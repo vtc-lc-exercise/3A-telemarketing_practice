@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VE3A Telemarketing Practice</title>
+    <!-- Import Google Fonts to ensure 100% same UI across iOS and Android -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    
     <style>
         /* CSS Variables */
         :root {
@@ -16,10 +21,15 @@
             --glass-border: rgba(255, 255, 255, 0.3);
             --text-dark: #1f2937;
             --card-bg: #ffffff;
+            
+            /* Font Definitions */
+            --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
+            --font-title: 'Playfair Display', serif;
+            --font-paper-title: 'Fredoka', cursive;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: var(--font-body);
             margin: 0; padding: 0; line-height: 1.6;
             min-height: 100vh;
             background-color: #f3f4f6; color: var(--text-dark);
@@ -55,8 +65,8 @@
             display: none; width: 100%; box-sizing: border-box;
         }
         body:not(.landing-active) header { display: block; }
-        header h1 { margin: 0; font-size: 1.3rem; }
-        header p { margin: 0.2rem 0 0; opacity: 0.9; font-size: 0.85rem; }
+        header h1 { margin: 0; font-size: 1.4rem; font-family: var(--font-body); font-weight: 700; }
+        header p { margin: 0.2rem 0 0; opacity: 0.9; font-size: 0.9rem; }
 
         .page { display: none; animation: fadeIn 0.4s ease-out; width: 100%; box-sizing: border-box; }
         .page.active { display: block; }
@@ -76,24 +86,25 @@
         }
         @media (min-width: 768px) { .glass-panel:hover { transform: translateY(-5px); box-shadow: 0 15px 40px 0 rgba(0,0,0,0.3); } }
         .glass-panel h3 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 3px; margin: 0 0 8px 0; font-weight: 700; }
-        .glass-panel h4 { font-size: 1rem; margin: 0 0 25px 0; border-bottom: 2px solid rgba(255,255,255,0.6); display: inline-block; padding-bottom: 5px; font-weight: 500;}
+        .glass-panel h4 { font-size: 1rem; margin: 0 0 25px 0; border-bottom: 2px solid rgba(255,255,255,0.6); display: inline-block; padding-bottom: 5px; font-weight: 600;}
         .emoji-float { display: inline-block; transition: transform 0.2s ease; cursor: pointer; }
         .emoji-float:hover { transform: scale(1.4) rotate(10deg); }
         
         .main-title { 
-            font-size: 2.2rem; font-family: 'Times New Roman', Times, serif; 
+            font-size: 2.2rem; font-family: var(--font-title); font-style: italic;
             text-shadow: 2px 3px 5px rgba(0,0,0,0.3); margin: 15px 0; 
             position: relative; display: inline-block; line-height: 1.2; white-space: nowrap; 
         }
         
-        .sparkle { color: #ffd700; position: absolute; animation: twinkle 1.5s infinite alternate; }
+        .sparkle { color: #ffd700; position: absolute; animation: twinkle 1.5s infinite alternate; font-style: normal; }
         .s1 { top: -10px; left: -20px; font-size: 1.2rem; } .s2 { bottom: 0; left: -10px; animation-delay: 0.5s; font-size: 0.8rem; }
         .s3 { top: -5px; right: -20px; animation-delay: 0.2s; font-size: 1.2rem; } .s4 { bottom: 5px; right: -15px; animation-delay: 0.7s; font-size: 1rem; }
         @keyframes twinkle { 0% { opacity: 0.3; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
         
-        .subtitle-text { font-size: 1.1rem; margin-top: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); font-weight: 500; }
+        .subtitle-text { font-size: 1.1rem; margin-top: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); font-weight: 600; }
         .btn-landing {
-            background: white; color: var(--primary); border: none; padding: 16px 40px; border-radius: 50px; font-size: 1.3rem; font-weight: bold; cursor: pointer;
+            font-family: var(--font-body);
+            background: white; color: var(--primary); border: none; padding: 16px 40px; border-radius: 50px; font-size: 1.3rem; font-weight: 700; cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 350px;
             transition: all 0.3s ease; -webkit-tap-highlight-color: transparent;
         }
@@ -111,8 +122,8 @@
         .option-card { background: var(--card-bg); border-radius: 12px; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 2px solid transparent; cursor: pointer; transition: all 0.2s;}
         .option-card:active { transform: scale(0.98); border-color: var(--primary); }
         .option-icon { font-size: 1.5rem; margin-right: 12px; background: #e0e7ff; color: var(--primary); font-weight: 900; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px; flex-shrink: 0; }
-        .option-text h3 { margin: 0 0 3px 0; color: var(--primary); font-size: 1.05rem; }
-        .option-text p { margin: 0; color: #6b7280; font-size: 0.85rem; }
+        .option-text h3 { margin: 0 0 3px 0; color: var(--primary); font-size: 1.1rem; font-family: var(--font-body); font-weight: 700; }
+        .option-text p { margin: 0; color: #6b7280; font-size: 0.9rem; font-weight: 600; }
 
         /* --- Paper Layout --- */
         .paper-layout { margin-top: 15px; position: relative; }
@@ -121,8 +132,9 @@
         .target-offer-box { border: 2px dashed #9ca3af; padding: 10px; text-align: center; border-radius: 8px; margin: 15px 0; background: #f9fafb; position: relative; }
         
         .mobile-hint-btn {
+            font-family: var(--font-body);
             display: inline-flex; align-items: center; justify-content: center; background: #fef3c7; color: #d97706; border: 1px solid #fde68a;
-            padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; margin-left: 10px; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-left: 10px; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             vertical-align: middle; -webkit-tap-highlight-color: transparent;
         }
         .mobile-hint-btn:active { background: #fde68a; transform: scale(0.95); }
@@ -137,7 +149,7 @@
             .svg-arrow { display: block; position: absolute; left: -45px; width: 45px; height: 20px; z-index: 10; }
         }
         @media (max-width: 767px) { .desktop-hints-container { display: none; } .svg-arrow { display: none; } }
-        .box-title { font-weight: bold; font-size: 1.05rem; margin-bottom: 10px; border-bottom: 2px solid #f3f4f6; padding-bottom: 5px; display: flex; align-items: center; gap: 5px; color: var(--text-dark); }
+        .box-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 10px; border-bottom: 2px solid #f3f4f6; padding-bottom: 5px; display: flex; align-items: center; gap: 5px; color: var(--text-dark); }
 
         /* --- Modals --- */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; opacity: 0; transition: opacity 0.3s; align-items: flex-end; }
@@ -148,15 +160,15 @@
 
         /* --- Common UI --- */
         .settings-panel { background: white; border-radius: 10px; padding: 12px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; border-left: 4px solid var(--primary); }
-        .setting-group { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
-        select { padding: 6px 10px; border-radius: 6px; border: 1px solid #d1d5db; background: #f9fafb; font-size: 0.9rem; font-weight: bold; min-height: 36px; cursor: pointer; }
+        .setting-group { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; font-weight: 600; }
+        select { font-family: var(--font-body); padding: 6px 10px; border-radius: 6px; border: 1px solid #d1d5db; background: #f9fafb; font-size: 0.9rem; font-weight: 700; min-height: 36px; cursor: pointer; }
 
-        .meaning-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.2s; z-index: 1000; pointer-events: none; letter-spacing: 0.5px; font-weight: bold; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4); margin-bottom: 8px; }
+        .meaning-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; padding: 6px 10px; border-radius: 6px; font-size: 0.85rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.2s; z-index: 1000; pointer-events: none; letter-spacing: 0.5px; font-weight: 700; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4); margin-bottom: 8px; }
         .meaning-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--accent) transparent transparent transparent; }
         .clickable-word.show-tooltip .meaning-tooltip { opacity: 1; visibility: visible; }
         .clickable-word { cursor: pointer; padding: 4px 2px; margin: 0 1px; border-radius: 4px; display: inline-block; transition: background-color 0.2s, color 0.2s; position: relative; -webkit-tap-highlight-color: transparent; }
         .clickable-word:active { background-color: var(--primary); color: white; }
-        .syllable-tooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 6px 10px; border-radius: 6px; font-size: 0.9rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.2s; z-index: 1000; pointer-events: none; letter-spacing: 1px; font-weight: bold; }
+        .syllable-tooltip { font-family: var(--font-body); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 6px 10px; border-radius: 6px; font-size: 0.9rem; white-space: nowrap; opacity: 0; visibility: hidden; transition: opacity 0.2s; z-index: 1000; pointer-events: none; letter-spacing: 1px; font-weight: 700; }
         .syllable-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #1f2937 transparent transparent transparent; }
         .clickable-word.show-tooltip .syllable-tooltip { opacity: 1; visibility: visible; }
 
@@ -166,21 +178,23 @@
         .timer-display.recording { color: #ef4444; background: #fee2e2; border-color: #ef4444; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
         .controls-row { display: flex; gap: 15px; width: 100%; justify-content: center; }
-        .rec-btn { border: none; border-radius: 50px; padding: 10px 20px; font-size: 0.95rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .rec-btn { font-family: var(--font-body); border: none; border-radius: 50px; padding: 10px 20px; font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .btn-start-rec { background: #ef4444; color: white; } .btn-start-rec:active { transform: scale(0.95); background: #dc2626; }
         .btn-stop-rec { background: #4b5563; color: white; display: none; } .btn-stop-rec:active { transform: scale(0.95); }
         
         .btn-container { display: flex; justify-content: space-between; margin: 15px 0; gap: 10px; }
-        .btn { flex: 1; background: var(--primary); color: white; border: none; padding: 12px 10px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3); min-height: 44px; display: flex; align-items: center; justify-content: center; }
+        .btn { font-family: var(--font-body); flex: 1; background: var(--primary); color: white; border: none; padding: 12px 10px; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3); min-height: 44px; display: flex; align-items: center; justify-content: center; }
         .btn:active { background-color: var(--primary-hover); box-shadow: none; transform: translateY(1px); }
         .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); box-shadow: none; }
         
         .exp-card { background: white; border-radius: 10px; padding: 12px; margin-bottom: 12px; border-left: 4px solid var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .play-row { display: flex; align-items: flex-start; gap: 12px; }
-        .play-btn { background: var(--primary); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-top: 2px; }
+        .play-btn { font-family: var(--font-body); background: var(--primary); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.2); margin-top: 2px; }
         .play-btn:active { transform: scale(0.9); }
         .text-content { font-size: 0.95rem; line-height: 1.5; width: calc(100% - 48px); word-wrap: break-word; }
-        .hint { background: #fffbeb; border-left: 4px solid var(--accent); padding: 10px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: flex-start; }
+        .hint { background: #fffbeb; border-left: 4px solid var(--accent); padding: 10px; border-radius: 4px; font-size: 0.85rem; margin-bottom: 15px; display: flex; align-items: flex-start; font-weight: 600; }
+        
+        b, strong { font-weight: 700; }
     </style>
 </head>
 <body class="landing-active" id="main-body">
@@ -210,8 +224,8 @@
 
         <!-- ================= PAGE 1.5: MENU ================= -->
         <div id="page-menu" class="page">
-            <h2 style="font-size: 1.4rem; margin-top: 0;">Select a Practice</h2>
-            <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 15px;">Choose a paper below to begin.</p>
+            <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700;">Select a Practice</h2>
+            <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 15px; font-weight: 600;">Choose a paper below to begin.</p>
             <div class="option-list">
                 <div class="option-card" onclick="loadPractice('p1')">
                     <div class="option-icon">1</div>
@@ -289,8 +303,8 @@
             
             <!-- RECORDING UI -->
             <div class="recorder-container">
-                <div style="font-weight: bold; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem;">🎙️ Record your Pitch here!</div>
-                <div style="font-size: 0.85rem; color: #6b7280; text-align: center;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
+                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem;">🎙️ Record your Pitch here!</div>
+                <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
                 <div class="timer-display" id="timer">00:00</div>
                 <div class="controls-row">
                     <button class="rec-btn btn-start-rec" id="btn-start" onclick="startRecording()">
@@ -304,22 +318,19 @@
                 
                 <!-- AUTO-SWITCHING ACTION BUTTONS -->
                 <div id="post-record-actions" style="display: none; flex-direction: column; width: 100%; align-items: center; gap: 10px; margin-top: 5px;">
-                    
-                    <!-- Only shows on Mobile Native Share -->
                     <button class="rec-btn" id="btn-share" onclick="shareAudio()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3); display: none;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg> Send via WhatsApp
                     </button>
                     
-                    <!-- Only shows on Desktop or if Native Share fails -->
                     <a id="btn-download" class="rec-btn" target="_blank" style="background: #f59e0b; color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3); display: none;">
                         📥 Download & Send
                     </a>
                     
-                    <p id="share-status" style="font-size: 0.85rem; color: #6b7280; display: none; text-align: center; margin: 0; padding: 0 10px; line-height: 1.3;"></p>
+                    <p id="share-status" style="font-size: 0.85rem; color: #6b7280; display: none; text-align: center; margin: 0; padding: 0 10px; line-height: 1.3; font-weight: 600;"></p>
                 </div>
             </div>
             
-            <h2 style="font-size: 1.4rem; margin-top: 15px;">Possible Sample</h2>
+            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700;">Possible Sample</h2>
             <div class="hint"><span style="margin-right: 8px;">▶️</span> Tap play for the whole sentence, or tap words for syllables!</div>
             <div class="box" id="sample-container" style="display: flex; flex-direction: column; gap: 12px; padding: 12px;"></div>
         </div>
@@ -331,8 +342,8 @@
                 <button class="btn btn-outline" onclick="navTo('page-sample')">Sample</button>
                 <button class="btn" onclick="navTo('page-menu')">🏠 Menu</button>
             </div>
-            <h2 style="font-size: 1.4rem; margin-top: 0;">Useful Expressions</h2>
-            <p style="font-size: 0.9rem; color: #6b7280;">Use these templates for your speaking assessment. The red parts can be changed!</p>
+            <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700;">Useful Expressions</h2>
+            <p style="font-size: 0.9rem; color: #6b7280; font-weight: 600;">Use these templates for your speaking assessment. The red parts can be changed!</p>
             <div id="expressions-container"></div>
         </div>
 
@@ -479,9 +490,9 @@
             let detailsHtml = d.details.map(x => `<li>${x}</li>`).join(''); let enrollHtml = d.enrollment.map(x => `<li>${x}</li>`).join('');
             document.getElementById('paper-left-container').innerHTML = `
                 <div class="box box-left" id="box-main">
-                    <div style="text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; font-family: 'Comic Sans MS', cursive;">${d.title}</div>
+                    <div style="text-align: center; font-size: 1.3rem; font-weight: 600; margin-bottom: 15px; font-family: var(--font-paper-title); color: #1e3a8a;">${d.title}</div>
                     <div id="target-details" style="position: relative;"><b>Details</b><button class="mobile-hint-btn" onclick="openModal('modal-why')">💡 Why joining?</button><ul style="margin-top: 5px; padding-left: 20px;">${detailsHtml}</ul></div>
-                    <b>${d.enrollTitle}</b><ul style="margin-top: 5px; padding-left: 20px;">${enrollHtml}</ul>
+                    <b style="margin-top: 10px; display: inline-block;">${d.enrollTitle}</b><ul style="margin-top: 5px; padding-left: 20px;">${enrollHtml}</ul>
                     <div class="target-offer-box" id="target-offer"><b>Check out our special offers to participants sponsored by<br>${d.sponsor}</b><div style="margin-top: 8px;"><button class="mobile-hint-btn" style="margin:0;" onclick="openModal('modal-offers')">🎁 View Offers</button></div></div>
                     <b>Enquiry</b><ul style="margin-top: 5px; margin-bottom: 0; padding-left: 20px;"><li>More information: ${d.enquiry}</li></ul>
                 </div>`;
@@ -509,8 +520,8 @@
                 const btn = document.createElement('button'); btn.className = 'play-btn'; btn.innerHTML = '▶';
                 btn.onclick = (e) => { e.preventDefault(); if(synth.state === 'suspended') synth.resume(); speak(exp.example); };
                 const content = document.createElement('div'); content.className = 'text-content';
-                let formattedPattern = exp.pattern.replace(/\((.*?)\)/g, '<span style="color:#f59e0b; font-weight:bold;">($1)</span>');
-                content.innerHTML = `<div style="font-weight:600; font-size:1rem; margin-bottom:6px; color:var(--text-main); line-height:1.4;">${formattedPattern}</div><div style="color:var(--text-muted); font-style:italic; font-size:0.9rem;"><span style="font-weight:bold; color:var(--primary);">E.g.</span> ${exp.example}</div>`;
+                let formattedPattern = exp.pattern.replace(/\((.*?)\)/g, '<span style="color:#f59e0b; font-weight:700;">($1)</span>');
+                content.innerHTML = `<div style="font-weight:700; font-size:1rem; margin-bottom:6px; color:var(--text-main); line-height:1.4;">${formattedPattern}</div><div style="color:var(--text-muted); font-style:italic; font-size:0.95rem; font-weight: 500;"><span style="font-weight:700; color:var(--primary);">E.g.</span> ${exp.example}</div>`;
                 card.appendChild(btn); card.appendChild(content); expContainer.appendChild(card);
             });
 
@@ -675,16 +686,12 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 activeStream = stream;
                 
-                // 優先選擇跨平台最相容的格式
                 let mimeType = '';
                 const types = [
                     'audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus'
                 ];
                 for (let type of types) {
-                    if (MediaRecorder.isTypeSupported(type)) {
-                        mimeType = type;
-                        break;
-                    }
+                    if (MediaRecorder.isTypeSupported(type)) { mimeType = type; break; }
                 }
 
                 const options = mimeType ? { mimeType } : undefined;
@@ -696,9 +703,8 @@
                 mediaRecorder.onstop = () => {
                     if (audioChunks.length === 0) return;
                     
-                    // 為了確保不論 iOS 或 Android，儲存下來的附檔名都是 WhatsApp 讀得懂的
                     let finalMime = mediaRecorder.mimeType || 'audio/mp4';
-                    let ext = 'mp4'; // 預設用 MP4，因為 iOS 和 Android 都支援播放
+                    let ext = 'mp4'; 
                     
                     if (finalMime.includes('webm')) ext = 'webm';
                     else if (finalMime.includes('ogg')) ext = 'ogg';
@@ -714,27 +720,19 @@
                     
                     document.getElementById('post-record-actions').style.display = 'flex';
                     
-                    // 智慧判斷：是否支援 Native Share
                     const btnShare = document.getElementById('btn-share');
                     const btnDownload = document.getElementById('btn-download');
                     const statusEl = document.getElementById('share-status');
                     
-                    // Reset
-                    btnShare.style.display = 'none';
-                    btnDownload.style.display = 'none';
-                    statusEl.style.display = 'none';
+                    btnShare.style.display = 'none'; btnDownload.style.display = 'none'; statusEl.style.display = 'none';
 
-                    // 綁定下載連結
-                    btnDownload.href = audioUrl;
-                    btnDownload.download = filename;
+                    btnDownload.href = audioUrl; btnDownload.download = filename;
 
                     try {
                         const testFile = new File([recordedBlob], filename, { type: recordedBlob.type });
-                        // 如果是手機，且支援 Share File，就只顯示 Share 按鈕
                         if (navigator.canShare && navigator.canShare({ files: [testFile] }) && /Mobi|Android|iPhone/i.test(navigator.userAgent)) {
                             btnShare.style.display = 'flex';
                         } else {
-                            // 電腦版或不支援 Share 的 App 內建瀏覽器，只顯示 Download
                             btnDownload.style.display = 'flex';
                             statusEl.style.display = 'block';
                             statusEl.textContent = "Please save the file and send it to your teacher.";
@@ -748,17 +746,13 @@
 
                 mediaRecorder.start();
                 
-                document.getElementById('btn-start').style.display = 'none';
-                document.getElementById('btn-stop').style.display = 'flex';
-                document.getElementById('audio-preview').style.display = 'none';
-                document.getElementById('post-record-actions').style.display = 'none';
+                document.getElementById('btn-start').style.display = 'none'; document.getElementById('btn-stop').style.display = 'flex';
+                document.getElementById('audio-preview').style.display = 'none'; document.getElementById('post-record-actions').style.display = 'none';
                 document.getElementById('share-status').style.display = 'none';
                 
-                const timerEl = document.getElementById('timer');
-                timerEl.classList.add('recording');
+                const timerEl = document.getElementById('timer'); timerEl.classList.add('recording');
                 
-                seconds = 0; updateTimerDisplay();
-                clearInterval(timerInterval);
+                seconds = 0; updateTimerDisplay(); clearInterval(timerInterval);
                 timerInterval = setInterval(() => { seconds++; updateTimerDisplay(); }, 1000);
                 
             } catch (err) {
@@ -782,16 +776,12 @@
             const btnShare = document.getElementById('btn-share');
             const btnDownload = document.getElementById('btn-download');
             
-            statusEl.style.display = 'block';
-            statusEl.textContent = "Opening WhatsApp / Share menu...";
-            statusEl.style.color = "#6b7280";
+            statusEl.style.display = 'block'; statusEl.textContent = "Opening WhatsApp / Share menu..."; statusEl.style.color = "#6b7280";
             
             if (!recordedBlob) return;
 
-            let finalMime = mediaRecorder.mimeType || 'audio/mp4';
-            let ext = 'mp4'; 
-            if (finalMime.includes('webm')) ext = 'webm';
-            else if (finalMime.includes('ogg')) ext = 'ogg';
+            let finalMime = mediaRecorder.mimeType || 'audio/mp4'; let ext = 'mp4'; 
+            if (finalMime.includes('webm')) ext = 'webm'; else if (finalMime.includes('ogg')) ext = 'ogg';
             
             const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
             const filename = `${pName}_Telemarketing_Pitch.${ext}`;
@@ -803,13 +793,10 @@
                     text: 'Teacher, here is my recording!',
                     files: [audioFile]
                 });
-                statusEl.textContent = "✅ Shared successfully!"; 
-                statusEl.style.color = "#25D366"; 
+                statusEl.textContent = "✅ Shared successfully!"; statusEl.style.color = "#25D366"; 
             } catch (error) {
-                // 如果用戶取消或失敗，立即自動切換成實體下載按鈕，讓學生有備案
                 if (error.name !== "AbortError") {
-                    btnShare.style.display = 'none';
-                    btnDownload.style.display = 'flex';
+                    btnShare.style.display = 'none'; btnDownload.style.display = 'flex';
                     statusEl.innerHTML = "⚠️ Cannot share directly from this app/browser.<br>Please click the <b>Download</b> button above and send it manually."; 
                     statusEl.style.color = "#ef4444"; 
                 } else {
