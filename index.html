@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     
+    <!-- 引入純前端 MP3 編碼引擎 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
+
     <style>
         :root {
             --primary: #4f46e5;      
@@ -105,7 +108,8 @@
         .rec-btn { font-family: var(--font-body); border: none; border-radius: 50px; padding: 10px 20px; font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .btn-start-rec { background: #ef4444; color: white; } .btn-start-rec:active { transform: scale(0.95); background: #dc2626; }
         .btn-stop-rec { background: #4b5563; color: white; display: none; } .btn-stop-rec:active { transform: scale(0.95); }
-        
+        .loading-text { display: none; font-size: 0.85rem; color: #f59e0b; font-weight: bold; margin-top: -5px; }
+
         .btn-container { display: flex; justify-content: space-between; margin: 15px 0; gap: 10px; }
         .btn { font-family: var(--font-body); flex: 1; background: var(--primary); color: white; border: none; padding: 12px 10px; border-radius: 8px; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3); min-height: 44px; display: flex; align-items: center; justify-content: center; }
         .btn:active { background-color: var(--primary-hover); box-shadow: none; transform: translateY(1px); }
@@ -163,9 +167,10 @@
             <div class="settings-panel"><div class="setting-group"><label>🗣️ Accent:</label><select id="accent-select-2" onchange="syncAccents(this.value)"><option value="UK">British (UK)</option><option value="US">American (US)</option></select></div></div>
             
             <div class="recorder-container">
-                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record Here!!</div>
+                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record your Pitch here!</div>
                 <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
                 <div class="timer-display" id="timer">00:00</div>
+                <div class="loading-text" id="loading-text">⚙️ Encoding to MP3... Please wait</div>
                 <div class="controls-row">
                     <button class="rec-btn btn-start-rec" id="btn-start" onclick="startRecording()"><span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Start</button>
                     <button class="rec-btn btn-stop-rec" id="btn-stop" onclick="stopRecording()"><span style="background: white; width: 12px; height: 12px; display: inline-block;"></span> Stop</button>
@@ -173,18 +178,16 @@
                 <audio id="audio-preview" controls style="display: none; width: 100%; margin-top: 5px;"></audio>
                 
                 <div id="post-record-actions" style="display: none; flex-direction: column; width: 100%; align-items: center; gap: 10px; margin-top: 15px;">
-                    <!-- Native Share Button for Mobile -->
-                    <button id="btn-share" class="rec-btn" onclick="shareAudioFile()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3); display:none;">
+                    <button id="btn-share" class="rec-btn" onclick="shareAudioFile()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
                         Send via WhatsApp
                     </button>
-                    <!-- Fallback Download Button -->
-                    <a id="btn-download" class="rec-btn" target="_blank" style="background: var(--primary); color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3);">📥 Download Audio</a>
+                    <a id="btn-download" class="rec-btn" target="_blank" style="background: var(--primary); color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3);">📥 Download MP3</a>
                     <div id="share-status" style="font-size: 0.85rem; color: #6b7280; text-align: center; margin-top: 5px; font-weight: 600; padding: 0 10px; display:none;"></div>
                 </div>
             </div>
             
-            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Sample</h2>
+            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Possible Sample</h2>
             <div class="hint"><span style="margin-right: 8px;">▶️</span> Tap play for the whole sentence, or tap words for syllables!</div>
             <div class="box" id="sample-container" style="display: flex; flex-direction: column; gap: 12px; padding: 12px;"></div>
         </div>
@@ -365,10 +368,11 @@
             makeClickableArea('box-main'); makeClickableArea('box-why'); makeClickableArea('box-offers');
             makeClickableArea('modal-content-why-list'); makeClickableArea('modal-content-offers-list');
 
-            if(mediaRecorder && mediaRecorder.state !== 'inactive') { stopRecording(); }
+            stopRecording();
             document.getElementById('audio-preview').style.display = 'none';
             document.getElementById('post-record-actions').style.display = 'none';
             document.getElementById('share-status').style.display = 'none';
+            document.getElementById('loading-text').style.display = 'none';
             document.getElementById('timer').textContent = "00:00";
             
             navTo('page-practice');
@@ -394,7 +398,6 @@
 
         const synth = window.speechSynthesis; let voiceUK = null, voiceUS = null;
         
-        // --- 尋找最靚、最Natural的聲線引擎 (保證純英文) ---
         function initVoices() {
             const voices = synth.getVoices();
             const findBest = (lang) => {
@@ -414,7 +417,6 @@
             if (!voiceUK || !voiceUS) initVoices();
             const utterThis = new SpeechSynthesisUtterance(text);
             utterThis.voice = (document.getElementById('accent-select').value === 'UK') ? voiceUK : voiceUS;
-            // 微微調慢語速，令發音更有感情
             utterThis.rate = parseFloat(document.getElementById('speed-select').value) * 0.95; 
             synth.speak(utterThis);
         }
@@ -455,9 +457,11 @@
         }
         function makeClickableArea(elementId) { const el = document.getElementById(elementId); if(el) { const processed = processNode(el); el.parentNode.replaceChild(processed, el); } }
 
-        // --- 超強兼容版 Recorder (100% Android / iOS 通用) ---
-        let mediaRecorder = null; let audioChunks = []; let timerInterval = null; let seconds = 0; let recordedBlob = null; let activeStream = null;
-        let finalExtension = 'mp3'; let finalMimeType = 'audio/mpeg'; 
+        // --- 純前端 100% 輸出 MP3 (解決 WhatsApp 相容性問題) ---
+        let audioContext = null; let sourceNode = null; let processorNode = null; let activeStream = null;
+        let mp3Encoder = null; let mp3Data = []; 
+        let timerInterval = null; let seconds = 0; let recordedBlob = null;
+        let isRecording = false;
 
         function updateTimerDisplay() { const mins = Math.floor(seconds / 60).toString().padStart(2, '0'); const secs = (seconds % 60).toString().padStart(2, '0'); document.getElementById('timer').textContent = `${mins}:${secs}`; }
 
@@ -467,44 +471,33 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 activeStream = stream;
                 
-                let mimeType = '';
-                if (MediaRecorder.isTypeSupported('audio/mp4')) { mimeType = 'audio/mp4'; finalExtension = 'mp4'; finalMimeType = 'audio/mp4'; } 
-                else if (MediaRecorder.isTypeSupported('audio/webm')) { mimeType = 'audio/webm'; finalExtension = 'webm'; finalMimeType = 'audio/webm'; } 
-                else if (MediaRecorder.isTypeSupported('audio/ogg')) { mimeType = 'audio/ogg'; finalExtension = 'ogg'; finalMimeType = 'audio/ogg'; }
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const sampleRate = audioContext.sampleRate;
                 
-                const options = mimeType ? { mimeType } : undefined;
-                mediaRecorder = new MediaRecorder(stream, options);
-                audioChunks = []; recordedBlob = null;
+                // 初始化 LameJS MP3 Encoder (單聲道, 128kbps)
+                mp3Encoder = new lamejs.Mp3Encoder(1, sampleRate, 128);
+                mp3Data = [];
+                isRecording = true;
 
-                mediaRecorder.ondataavailable = event => { if (event.data && event.data.size > 0) { audioChunks.push(event.data); } };
-                mediaRecorder.onstop = () => {
-                    if (audioChunks.length === 0) return;
-                    
-                    recordedBlob = new Blob(audioChunks, { type: finalMimeType }); 
-                    const audioUrl = URL.createObjectURL(recordedBlob);
-                    const audioEl = document.getElementById('audio-preview');
-                    audioEl.src = audioUrl; audioEl.style.display = 'block';
-                    
-                    const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
-                    const filename = `${pName}_Pitch.${finalExtension}`;
-                    
-                    document.getElementById('post-record-actions').style.display = 'flex';
-                    
-                    const btnDownload = document.getElementById('btn-download');
-                    btnDownload.href = audioUrl; btnDownload.download = filename;
+                sourceNode = audioContext.createMediaStreamSource(stream);
+                processorNode = audioContext.createScriptProcessor(4096, 1, 1);
 
-                    if (navigator.canShare && navigator.canShare({ files: [new File([recordedBlob], filename, { type: finalMimeType })] })) {
-                        document.getElementById('btn-share').style.display = 'flex';
-                    } else {
-                        document.getElementById('btn-share').style.display = 'none';
-                        document.getElementById('share-status').style.display = 'block';
-                        document.getElementById('share-status').textContent = '💡 Please use the Download button on your computer.';
+                processorNode.onaudioprocess = function(e) {
+                    if (!isRecording) return;
+                    const left = e.inputBuffer.getChannelData(0);
+                    // 將 Float32 轉成 Int16
+                    const sampleChunk = new Int16Array(left.length);
+                    for (let i = 0; i < left.length; i++) {
+                        let s = Math.max(-1, Math.min(1, left[i]));
+                        sampleChunk[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
                     }
-
-                    if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
+                    const mp3buf = mp3Encoder.encodeBuffer(sampleChunk);
+                    if (mp3buf.length > 0) { mp3Data.push(new Int8Array(mp3buf)); }
                 };
 
-                mediaRecorder.start();
+                sourceNode.connect(processorNode);
+                processorNode.connect(audioContext.destination);
+
                 document.getElementById('btn-start').style.display = 'none'; document.getElementById('btn-stop').style.display = 'flex';
                 document.getElementById('audio-preview').style.display = 'none'; document.getElementById('post-record-actions').style.display = 'none'; document.getElementById('share-status').style.display = 'none';
                 document.getElementById('timer').classList.add('recording');
@@ -514,11 +507,43 @@
         }
 
         function stopRecording() {
-            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                mediaRecorder.stop(); clearInterval(timerInterval);
+            if (isRecording) {
+                isRecording = false;
+                clearInterval(timerInterval);
                 document.getElementById('timer').classList.remove('recording');
-                document.getElementById('btn-start').style.display = 'flex'; document.getElementById('btn-start').innerHTML = '<span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Record Again';
+                document.getElementById('btn-start').style.display = 'none';
                 document.getElementById('btn-stop').style.display = 'none';
+                document.getElementById('loading-text').style.display = 'block';
+
+                if (processorNode && sourceNode) {
+                    sourceNode.disconnect(); processorNode.disconnect();
+                }
+                if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
+                if (audioContext && audioContext.state !== 'closed') { audioContext.close(); }
+
+                // 讓畫面渲染一下 Loading，然後開始打包 MP3
+                setTimeout(() => {
+                    const mp3buf = mp3Encoder.flush();
+                    if (mp3buf.length > 0) { mp3Data.push(new Int8Array(mp3buf)); }
+                    
+                    recordedBlob = new Blob(mp3Data, { type: 'audio/mpeg' }); 
+                    const audioUrl = URL.createObjectURL(recordedBlob);
+                    
+                    const audioEl = document.getElementById('audio-preview');
+                    audioEl.src = audioUrl; audioEl.style.display = 'block';
+                    
+                    const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
+                    const filename = `${pName}_Pitch.mp3`;
+                    
+                    document.getElementById('post-record-actions').style.display = 'flex';
+                    
+                    const btnDownload = document.getElementById('btn-download');
+                    btnDownload.href = audioUrl; btnDownload.download = filename;
+
+                    document.getElementById('loading-text').style.display = 'none';
+                    document.getElementById('btn-start').style.display = 'flex'; 
+                    document.getElementById('btn-start').innerHTML = '<span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Record Again';
+                }, 500);
             }
         }
 
@@ -526,8 +551,8 @@
         async function shareAudioFile() {
             if (!recordedBlob) return;
             const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
-            const filename = `${pName}_Pitch.${finalExtension}`;
-            const file = new File([recordedBlob], filename, { type: finalMimeType });
+            const filename = `${pName}_Pitch.mp3`;
+            const file = new File([recordedBlob], filename, { type: 'audio/mpeg' });
             const statusEl = document.getElementById('share-status');
             
             try {
@@ -536,9 +561,11 @@
                     await navigator.share({ files: [file], title: 'My Pitch', text: 'Here is my recorded pitch!' });
                     statusEl.style.color = '#25D366'; statusEl.textContent = 'Shared successfully!';
                     setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+                } else {
+                    statusEl.style.display = 'block'; statusEl.style.color = '#ef4444'; statusEl.textContent = 'Your browser blocks sharing files. Please use Download.';
                 }
             } catch (error) {
-                if (error.name !== "AbortError") { statusEl.style.color = '#ef4444'; statusEl.textContent = 'Failed to share. Please use Download instead.'; }
+                if (error.name !== "AbortError") { statusEl.style.display = 'block'; statusEl.style.color = '#ef4444'; statusEl.textContent = 'Failed to share. Please use Download instead.'; }
                 else { statusEl.style.display = 'none'; }
             }
         }
