@@ -382,13 +382,13 @@
     </div>
 
     <script>
-        // --- 4 Practices Database ---
+        // --- 4 Practices Database (Dates unchanged to match paper) ---
         const pData = {
             p1: {
                 title: "Apple Tree Learning Centre<br>English Fun Day",
                 enrollTitle: "Enrolment Method & Fee",
-                details: ["For children (aged 7 – 12)", "Date / Time / Venue:<br>the 8th of Jul / 9 am – 4 pm / Multi-purpose room, Apple Tree Learning Centre", "Activities: language games, role play & storytelling"],
-                enrollment: ["Online enrolment: www.appletree.com.hk", "Fee: $420 / participant", "Deadline: the 31st of May 2026"],
+                details: ["For children (aged 7 – 12)", "Date / Time / Venue:<br>8 Jul / 9 am – 4 pm / Multi-purpose room, Apple Tree Learning Centre", "Activities: language games, role play & storytelling"],
+                enrollment: ["Online enrolment: www.appletree.com.hk", "Fee: $420 / participant", "Deadline: 31 May 2026"],
                 sponsor: "World Education Fund", enquiry: "2 3 8 8 9 0 0 8",
                 whyPoints: ["Friendly English speaking environment -> everyone 😊", "<b>Benefit 2 and elaboration?</b>"], offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
                 sample: [
@@ -600,6 +600,7 @@
             "oct": { spoken: "October", meaning: "October" }, 
             "nov": { spoken: "November", meaning: "November" }, 
             "jan": { spoken: "January", meaning: "January" }, 
+            "may": { spoken: "May", meaning: "May" },
             "feb": { spoken: "February", meaning: "February" },
             "am":  { spoken: "a. m.", meaning: "Morning" },
             "pm":  { spoken: "p. m.", meaning: "Afternoon" },
@@ -609,6 +610,10 @@
             "www": { spoken: "W W W", meaning: "World Wide Web" }
         };
         
+        // Ordinal mapper for dates
+        const ordinalMap = { "1": "first", "8": "eighth", "15": "fifteenth", "20": "twentieth", "21": "twenty-first", "31": "thirty-first" };
+        const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+
         const synth = window.speechSynthesis; let voiceUK = null, voiceUS = null;
         function initVoices() {
             const voices = synth.getVoices();
@@ -646,26 +651,52 @@
             if (tooltipRect.right > viewportWidth - 5) { tooltip.style.transform = `translateX(calc(-50% - ${tooltipRect.right - viewportWidth + 10}px))`; }
             else if (tooltipRect.left < 5) { tooltip.style.transform = `translateX(calc(-50% + ${10 - tooltipRect.left}px))`; }
         }
+        
         function processNode(node) {
             if (node.nodeType === Node.TEXT_NODE) {
                 const text = node.textContent; if (!text.trim()) return node;
                 const fragment = document.createDocumentFragment();
                 const tokens = text.match(/[\w']+|[^\w']+/g) || [];
-                tokens.forEach(token => {
+                
+                tokens.forEach((token, index) => {
                     if (/^[a-zA-Z0-9]+$/.test(token)) {
                         const span = document.createElement('span'); span.className = 'clickable-word'; span.textContent = token;
-                        const lowerToken = token.toLowerCase(); let syllables = syllableDict[lowerToken]; const customMeaning = meaningDict[lowerToken]; 
+                        const lowerToken = token.toLowerCase(); 
                         
+                        let syllables = syllableDict[lowerToken]; 
+                        let customMeaning = meaningDict[lowerToken]; 
+                        
+                        // MAGIC: Check if this is a Date Number! 
+                        let spokenText = token;
+                        let tooltipText = null;
+                        
+                        if (/^[0-9]+$/.test(token) && ordinalMap[token]) {
+                            // Look ahead to see if the next word is a month
+                            let isDate = false;
+                            for (let i = index + 1; i < index + 5 && i < tokens.length; i++) {
+                                if (tokens[i].trim() === '') continue;
+                                if (months.includes(tokens[i].toLowerCase())) { isDate = true; break; }
+                                break; // Stop looking if we hit a non-space word that isn't a month
+                            }
+                            if (isDate) {
+                                spokenText = ordinalMap[token];
+                                tooltipText = ordinalMap[token]; // e.g., "twenty-first"
+                            }
+                        }
+
                         if (!/^[0-9]+$/.test(token) && !syllables && token.length > 4 && countSyllables(token) > 1) { syllables = generateSyllables(token); }
+                        
                         let sylTooltip = null; let meaningTooltip = null;
                         
                         if (syllables && syllables !== lowerToken) {
                             sylTooltip = document.createElement('span'); sylTooltip.className = 'syllable-tooltip'; 
                             sylTooltip.textContent = syllables; span.appendChild(sylTooltip);
                         }
-                        if (customMeaning) {
+                        
+                        // Add Date Tooltip or Normal Meaning Tooltip
+                        if (customMeaning || tooltipText) {
                             meaningTooltip = document.createElement('span'); meaningTooltip.className = 'meaning-tooltip'; 
-                            meaningTooltip.textContent = `${customMeaning.meaning}`;
+                            meaningTooltip.textContent = tooltipText || customMeaning.meaning;
                             if (sylTooltip) { sylTooltip.style.bottom = "calc(100% + 30px)"; }
                             span.appendChild(meaningTooltip);
                         }
@@ -673,7 +704,9 @@
                         span.addEventListener('click', function(e) {
                             e.preventDefault(); e.stopPropagation();
                             if(synth.state === 'suspended') synth.resume();
-                            speak(customMeaning ? customMeaning.spoken : token);
+                            
+                            speak(customMeaning ? customMeaning.spoken : spokenText);
+                            
                             this.style.backgroundColor = 'var(--primary)'; this.style.color = 'white'; this.classList.add('show-tooltip');
                             if (sylTooltip) setTimeout(() => adjustTooltipPosition(sylTooltip, this.getBoundingClientRect()), 10);
                             if (meaningTooltip) setTimeout(() => adjustTooltipPosition(meaningTooltip, this.getBoundingClientRect()), 10);
@@ -691,6 +724,7 @@
             }
             return node.cloneNode(true);
         }
+        
         function makeClickableArea(elementId) {
             const el = document.getElementById(elementId);
             if(el) { const processed = processNode(el); el.parentNode.replaceChild(processed, el); }
