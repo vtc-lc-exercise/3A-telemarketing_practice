@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VE3A Telemarketing Practice</title>
-    <!-- Import Google Fonts: Quicksand (Century Gothic style), Fredoka, and Nunito -->
+    <!-- Import Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
@@ -63,6 +63,7 @@
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
             position: sticky; top: 0; z-index: 100;
             display: none; width: 100%; box-sizing: border-box;
+            padding-top: calc(1rem + env(safe-area-inset-top)); /* Safe area for modern phones */
         }
         body:not(.landing-active) header { display: block; }
         header h1 { margin: 0; font-size: 1.4rem; font-family: var(--font-body); font-weight: 700; }
@@ -90,9 +91,8 @@
         .emoji-float { display: inline-block; transition: transform 0.2s ease; cursor: pointer; }
         .emoji-float:hover { transform: scale(1.4) rotate(10deg); }
         
-        /* 🚀 FIX: Responsive Main Title */
+        /* Responsive Main Title */
         .main-title { 
-            /* clamp(min, preferred, max) auto-scales the font size smoothly */
             font-size: clamp(1.8rem, 8vw, 3.5rem); 
             font-family: var(--font-title); font-weight: 700;
             text-shadow: 2px 3px 5px rgba(0,0,0,0.2); 
@@ -100,15 +100,11 @@
             position: relative; 
             display: flex; align-items: center; justify-content: center; gap: 8px; 
             line-height: 1.2; 
-            flex-wrap: wrap; /* Allows wrapping on very narrow screens */
+            flex-wrap: wrap; 
             text-align: center;
         }
         
-        /* Keep text together to prevent odd line breaks */
-        .title-text {
-            display: inline-block;
-            word-break: keep-all;
-        }
+        .title-text { display: inline-block; word-break: keep-all; }
         
         .sparkle { color: #ffd700; position: absolute; animation: twinkle 1.5s infinite alternate; font-style: normal; pointer-events: none; }
         .s1 { top: -15px; left: -10%; font-size: clamp(1.2rem, 4vw, 1.4rem); } 
@@ -226,7 +222,6 @@
             <h3>Vocational English 3A</h3>
             <h4>Language Centre</h4>
             
-            <!-- 🚀 FIX: HTML structure updated for proper flex wrapping -->
             <div class="main-title">
                 <span class="sparkle s1">✦</span><span class="sparkle s2">✧</span>
                 <span class="emoji-float">📞</span>
@@ -312,7 +307,7 @@
             </div>
         </div>
 
-        <!-- ================= PAGE 3: Sample (+ RECORDER) ================= -->
+        <!-- ================= PAGE 3: POSSIBLE SAMPLE (+ RECORDER) ================= -->
         <div id="page-sample" class="page">
             <div class="btn-container">
                 <button class="btn btn-outline" onclick="navTo('page-practice')">← Paper</button>
@@ -324,7 +319,7 @@
             
             <!-- RECORDING UI -->
             <div class="recorder-container">
-                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record here!</div>
+                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record your Pitch here!</div>
                 <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
                 <div class="timer-display" id="timer">00:00</div>
                 <div class="controls-row">
@@ -337,20 +332,22 @@
                 </div>
                 <audio id="audio-preview" controls style="display: none; width: 100%; margin-top: 5px;"></audio>
                 
-                <div id="post-record-actions" style="display: none; flex-direction: column; width: 100%; align-items: center; gap: 10px; margin-top: 5px;">
-                    <button class="rec-btn" id="btn-share" onclick="shareAudio()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3); display: none;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg> Send via WhatsApp
+                <!-- NEW ACTION BUTTONS LAYOUT -->
+                <div id="post-record-actions" style="display: none; flex-direction: column; width: 100%; align-items: center; gap: 10px; margin-top: 15px;">
+                    
+                    <a id="btn-download" class="rec-btn" target="_blank" style="background: #f59e0b; color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);">
+                        📥 Download Recording
+                    </a>
+
+                    <button class="rec-btn" id="btn-share" onclick="shareAudio()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg> Share directly
                     </button>
                     
-                    <a id="btn-download" class="rec-btn" target="_blank" style="background: #f59e0b; color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3); display: none;">
-                        📥 Download & Send
-                    </a>
-                    
-                    <p id="share-status" style="font-size: 0.85rem; color: #6b7280; display: none; text-align: center; margin: 0; padding: 0 10px; line-height: 1.3; font-weight: 600;"></p>
+                    <p id="share-status" style="font-size: 0.85rem; color: #ef4444; display: none; text-align: center; margin: 0; padding: 0 10px; line-height: 1.3; font-weight: 600;"></p>
                 </div>
             </div>
             
-            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Sample</h2>
+            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Possible Sample</h2>
             <div class="hint"><span style="margin-right: 8px;">▶️</span> Tap play for the whole sentence, or tap words for syllables!</div>
             <div class="box" id="sample-container" style="display: flex; flex-direction: column; gap: 12px; padding: 12px;"></div>
         </div>
@@ -363,7 +360,7 @@
                 <button class="btn" onclick="navTo('page-menu')">🏠 Menu</button>
             </div>
             <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700; font-family: var(--font-title);">Useful Expressions</h2>
-            <p style="font-size: 0.9rem; color: #6b7280; font-weight: 600;">Use these templates for your speaking assessment. The orange parts can be changed!</p>
+            <p style="font-size: 0.9rem; color: #6b7280; font-weight: 600;">Use these templates for your speaking assessment. The red parts can be changed!</p>
             <div id="expressions-container"></div>
         </div>
 
@@ -751,21 +748,17 @@
                     const btnDownload = document.getElementById('btn-download');
                     const statusEl = document.getElementById('share-status');
                     
-                    btnShare.style.display = 'none'; btnDownload.style.display = 'none'; statusEl.style.display = 'none';
+                    statusEl.style.display = 'none';
 
+                    // Both buttons are always visible now. Share is a bonus, Download is the reliable fallback.
                     btnDownload.href = audioUrl; btnDownload.download = filename;
-
-                    try {
-                        const testFile = new File([recordedBlob], filename, { type: recordedBlob.type });
-                        if (navigator.canShare && navigator.canShare({ files: [testFile] }) && /Mobi|Android|iPhone/i.test(navigator.userAgent)) {
-                            btnShare.style.display = 'flex';
-                        } else {
-                            btnDownload.style.display = 'flex';
-                            statusEl.style.display = 'block';
-                            statusEl.textContent = "Please save the file and send it to your teacher.";
-                        }
-                    } catch(e) {
-                        btnDownload.style.display = 'flex';
+                    btnDownload.style.display = 'flex';
+                    
+                    // Show Share button only if Web Share API is available
+                    if (navigator.share) {
+                        btnShare.style.display = 'flex';
+                    } else {
+                        btnShare.style.display = 'none';
                     }
 
                     if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
@@ -800,10 +793,6 @@
         
         async function shareAudio() {
             const statusEl = document.getElementById('share-status'); 
-            const btnShare = document.getElementById('btn-share');
-            const btnDownload = document.getElementById('btn-download');
-            
-            statusEl.style.display = 'block'; statusEl.textContent = "Opening WhatsApp / Share menu..."; statusEl.style.color = "#6b7280";
             
             if (!recordedBlob) return;
 
@@ -815,19 +804,21 @@
             const audioFile = new File([recordedBlob], filename, { type: recordedBlob.type });
 
             try {
-                await navigator.share({
-                    title: 'VE3A Telemarketing Assessment',
-                    text: 'Teacher, here is my recording!',
-                    files: [audioFile]
-                });
-                statusEl.textContent = "✅ Shared successfully!"; statusEl.style.color = "#25D366"; 
+                // Check if the browser allows sharing FILES (iOS Safari often blocks this for audio)
+                if (navigator.canShare && navigator.canShare({ files: [audioFile] })) {
+                    await navigator.share({
+                        title: 'VE3A Telemarketing Assessment',
+                        text: 'Teacher, here is my recording!',
+                        files: [audioFile]
+                    });
+                } else {
+                    // Fallback to text only share if files aren't allowed
+                     throw new Error("Files not supported");
+                }
             } catch (error) {
                 if (error.name !== "AbortError") {
-                    btnShare.style.display = 'none'; btnDownload.style.display = 'flex';
-                    statusEl.innerHTML = "⚠️ Cannot share directly from this app/browser.<br>Please click the <b>Download</b> button above and send it manually."; 
-                    statusEl.style.color = "#ef4444"; 
-                } else {
-                    statusEl.style.display = 'none';
+                    statusEl.innerHTML = "⚠️ Your browser blocks direct audio sharing.<br>Please click the <b>Download</b> button above and send it manually."; 
+                    statusEl.style.display = 'block';
                 }
             }
         }
