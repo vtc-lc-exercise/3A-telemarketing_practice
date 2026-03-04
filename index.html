@@ -221,7 +221,7 @@
                     "Good morning! Thank you for calling the Apple Tree Learning Centre hotline.", 
                     "We are excited to share the news about our new event: English Fun Day!", 
                     "Perfect for kids aged seven to twelve, this event will be held on the 8th of July from 9 a.m. to 4 p.m. in our multi-purpose room.", 
-                    "We have a line-up of activities ready, from language games to role-play and storytelling.", 
+                    "We have a lineup of activities ready, from language games to role-play and storytelling.", 
                     "Everyone will love practicing their English in our friendly English speaking environment.", 
                     "Plus, they will make great new friends while learning and it builds their confidence in everyday communication.", 
                     "Don't miss out! Secure your spot by visiting www.appletree.com.hk before the 31st of May, 2026.", 
@@ -232,7 +232,7 @@
                 ],
                 exp: [
                     {pattern: "Perfect for (target group), this event will be held on (date) from (time) to (time) in our (venue).", example: "Perfect for kids aged seven to twelve, this event will be held on the 8th of July from 9 a.m. to 4 p.m. in our multi-purpose room."}, 
-                    {pattern: "We have a line-up of activities ready, from (activity 1) to (activity 2) and (activity 3).", example: "We have a line-up of activities ready, from language games to role-play and storytelling."}, 
+                    {pattern: "We have a lineup of activities ready, from (activity 1) to (activity 2) and (activity 3).", example: "We have a lineup of activities ready, from language games to role-play and storytelling."}, 
                     {pattern: "Secure your spot by visiting (website) before (deadline).", example: "Secure your spot by visiting www.appletree.com.hk before the 31st of May, 2026."}, 
                     {pattern: "As a special bonus, (Sponsor) is sponsoring (Offer 1) and (Offer 2) for all participants.", example: "As a special bonus, the World Education Fund is sponsoring a free phonics workbook and a certificate for all participants."}
                 ]
@@ -390,9 +390,25 @@
         }
         window.addEventListener('resize', adjustArrows);
 
-        // --- Syllable & TTS ---
-        const syllableDict = {"learning": "learn·ing", "centre": "cen·tre", "english": "eng·lish", "children": "chil·dren", "multi": "mul·ti", "purpose": "pur·pose", "activities": "ac·tiv·i·ties", "language": "lan·guage", "storytelling": "sto·ry·tell·ing", "enrolment": "en·rol·ment", "method": "meth·od", "online": "on·line", "participant": "par·tic·i·pant", "participants": "par·tic·i·pants", "deadline": "dead·line", "special": "spe·cial", "offers": "of·fers", "sponsored": "spon·sored", "education": "ed·u·ca·tion", "environment": "en·vi·ron·ment", "everyone": "ev·ery·one", "benefit": "ben·e·fit", "elaboration": "e·lab·o·ra·tion", "enquiry": "en·qui·ry", "information": "in·for·ma·tion", "morning": "morn·ing", "calling": "call·ing", "hotline": "hot·line", "excited": "ex·cit·ed", "perfect": "per·fect", "seven": "sev·en", "twelve": "twelve", "line-up": "line·up", "ready": "read·y", "practicing": "prac·tic·ing", "friendly": "friend·ly", "speaking": "speak·ing", "confidence": "con·fi·dence", "everyday": "ev·ery·day", "communication": "com·mu·ni·ca·tion", "secure": "se·cure", "visiting": "vis·it·ing", "before": "be·fore", "dollars": "dol·lars", "bonus": "bo·nus", "phonics": "phon·ics", "workbook": "work·book", "junior": "jun·ior", "master": "mas·ter", "certificate": "cer·tif·i·cate", "goodbye": "good·bye", "apple": "ap·ple", "july": "ju·ly", "united": "u·nit·ed", "charity": "char·i·ty", "mental": "men·tal", "health": "health", "adults": "a·dults", "november": "no·vem·ber", "central": "cen·tral", "different": "dif·fer·ent", "sharing": "shar·ing", "sessions": "ses·sions", "management": "man·age·ment", "workshops": "work·shops", "relaxation": "re·lax·a·tion", "exercises": "ex·er·cis·es", "useful": "use·ful", "experts": "ex·perts", "practical": "prac·ti·cal", "techniques": "tech·niques", "effectively": "ef·fec·tive·ly", "balance": "bal·ance", "demands": "de·mands", "personal": "per·son·al", "enrol": "en·rol", "website": "web·site", "october": "oc·to·ber", "person": "per·son", "sponsorship": "spon·sor·ship", "receive": "re·ceive", "guided": "guid·ed", "meditation": "med·i·ta·tion", "audio": "au·di·o", "sensory": "sen·so·ry", "toolkit": "tool·kit", "details": "de·tails", "graceful": "grace·ful", "service": "ser·vice", "warmly": "warm·ly", "invite": "in·vite", "students": "stu·dents", "january": "jan·u·ar·y", "college": "col·lege", "caring": "car·ing", "visits": "vis·its", "donation": "do·na·tion", "tutoring": "tu·tor·ing", "meaningful": "mean·ing·ful", "volunteer": "vol·un·teer", "minded": "mind·ed", "contributing": "con·trib·ut·ing", "supportive": "sup·por·tive", "setting": "set·ting", "applications": "ap·pli·ca·tions", "participation": "par·tic·i·pa·tion", "official": "of·fi·cial", "appreciation": "ap·pre·ci·a·tion", "limited": "lim·it·ed", "edition": "e·di·tion", "development": "de·vel·op·ment", "lovely": "love·ly", "community": "com·mu·ni·ty", "contacting": "con·tact·ing", "announce": "an·nounce", "leadership": "lead·er·ship", "training": "train·ing", "scheduled": "sched·uled", "running": "run·ning", "lantau": "lan·tau", "island": "is·land", "feature": "fea·ture", "various": "var·i·ous", "outdoor": "out·door", "shelter": "shel·ter", "nature": "na·ture", "highly": "high·ly", "recommend": "rec·om·mend", "furthermore": "fur·ther·more", "strengthen": "strength·en", "resilience": "re·sil·ience", "dramatically": "dra·mat·i·cal·ly", "improve": "im·prove", "ability": "a·bil·i·ty", "pressure": "pres·sure", "registration": "reg·is·tra·tion", "mention": "men·tion", "talent": "tal·ent", "support": "sup·port", "complimentary": "com·pli·men·ta·ry", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles", "enquiries": "en·qui·ries"};
-        const meaningDict = { "jul": { spoken: "July", meaning: "July" }, "oct": { spoken: "October", meaning: "October" }, "nov": { spoken: "November", meaning: "November" }, "jan": { spoken: "January", meaning: "January" }, "may": { spoken: "May", meaning: "May" }, "feb": { spoken: "February", meaning: "February" }, "am": { spoken: "a. m.", meaning: "Morning" }, "pm": { spoken: "p. m.", meaning: "Afternoon" }, "org": { spoken: "dot org", meaning: ".org = organisation" }, "hk": { spoken: "dot H K", meaning: ".hk = Hong Kong" }, "com": { spoken: "dot com", meaning: ".com = commercial" }, "www": { spoken: "W W W", meaning: "World Wide Web" } };
+        // --- Syllable, TTS, and Pronunciation Fixes ---
+        const syllableDict = {"learning": "learn·ing", "centre": "cen·tre", "english": "eng·lish", "children": "chil·dren", "multi": "mul·ti", "purpose": "pur·pose", "activities": "ac·tiv·i·ties", "language": "lan·guage", "storytelling": "sto·ry·tell·ing", "enrolment": "en·rol·ment", "method": "meth·od", "online": "on·line", "participant": "par·tic·i·pant", "participants": "par·tic·i·pants", "deadline": "dead·line", "special": "spe·cial", "offers": "of·fers", "sponsored": "spon·sored", "education": "ed·u·ca·tion", "environment": "en·vi·ron·ment", "everyone": "ev·ery·one", "benefit": "ben·e·fit", "elaboration": "e·lab·o·ra·tion", "enquiry": "en·qui·ry", "information": "in·for·ma·tion", "morning": "morn·ing", "calling": "call·ing", "hotline": "hot·line", "excited": "ex·cit·ed", "perfect": "per·fect", "seven": "sev·en", "twelve": "twelve", "lineup": "line·up", "ready": "read·y", "practicing": "prac·tic·ing", "friendly": "friend·ly", "speaking": "speak·ing", "confidence": "con·fi·dence", "everyday": "ev·ery·day", "communication": "com·mu·ni·ca·tion", "secure": "se·cure", "visiting": "vis·it·ing", "before": "be·fore", "dollars": "dol·lars", "bonus": "bo·nus", "phonics": "phon·ics", "workbook": "work·book", "junior": "jun·ior", "master": "mas·ter", "certificate": "cer·tif·i·cate", "goodbye": "good·bye", "apple": "ap·ple", "july": "ju·ly", "united": "u·nit·ed", "charity": "char·i·ty", "mental": "men·tal", "health": "health", "adults": "a·dults", "november": "no·vem·ber", "central": "cen·tral", "different": "dif·fer·ent", "sharing": "shar·ing", "sessions": "ses·sions", "management": "man·age·ment", "workshops": "work·shops", "relaxation": "re·lax·a·tion", "exercises": "ex·er·cis·es", "useful": "use·ful", "experts": "ex·perts", "practical": "prac·ti·cal", "techniques": "tech·niques", "effectively": "ef·fec·tive·ly", "balance": "bal·ance", "demands": "de·mands", "personal": "per·son·al", "enrol": "en·rol", "website": "web·site", "october": "oc·to·ber", "person": "per·son", "sponsorship": "spon·sor·ship", "receive": "re·ceive", "guided": "guid·ed", "meditation": "med·i·ta·tion", "audio": "au·di·o", "sensory": "sen·so·ry", "toolkit": "tool·kit", "details": "de·tails", "graceful": "grace·ful", "service": "ser·vice", "warmly": "warm·ly", "invite": "in·vite", "students": "stu·dents", "january": "jan·u·ar·y", "college": "col·lege", "caring": "car·ing", "visits": "vis·its", "donation": "do·na·tion", "tutoring": "tu·tor·ing", "meaningful": "mean·ing·ful", "volunteer": "vol·un·teer", "minded": "mind·ed", "contributing": "con·trib·ut·ing", "supportive": "sup·por·tive", "setting": "set·ting", "applications": "ap·pli·ca·tions", "participation": "par·tic·i·pa·tion", "official": "of·fi·cial", "appreciation": "ap·pre·ci·a·tion", "limited": "lim·it·ed", "edition": "e·di·tion", "development": "de·vel·op·ment", "lovely": "love·ly", "community": "com·mu·ni·ty", "contacting": "con·tact·ing", "announce": "an·nounce", "leadership": "lead·er·ship", "training": "train·ing", "scheduled": "sched·uled", "running": "run·ning", "lantau": "lan·tau", "island": "is·land", "feature": "fea·ture", "various": "var·i·ous", "outdoor": "out·door", "shelter": "shel·ter", "nature": "na·ture", "highly": "high·ly", "recommend": "rec·om·mend", "furthermore": "fur·ther·more", "strengthen": "strength·en", "resilience": "re·sil·ience", "dramatically": "dra·mat·i·cal·ly", "improve": "im·prove", "ability": "a·bil·i·ty", "pressure": "pres·sure", "registration": "reg·is·tra·tion", "mention": "men·tion", "talent": "tal·ent", "support": "sup·port", "complimentary": "com·pli·men·ta·ry", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles", "enquiries": "en·qui·ries"};
+        
+        // 修改了讀音字典，強迫單字點擊時逐字母讀出
+        const meaningDict = { 
+            "jul": { spoken: "July", meaning: "July" }, 
+            "oct": { spoken: "October", meaning: "October" }, 
+            "nov": { spoken: "November", meaning: "November" }, 
+            "jan": { spoken: "January", meaning: "January" }, 
+            "may": { spoken: "May", meaning: "May" }, 
+            "feb": { spoken: "February", meaning: "February" }, 
+            "am": { spoken: "A M", meaning: "Morning" }, 
+            "pm": { spoken: "P M", meaning: "Afternoon" }, 
+            "org": { spoken: "dot O R G", meaning: ".org = organisation" }, 
+            "hk": { spoken: "dot H K", meaning: ".hk = Hong Kong" }, 
+            "com": { spoken: "dot C O M", meaning: ".com = commercial" }, 
+            "www": { spoken: "W W W", meaning: "World Wide Web" } 
+        };
+        
         const ordinalMap = { "1": "first", "8": "eighth", "15": "fifteenth", "20": "twentieth", "21": "twenty-first", "31": "thirty-first" };
         const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
@@ -415,8 +431,22 @@
         function speak(text) {
             if (synth.speaking) synth.cancel();
             if (!voiceUK || !voiceUS) initVoices();
-            const utterThis = new SpeechSynthesisUtterance(text);
-            utterThis.voice = (document.getElementById('accent-select').value === 'UK') ? voiceUK : voiceUS;
+            
+            // 讀音修正魔法：在發聲前把網址和時間打散，避免讀錯
+            let processedText = text.replace(/www\./gi, 'W W W dot ')
+                                    .replace(/\.org/gi, ' dot O R G ')
+                                    .replace(/\.com/gi, ' dot C O M ')
+                                    .replace(/\.hk/gi, ' dot H K ')
+                                    .replace(/a\.m\./gi, ' A M ')
+                                    .replace(/p\.m\./gi, ' P M ');
+
+            const utterThis = new SpeechSynthesisUtterance(processedText);
+            
+            // 強制鎖定英文語系，拒絕被手機系統語言干擾
+            const selectedAccent = document.getElementById('accent-select').value;
+            utterThis.voice = (selectedAccent === 'UK') ? voiceUK : voiceUS;
+            utterThis.lang = (selectedAccent === 'UK') ? 'en-GB' : 'en-US'; 
+            
             utterThis.rate = parseFloat(document.getElementById('speed-select').value) * 0.95; 
             synth.speak(utterThis);
         }
@@ -474,7 +504,6 @@
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const sampleRate = audioContext.sampleRate;
                 
-                // 初始化 LameJS MP3 Encoder (單聲道, 128kbps)
                 mp3Encoder = new lamejs.Mp3Encoder(1, sampleRate, 128);
                 mp3Data = [];
                 isRecording = true;
@@ -485,7 +514,6 @@
                 processorNode.onaudioprocess = function(e) {
                     if (!isRecording) return;
                     const left = e.inputBuffer.getChannelData(0);
-                    // 將 Float32 轉成 Int16
                     const sampleChunk = new Int16Array(left.length);
                     for (let i = 0; i < left.length; i++) {
                         let s = Math.max(-1, Math.min(1, left[i]));
@@ -521,7 +549,6 @@
                 if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
                 if (audioContext && audioContext.state !== 'closed') { audioContext.close(); }
 
-                // 讓畫面渲染一下 Loading，然後開始打包 MP3
                 setTimeout(() => {
                     const mp3buf = mp3Encoder.flush();
                     if (mp3buf.length > 0) { mp3Data.push(new Int8Array(mp3buf)); }
@@ -547,7 +574,6 @@
             }
         }
 
-        // --- Web Share API ---
         async function shareAudioFile() {
             if (!recordedBlob) return;
             const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
