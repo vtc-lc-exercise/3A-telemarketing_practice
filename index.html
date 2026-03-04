@@ -7,9 +7,9 @@
     <style>
         /* CSS Variables */
         :root {
-            --primary: #4f46e5;      /* Indigo */
+            --primary: #4f46e5;      
             --primary-hover: #4338ca;
-            --accent: #f59e0b;       /* Amber */
+            --accent: #f59e0b;       
             --bg-grad-1: #4f46e5;    
             --bg-grad-2: #06b6d4;    
             --glass-bg: rgba(255, 255, 255, 0.15);
@@ -169,7 +169,6 @@
         .rec-btn { border: none; border-radius: 50px; padding: 10px 20px; font-size: 0.95rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .btn-start-rec { background: #ef4444; color: white; } .btn-start-rec:active { transform: scale(0.95); background: #dc2626; }
         .btn-stop-rec { background: #4b5563; color: white; display: none; } .btn-stop-rec:active { transform: scale(0.95); }
-        .btn-share { background: #25D366; color: white; display: none; width: 100%; max-width: 250px; justify-content: center;} .btn-share:active { background: #128C7E; transform: scale(0.98); }
         .btn-container { display: flex; justify-content: space-between; margin: 15px 0; gap: 10px; }
         .btn { flex: 1; background: var(--primary); color: white; border: none; padding: 12px 10px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3); min-height: 44px; display: flex; align-items: center; justify-content: center; }
         .btn:active { background-color: var(--primary-hover); box-shadow: none; transform: translateY(1px); }
@@ -247,7 +246,7 @@
             </div>
         </div>
 
-        <!-- ================= PAGE 2: PRACTICE PAPER (DYNAMIC) ================= -->
+        <!-- ================= PAGE 2: PRACTICE PAPER ================= -->
         <div id="page-practice" class="page">
             <div class="btn-container">
                 <button class="btn btn-outline" onclick="navTo('page-menu')">← Menu</button>
@@ -268,9 +267,7 @@
             <div class="hint"><span style="margin-right: 8px;">💡</span> Tap any word to hear it and see its syllables!</div>
 
             <div class="paper-layout">
-                <!-- Left Box (Injected dynamically) -->
                 <div class="paper-left" id="paper-left-container"></div>
-                <!-- Right Boxes (Desktop only, Injected dynamically) -->
                 <div class="desktop-hints-container" id="desktop-hints-container"></div>
             </div>
             
@@ -289,6 +286,7 @@
                 <div class="setting-group"><label>🗣️ Accent:</label><select id="accent-select-2" onchange="syncAccents(this.value)"><option value="UK">British (UK)</option><option value="US">American (US)</option></select></div>
             </div>
             
+            <!-- RECORDING UI -->
             <div class="recorder-container">
                 <div style="font-weight: bold; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem;">🎙️ Record your Pitch here!</div>
                 <div style="font-size: 0.85rem; color: #6b7280; text-align: center;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
@@ -303,13 +301,21 @@
                 </div>
                 <audio id="audio-preview" controls style="display: none; width: 100%; margin-top: 5px;"></audio>
                 
-                <!-- Send to Teacher button (Native Share with Fallback) -->
-                <button class="rec-btn btn-share" id="btn-share" onclick="shareAudio()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                    Send to Teacher
-                </button>
-                
-                <p id="share-status" style="font-size: 0.85rem; color: #6b7280; display: none; text-align: center; margin: 0; padding: 0 10px;"></p>
+                <!-- NEW POST-RECORD ACTIONS (Fixes iOS download blocks) -->
+                <div id="post-record-actions" style="display: none; flex-direction: column; width: 100%; align-items: center; gap: 10px; margin-top: 5px;">
+                    <p style="font-size: 0.85rem; color: #6b7280; text-align: center; margin: 0 0 5px 0;">Choose how to send your recording:</p>
+                    
+                    <button class="rec-btn" id="btn-share" onclick="shareAudio()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg> Share to Teacher
+                    </button>
+                    
+                    <!-- Direct A-tag Download Link to bypass security blocks -->
+                    <a id="btn-download" class="rec-btn" target="_blank" style="background: #f59e0b; color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);">
+                        📥 Save to Device
+                    </a>
+                    
+                    <p id="share-status" style="font-size: 0.85rem; color: #ef4444; display: none; text-align: center; margin: 0; padding: 0 10px; line-height: 1.3;"></p>
+                </div>
             </div>
             
             <h2 style="font-size: 1.4rem; margin-top: 15px;">Possible Sample</h2>
@@ -331,7 +337,7 @@
 
     </div>
 
-    <!-- ================= MODALS (Mobile Only, Dynamic Content) ================= -->
+    <!-- ================= MODALS (Mobile Only) ================= -->
     <div id="modal-why" class="modal" onclick="closeModalOnBG(event, 'modal-why')">
         <div class="modal-content" id="modal-content-why">
             <button class="modal-close" onclick="closeModal('modal-why')">&times;</button>
@@ -354,20 +360,10 @@
             p1: {
                 title: "Apple Tree Learning Centre<br>English Fun Day",
                 enrollTitle: "Enrolment Method & Fee",
-                details: [
-                    "For children (aged 7 – 12)",
-                    "Date / Time / Venue:<br>the 8th of Jul / 9 am – 4 pm / Multi-purpose room, Apple Tree Learning Centre",
-                    "Activities: language games, role play & storytelling"
-                ],
-                enrollment: [
-                    "Online enrolment: www.appletree.com.hk",
-                    "Fee: $420 / participant",
-                    "Deadline: the 31st of May 2026"
-                ],
-                sponsor: "World Education Fund",
-                enquiry: "2 3 8 8 9 0 0 8",
-                whyPoints: ["Friendly English speaking environment -> everyone 😊", "<b>Benefit 2 and elaboration?</b>"],
-                offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+                details: ["For children (aged 7 – 12)", "Date / Time / Venue:<br>the 8th of Jul / 9 am – 4 pm / Multi-purpose room, Apple Tree Learning Centre", "Activities: language games, role play & storytelling"],
+                enrollment: ["Online enrolment: www.appletree.com.hk", "Fee: $420 / participant", "Deadline: the 31st of May 2026"],
+                sponsor: "World Education Fund", enquiry: "2 3 8 8 9 0 0 8",
+                whyPoints: ["Friendly English speaking environment -> everyone 😊", "<b>Benefit 2 and elaboration?</b>"], offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
                 sample: [
                     "Good morning! Thank you for calling the Apple Tree Learning Centre hotline.", 
                     "We are excited to share the news about our new event: English Fun Day!", 
@@ -389,22 +385,10 @@
                 ]
             },
             p2: {
-                title: "United Charity<br>Mental Health Day",
-                enrollTitle: "Registration Method & Fee",
-                details: [
-                    "For adults (18 – 30 years old)",
-                    "Date / Time / Venue:<br>1 Nov / 10 am – 1 pm / Hall 3, Central Town Hall",
-                    "Activities: sharing session, stress management workshop & relaxation exercises"
-                ],
-                enrollment: [
-                    "Online registration: www.united.org.hk",
-                    "Fee: $50 / person",
-                    "Deadline: 20 Oct 2026"
-                ],
-                sponsor: "City Care Fund",
-                enquiry: "3 1 6 8 9 4 5 0",
-                whyPoints: ["Useful tips from experts -> everybody 😊", "<b>Benefit 2 and elaboration?</b>"],
-                offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+                title: "United Charity<br>Mental Health Day", enrollTitle: "Registration Method & Fee",
+                details: ["For adults (18 – 30 years old)", "Date / Time / Venue:<br>1 Nov / 10 am – 1 pm / Hall 3, Central Town Hall", "Activities: sharing session, stress management workshop & relaxation exercises"],
+                enrollment: ["Online registration: www.united.org.hk", "Fee: $50 / person", "Deadline: 20 Oct 2026"], sponsor: "City Care Fund", enquiry: "3 1 6 8 9 4 5 0",
+                whyPoints: ["Useful tips from experts -> everybody 😊", "<b>Benefit 2 and elaboration?</b>"], offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
                 sample: [
                     "Good morning! Thank you for calling the United Charity hotline.",
                     "We are excited to share the news about our new event: Mental Health Day!",
@@ -427,22 +411,10 @@
                 ]
             },
             p3: {
-                title: "Graceful Heart<br>Youth Service Day",
-                enrollTitle: "Application Method & Fee",
-                details: [
-                    "For full-time students (aged 16 – 24)",
-                    "Date / Time / Venue:<br>15 Jan / 10 am – 3 pm / Grand Hall, Hong Kong College",
-                    "Activities: caring visits, food donation & tutoring services"
-                ],
-                enrollment: [
-                    "Online application: www.gracefulheart.com",
-                    "Fee: free of charge",
-                    "Deadline: 21 Jan 2026"
-                ],
-                sponsor: "Bright Development Fund",
-                enquiry: "2 6 1 1 3 8 4 4",
-                whyPoints: ["Meaningful volunteer work -> everybody 😊", "<b>Benefit 2 and elaboration?</b>"],
-                offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+                title: "Graceful Heart<br>Youth Service Day", enrollTitle: "Application Method & Fee",
+                details: ["For full-time students (aged 16 – 24)", "Date / Time / Venue:<br>15 Jan / 10 am – 3 pm / Grand Hall, Hong Kong College", "Activities: caring visits, food donation & tutoring services"],
+                enrollment: ["Online application: www.gracefulheart.com", "Fee: free of charge", "Deadline: 21 Jan 2026"], sponsor: "Bright Development Fund", enquiry: "2 6 1 1 3 8 4 4",
+                whyPoints: ["Meaningful volunteer work -> everybody 😊", "<b>Benefit 2 and elaboration?</b>"], offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
                 sample: [
                     "Good morning, and thank you for calling Graceful Heart.",
                     "We warmly invite you to join our Youth Service Day.",
@@ -463,22 +435,10 @@
                 ]
             },
             p4: {
-                title: "Miles Community Centre<br>Leadership Training Camp",
-                enrollTitle: "Registration Method & Fee",
-                details: [
-                    "For young people (12 – 18 years old)",
-                    "Date / Time / Location:<br>21 Nov / 8 am – 6 pm / Lantau Island",
-                    "Outdoor activities: shelter building, nature hikes & team building games"
-                ],
-                enrollment: [
-                    "Online registration: www.miles.org.hk",
-                    "Fee: $550 / person",
-                    "Deadline: 15 Oct 2026"
-                ],
-                sponsor: "Talent Support Fund",
-                enquiry: "2 3 2 3 4 4 5 6",
-                whyPoints: ["Effective leadership skills -> everybody 😊", "<b>Benefit 2 and elaboration?</b>"],
-                offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+                title: "Miles Community Centre<br>Leadership Training Camp", enrollTitle: "Registration Method & Fee",
+                details: ["For young people (12 – 18 years old)", "Date / Time / Location:<br>21 Nov / 8 am – 6 pm / Lantau Island", "Outdoor activities: shelter building, nature hikes & team building games"],
+                enrollment: ["Online registration: www.miles.org.hk", "Fee: $550 / person", "Deadline: 15 Oct 2026"], sponsor: "Talent Support Fund", enquiry: "2 3 2 3 4 4 5 6",
+                whyPoints: ["Effective leadership skills -> everybody 😊", "<b>Benefit 2 and elaboration?</b>"], offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
                 sample: [
                     "Good morning. Thank you for contacting the Miles Community Centre.",
                     "We are pleased to announce the launch of our Leadership Training Camp.",
@@ -513,62 +473,30 @@
         }
 
         function loadPractice(id) {
-            currentPracticeId = id;
-            const d = pData[id];
+            currentPracticeId = id; const d = pData[id];
             
             // 1. Build Left Box (Paper)
-            let detailsHtml = d.details.map(x => `<li>${x}</li>`).join('');
-            let enrollHtml = d.enrollment.map(x => `<li>${x}</li>`).join('');
-            
+            let detailsHtml = d.details.map(x => `<li>${x}</li>`).join(''); let enrollHtml = d.enrollment.map(x => `<li>${x}</li>`).join('');
             document.getElementById('paper-left-container').innerHTML = `
                 <div class="box box-left" id="box-main">
-                    <div style="text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; font-family: 'Comic Sans MS', cursive;">
-                        ${d.title}
-                    </div>
-                    <div id="target-details" style="position: relative;">
-                        <b>Details</b> 
-                        <button class="mobile-hint-btn" onclick="openModal('modal-why')">💡 Why joining?</button>
-                        <ul style="margin-top: 5px; padding-left: 20px;">${detailsHtml}</ul>
-                    </div>
-                    <b>${d.enrollTitle}</b>
-                    <ul style="margin-top: 5px; padding-left: 20px;">${enrollHtml}</ul>
-                    <div class="target-offer-box" id="target-offer">
-                        <b>Check out our special offers to participants sponsored by<br>${d.sponsor}</b>
-                        <div style="margin-top: 8px;">
-                            <button class="mobile-hint-btn" style="margin:0;" onclick="openModal('modal-offers')">🎁 View Offers</button>
-                        </div>
-                    </div>
-                    <b>Enquiry</b>
-                    <ul style="margin-top: 5px; margin-bottom: 0; padding-left: 20px;">
-                        <li>More information: ${d.enquiry}</li>
-                    </ul>
-                </div>
-            `;
+                    <div style="text-align: center; font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; font-family: 'Comic Sans MS', cursive;">${d.title}</div>
+                    <div id="target-details" style="position: relative;"><b>Details</b><button class="mobile-hint-btn" onclick="openModal('modal-why')">💡 Why joining?</button><ul style="margin-top: 5px; padding-left: 20px;">${detailsHtml}</ul></div>
+                    <b>${d.enrollTitle}</b><ul style="margin-top: 5px; padding-left: 20px;">${enrollHtml}</ul>
+                    <div class="target-offer-box" id="target-offer"><b>Check out our special offers to participants sponsored by<br>${d.sponsor}</b><div style="margin-top: 8px;"><button class="mobile-hint-btn" style="margin:0;" onclick="openModal('modal-offers')">🎁 View Offers</button></div></div>
+                    <b>Enquiry</b><ul style="margin-top: 5px; margin-bottom: 0; padding-left: 20px;"><li>More information: ${d.enquiry}</li></ul>
+                </div>`;
             
             // 2. Build Right Boxes (Desktop Hints)
-            let whyHtml = d.whyPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join('');
-            let offerHtml = d.offerPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join('');
-            
+            let whyHtml = d.whyPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join(''); let offerHtml = d.offerPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join('');
             document.getElementById('desktop-hints-container').innerHTML = `
-                <div class="box box-right" id="box-why">
-                    <svg class="svg-arrow" id="why-arrow" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none" /></svg>
-                    <div class="box-title">💡 Why joining?</div>
-                    <ul style="padding-left: 20px; margin-bottom: 0;">${whyHtml}</ul>
-                </div>
-                <div class="box box-right" id="box-offers">
-                    <svg class="svg-arrow" id="offer-arrow" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none" /></svg>
-                    <div class="box-title">🎁 Offers to participants:</div>
-                    <ul style="padding-left: 20px; margin-bottom: 0;">${offerHtml}</ul>
-                </div>
-            `;
+                <div class="box box-right" id="box-why"><svg class="svg-arrow" id="why-arrow" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none" /></svg><div class="box-title">💡 Why joining?</div><ul style="padding-left: 20px; margin-bottom: 0;">${whyHtml}</ul></div>
+                <div class="box box-right" id="box-offers"><svg class="svg-arrow" id="offer-arrow" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none" /></svg><div class="box-title">🎁 Offers to participants:</div><ul style="padding-left: 20px; margin-bottom: 0;">${offerHtml}</ul></div>`;
             
-            // 3. Build Modals (Mobile Hints)
-            document.getElementById('modal-content-why-list').innerHTML = whyHtml;
-            document.getElementById('modal-content-offers-list').innerHTML = offerHtml;
+            // 3. Build Modals
+            document.getElementById('modal-content-why-list').innerHTML = whyHtml; document.getElementById('modal-content-offers-list').innerHTML = offerHtml;
             
             // 4. Build Sample Section
-            const sampleContainer = document.getElementById('sample-container');
-            sampleContainer.innerHTML = '';
+            const sampleContainer = document.getElementById('sample-container'); sampleContainer.innerHTML = '';
             d.sample.forEach(sentence => {
                 const row = document.createElement('div'); row.className = 'play-row'; row.style.borderBottom = '1px dashed #e5e7eb'; row.style.paddingBottom = '10px';
                 const btn = document.createElement('button'); btn.className = 'play-btn'; btn.innerHTML = '▶';
@@ -579,8 +507,7 @@
             });
 
             // 5. Build Useful Expressions
-            const expContainer = document.getElementById('expressions-container');
-            expContainer.innerHTML = '';
+            const expContainer = document.getElementById('expressions-container'); expContainer.innerHTML = '';
             d.exp.forEach(exp => {
                 const card = document.createElement('div'); card.className = 'exp-card play-row';
                 const btn = document.createElement('button'); btn.className = 'play-btn'; btn.innerHTML = '▶';
@@ -591,17 +518,13 @@
                 card.appendChild(btn); card.appendChild(content); expContainer.appendChild(card);
             });
 
-            // Make interactive
-            makeClickableArea('box-main'); 
-            makeClickableArea('box-why'); 
-            makeClickableArea('box-offers');
-            makeClickableArea('modal-content-why-list'); 
-            makeClickableArea('modal-content-offers-list');
+            makeClickableArea('box-main'); makeClickableArea('box-why'); makeClickableArea('box-offers');
+            makeClickableArea('modal-content-why-list'); makeClickableArea('modal-content-offers-list');
 
             // Reset recording UI
             if(mediaRecorder && mediaRecorder.state !== 'inactive') { stopRecording(); }
             document.getElementById('audio-preview').style.display = 'none';
-            document.getElementById('btn-share').style.display = 'none';
+            document.getElementById('post-record-actions').style.display = 'none';
             document.getElementById('share-status').style.display = 'none';
             document.getElementById('timer').textContent = "00:00";
             
@@ -609,14 +532,8 @@
         }
 
         // --- Modals Logic (Mobile) ---
-        function openModal(id) {
-            const modal = document.getElementById(id); modal.style.display = 'flex';
-            setTimeout(() => { modal.classList.add('show'); }, 10); document.body.style.overflow = 'hidden'; 
-        }
-        function closeModal(id) {
-            const modal = document.getElementById(id); modal.classList.remove('show');
-            setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 300); 
-        }
+        function openModal(id) { const modal = document.getElementById(id); modal.style.display = 'flex'; setTimeout(() => { modal.classList.add('show'); }, 10); document.body.style.overflow = 'hidden'; }
+        function closeModal(id) { const modal = document.getElementById(id); modal.classList.remove('show'); setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 300); }
         function closeModalOnBG(event, id) { if (event.target.id === id) { closeModal(id); } }
 
         // --- Desktop Arrows Alignment ---
@@ -641,7 +558,6 @@
             "everyday": "ev·ery·day", "communication": "com·mu·ni·ca·tion", "secure": "se·cure", "visiting": "vis·it·ing", "before": "be·fore", 
             "dollars": "dol·lars", "bonus": "bo·nus", "phonics": "phon·ics", "workbook": "work·book", "junior": "jun·ior", "master": "mas·ter", 
             "certificate": "cer·tif·i·cate", "goodbye": "good·bye", "apple": "ap·ple", "july": "ju·ly",
-            // New Words added for Practice 2, 3, 4
             "united": "u·nit·ed", "charity": "char·i·ty", "mental": "men·tal", "health": "health", "adults": "a·dults", "november": "no·vem·ber", "central": "cen·tral",
             "different": "dif·fer·ent", "sharing": "shar·ing", "sessions": "ses·sions", "management": "man·age·ment", "workshops": "work·shops",
             "relaxation": "re·lax·a·tion", "exercises": "ex·er·cis·es", "useful": "use·ful", "experts": "ex·perts", "practical": "prac·ti·cal", "techniques": "tech·niques", 
@@ -659,18 +575,9 @@
             "pressure": "pres·sure", "registration": "reg·is·tra·tion", "mention": "men·tion", "talent": "tal·ent", "support": "sup·port", 
             "complimentary": "com·pli·men·ta·ry", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles", "enquiries": "en·qui·ries"
         };
+        const meaningDict = { "jul": { spoken: "July", meaning: "July" }, "oct": { spoken: "October", meaning: "October" }, "nov": { spoken: "November", meaning: "November" }, "jan": { spoken: "January", meaning: "January" }, "feb": { spoken: "February", meaning: "February" } };
         
-        const meaningDict = {
-            "jul": { spoken: "July", meaning: "July" },
-            "oct": { spoken: "October", meaning: "October" },
-            "nov": { spoken: "November", meaning: "November" },
-            "jan": { spoken: "January", meaning: "January" },
-            "feb": { spoken: "February", meaning: "February" }
-        };
-        
-        const synth = window.speechSynthesis;
-        let voiceUK = null, voiceUS = null;
-
+        const synth = window.speechSynthesis; let voiceUK = null, voiceUS = null;
         function initVoices() {
             const voices = synth.getVoices();
             voiceUK = voices.find(v => v.lang === 'en-GB' && v.name.includes('Google')) || voices.find(v => v.lang === 'en-GB' && v.name.includes('Siri')) || voices.find(v => v.lang === 'en-GB') || voices[0];
@@ -689,6 +596,20 @@
             synth.speak(utterThis);
         }
 
+        // --- Syllable Auto-Generator ---
+        function countSyllables(word) {
+            word = word.toLowerCase(); if(word.length <= 3) return 1;
+            word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, ''); word = word.replace(/^y/, '');
+            return word.match(/[aeiouy]{1,2}/g)?.length || 1;
+        }
+
+        function generateSyllables(word) {
+            let count = countSyllables(word); if (count <= 1) return word; 
+            let w = word.toLowerCase(); let result = ""; let chunk = Math.ceil(w.length / count);
+            for(let i=0; i<w.length; i+=chunk) { result += w.substring(i, i+chunk) + (i+chunk < w.length ? "·" : ""); }
+            return result;
+        }
+
         function adjustTooltipPosition(tooltip, spanRect) {
             tooltip.style.transform = 'translateX(-50%)'; tooltip.style.left = '50%';
             const tooltipRect = tooltip.getBoundingClientRect(), viewportWidth = window.innerWidth;
@@ -698,26 +619,21 @@
 
         function processNode(node) {
             if (node.nodeType === Node.TEXT_NODE) {
-                const text = node.textContent;
-                if (!text.trim()) return node;
+                const text = node.textContent; if (!text.trim()) return node;
                 const fragment = document.createDocumentFragment();
                 const tokens = text.match(/[\w']+|[^\w']+/g) || [];
                 tokens.forEach(token => {
-                    if (/^[a-zA-Z0-9]+$/.test(token)) {
-                        const span = document.createElement('span');
-                        span.className = 'clickable-word'; span.textContent = token;
+                    if (/^[a-zA-Z]+$/.test(token)) {
+                        const span = document.createElement('span'); span.className = 'clickable-word'; span.textContent = token;
+                        const lowerToken = token.toLowerCase(); let syllables = syllableDict[lowerToken]; const customMeaning = meaningDict[lowerToken]; 
                         
-                        const lowerToken = token.toLowerCase();
-                        const syllables = syllableDict[lowerToken];
-                        const customMeaning = meaningDict[lowerToken]; 
-                        
+                        if (!syllables && token.length > 4 && countSyllables(token) > 1) { syllables = generateSyllables(token); }
                         let sylTooltip = null; let meaningTooltip = null;
                         
-                        if (syllables) {
+                        if (syllables && syllables !== lowerToken) {
                             sylTooltip = document.createElement('span'); sylTooltip.className = 'syllable-tooltip'; 
                             sylTooltip.textContent = syllables; span.appendChild(sylTooltip);
                         }
-                        
                         if (customMeaning) {
                             meaningTooltip = document.createElement('span'); meaningTooltip.className = 'meaning-tooltip'; 
                             meaningTooltip.textContent = `Means: ${customMeaning.meaning}`;
@@ -728,14 +644,10 @@
                         span.addEventListener('click', function(e) {
                             e.preventDefault(); e.stopPropagation();
                             if(synth.state === 'suspended') synth.resume();
-                            const textToSpeak = customMeaning ? customMeaning.spoken : token;
-                            speak(textToSpeak);
-                            
-                            this.style.backgroundColor = 'var(--primary)'; this.style.color = 'white';
-                            this.classList.add('show-tooltip');
+                            speak(customMeaning ? customMeaning.spoken : token);
+                            this.style.backgroundColor = 'var(--primary)'; this.style.color = 'white'; this.classList.add('show-tooltip');
                             if (sylTooltip) setTimeout(() => adjustTooltipPosition(sylTooltip, this.getBoundingClientRect()), 10);
                             if (meaningTooltip) setTimeout(() => adjustTooltipPosition(meaningTooltip, this.getBoundingClientRect()), 10);
-                            
                             setTimeout(() => { this.style.backgroundColor = ''; this.style.color = ''; this.classList.remove('show-tooltip'); }, 1500);
                         });
                         fragment.appendChild(span);
@@ -743,7 +655,7 @@
                 });
                 return fragment;
             } else if (node.nodeType === Node.ELEMENT_NODE) {
-                if (['SCRIPT','STYLE','SELECT','OPTION','SVG','BUTTON'].includes(node.tagName)) return node;
+                if (['SCRIPT','STYLE','SELECT','OPTION','SVG','BUTTON','A'].includes(node.tagName)) return node;
                 const newElement = node.cloneNode(false);
                 Array.from(node.childNodes).forEach(child => { newElement.appendChild(processNode(child)); });
                 return newElement;
@@ -753,19 +665,11 @@
 
         function makeClickableArea(elementId) {
             const el = document.getElementById(elementId);
-            if(el) {
-                const processed = processNode(el);
-                el.parentNode.replaceChild(processed, el);
-            }
+            if(el) { const processed = processNode(el); el.parentNode.replaceChild(processed, el); }
         }
 
         // --- Reliable Audio Recording & Sharing Logic ---
-        let mediaRecorder = null; 
-        let audioChunks = []; 
-        let timerInterval = null; 
-        let seconds = 0; 
-        let recordedBlob = null;
-        let activeStream = null;
+        let mediaRecorder = null; let audioChunks = []; let timerInterval = null; let seconds = 0; let recordedBlob = null; let activeStream = null;
 
         function updateTimerDisplay() {
             const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -800,7 +704,31 @@
                     const audioEl = document.getElementById('audio-preview');
                     audioEl.src = audioUrl; audioEl.style.display = 'block';
                     
-                    document.getElementById('btn-share').style.display = 'flex';
+                    // --- SETUP EXPLICIT DOWNLOAD LINK ---
+                    let ext = 'webm';
+                    if (recordedBlob.type.includes('mp4')) ext = 'm4a';
+                    else if (recordedBlob.type.includes('ogg')) ext = 'ogg';
+                    const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
+                    const filename = `${pName}_Telemarketing_Pitch.${ext}`;
+                    
+                    const btnDownload = document.getElementById('btn-download');
+                    btnDownload.href = audioUrl;
+                    btnDownload.download = filename;
+                    
+                    document.getElementById('post-record-actions').style.display = 'flex';
+                    
+                    // Conditionally show Native Share Button
+                    try {
+                        const audioFile = new File([recordedBlob], filename, { type: recordedBlob.type });
+                        if (navigator.canShare && navigator.canShare({ files: [audioFile] })) {
+                            document.getElementById('btn-share').style.display = 'flex';
+                        } else {
+                            document.getElementById('btn-share').style.display = 'none';
+                        }
+                    } catch(e) {
+                        document.getElementById('btn-share').style.display = 'none';
+                    }
+
                     if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
                 };
 
@@ -809,7 +737,7 @@
                 document.getElementById('btn-start').style.display = 'none';
                 document.getElementById('btn-stop').style.display = 'flex';
                 document.getElementById('audio-preview').style.display = 'none';
-                document.getElementById('btn-share').style.display = 'none';
+                document.getElementById('post-record-actions').style.display = 'none';
                 document.getElementById('share-status').style.display = 'none';
                 
                 const timerEl = document.getElementById('timer');
@@ -821,7 +749,6 @@
                 
             } catch (err) {
                 alert("Cannot access microphone. Please ensure you have granted permission in your browser settings.");
-                console.error("Mic Error:", err);
             }
         }
 
@@ -839,6 +766,9 @@
         async function shareAudio() {
             const statusEl = document.getElementById('share-status'); 
             statusEl.style.display = 'block';
+            statusEl.textContent = "Opening share menu...";
+            statusEl.style.color = "#6b7280";
+            
             if (!recordedBlob) return;
 
             let ext = 'webm';
@@ -849,48 +779,22 @@
             const filename = `${pName}_Telemarketing_Pitch.${ext}`;
             const audioFile = new File([recordedBlob], filename, { type: recordedBlob.type });
 
-            // 嘗試使用原生的 Web Share API (會彈出分享選單，例如 WhatsApp)
-            if (navigator.canShare && navigator.canShare({ files: [audioFile] })) {
-                try {
-                    await navigator.share({
-                        title: 'VE3A Telemarketing Assessment',
-                        text: 'Teacher, here is my Telemarketing Practice recording!',
-                        files: [audioFile]
-                    });
-                    statusEl.textContent = "Audio shared successfully! ✅"; 
-                    statusEl.style.color = "#25D366"; 
-                } catch (error) {
-                    // 如果使用者取消分享 (AbortError)，或者發生其他錯誤，提供自動下載備案
-                    if (error.name !== "AbortError") {
-                        statusEl.innerHTML = "Cannot share directly. <br>The file has been saved to your device. Please send it manually! 📥"; 
-                        statusEl.style.color = "#d97706"; // Amber warning color
-                        downloadAudio(filename);
-                    } else {
-                        statusEl.textContent = "Share cancelled."; 
-                        statusEl.style.color = "#6b7280";
-                    }
+            try {
+                await navigator.share({
+                    title: 'VE3A Telemarketing Assessment',
+                    text: 'Teacher, here is my recording!',
+                    files: [audioFile]
+                });
+                statusEl.textContent = "✅ Shared successfully!"; 
+                statusEl.style.color = "#25D366"; 
+            } catch (error) {
+                if (error.name !== "AbortError") {
+                    statusEl.innerHTML = "⚠️ Cannot share directly from this app/browser.<br>Please click the <b>Save to Device</b> button below, then send it via WhatsApp manually."; 
+                    statusEl.style.color = "#ef4444"; 
+                } else {
+                    statusEl.style.display = 'none';
                 }
-            } else {
-                // 如果瀏覽器不支援 Web Share API (例如 Desktop 或舊手機)，直接觸發下載
-                statusEl.innerHTML = "Direct sharing is not supported on this browser. <br>The file has been saved to your device instead! 📥"; 
-                statusEl.style.color = "#d97706";
-                downloadAudio(filename);
             }
-        }
-        
-        function downloadAudio(filename) {
-            const url = URL.createObjectURL(recordedBlob);
-            const a = document.createElement('a'); 
-            a.style.display = 'none'; 
-            a.href = url; 
-            a.download = filename;
-            document.body.appendChild(a); 
-            a.click(); 
-            
-            setTimeout(() => {
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-            }, 100);
         }
 
         window.onload = function() {
