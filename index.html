@@ -169,6 +169,7 @@
         .rec-btn { border: none; border-radius: 50px; padding: 10px 20px; font-size: 0.95rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .btn-start-rec { background: #ef4444; color: white; } .btn-start-rec:active { transform: scale(0.95); background: #dc2626; }
         .btn-stop-rec { background: #4b5563; color: white; display: none; } .btn-stop-rec:active { transform: scale(0.95); }
+        
         .btn-container { display: flex; justify-content: space-between; margin: 15px 0; gap: 10px; }
         .btn { flex: 1; background: var(--primary); color: white; border: none; padding: 12px 10px; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; text-align: center; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3); min-height: 44px; display: flex; align-items: center; justify-content: center; }
         .btn:active { background-color: var(--primary-hover); box-shadow: none; transform: translateY(1px); }
@@ -301,20 +302,20 @@
                 </div>
                 <audio id="audio-preview" controls style="display: none; width: 100%; margin-top: 5px;"></audio>
                 
-                <!-- NEW POST-RECORD ACTIONS (Fixes iOS download blocks) -->
+                <!-- AUTO-SWITCHING ACTION BUTTONS -->
                 <div id="post-record-actions" style="display: none; flex-direction: column; width: 100%; align-items: center; gap: 10px; margin-top: 5px;">
-                    <p style="font-size: 0.85rem; color: #6b7280; text-align: center; margin: 0 0 5px 0;">Choose how to send your recording:</p>
                     
-                    <button class="rec-btn" id="btn-share" onclick="shareAudio()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg> Share to Teacher
+                    <!-- Only shows on Mobile Native Share -->
+                    <button class="rec-btn" id="btn-share" onclick="shareAudio()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3); display: none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg> Send via WhatsApp
                     </button>
                     
-                    <!-- Direct A-tag Download Link to bypass security blocks -->
-                    <a id="btn-download" class="rec-btn" target="_blank" style="background: #f59e0b; color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);">
-                        📥 Save to Device
+                    <!-- Only shows on Desktop or if Native Share fails -->
+                    <a id="btn-download" class="rec-btn" target="_blank" style="background: #f59e0b; color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3); display: none;">
+                        📥 Download & Send
                     </a>
                     
-                    <p id="share-status" style="font-size: 0.85rem; color: #ef4444; display: none; text-align: center; margin: 0; padding: 0 10px; line-height: 1.3;"></p>
+                    <p id="share-status" style="font-size: 0.85rem; color: #6b7280; display: none; text-align: center; margin: 0; padding: 0 10px; line-height: 1.3;"></p>
                 </div>
             </div>
             
@@ -475,7 +476,6 @@
         function loadPractice(id) {
             currentPracticeId = id; const d = pData[id];
             
-            // 1. Build Left Box (Paper)
             let detailsHtml = d.details.map(x => `<li>${x}</li>`).join(''); let enrollHtml = d.enrollment.map(x => `<li>${x}</li>`).join('');
             document.getElementById('paper-left-container').innerHTML = `
                 <div class="box box-left" id="box-main">
@@ -486,16 +486,13 @@
                     <b>Enquiry</b><ul style="margin-top: 5px; margin-bottom: 0; padding-left: 20px;"><li>More information: ${d.enquiry}</li></ul>
                 </div>`;
             
-            // 2. Build Right Boxes (Desktop Hints)
             let whyHtml = d.whyPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join(''); let offerHtml = d.offerPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join('');
             document.getElementById('desktop-hints-container').innerHTML = `
                 <div class="box box-right" id="box-why"><svg class="svg-arrow" id="why-arrow" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none" /></svg><div class="box-title">💡 Why joining?</div><ul style="padding-left: 20px; margin-bottom: 0;">${whyHtml}</ul></div>
                 <div class="box box-right" id="box-offers"><svg class="svg-arrow" id="offer-arrow" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none" /></svg><div class="box-title">🎁 Offers to participants:</div><ul style="padding-left: 20px; margin-bottom: 0;">${offerHtml}</ul></div>`;
             
-            // 3. Build Modals
             document.getElementById('modal-content-why-list').innerHTML = whyHtml; document.getElementById('modal-content-offers-list').innerHTML = offerHtml;
             
-            // 4. Build Sample Section
             const sampleContainer = document.getElementById('sample-container'); sampleContainer.innerHTML = '';
             d.sample.forEach(sentence => {
                 const row = document.createElement('div'); row.className = 'play-row'; row.style.borderBottom = '1px dashed #e5e7eb'; row.style.paddingBottom = '10px';
@@ -506,7 +503,6 @@
                 textDiv.parentNode.replaceChild(processNode(textDiv), textDiv);
             });
 
-            // 5. Build Useful Expressions
             const expContainer = document.getElementById('expressions-container'); expContainer.innerHTML = '';
             d.exp.forEach(exp => {
                 const card = document.createElement('div'); card.className = 'exp-card play-row';
@@ -602,21 +598,18 @@
             word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, ''); word = word.replace(/^y/, '');
             return word.match(/[aeiouy]{1,2}/g)?.length || 1;
         }
-
         function generateSyllables(word) {
             let count = countSyllables(word); if (count <= 1) return word; 
             let w = word.toLowerCase(); let result = ""; let chunk = Math.ceil(w.length / count);
             for(let i=0; i<w.length; i+=chunk) { result += w.substring(i, i+chunk) + (i+chunk < w.length ? "·" : ""); }
             return result;
         }
-
         function adjustTooltipPosition(tooltip, spanRect) {
             tooltip.style.transform = 'translateX(-50%)'; tooltip.style.left = '50%';
             const tooltipRect = tooltip.getBoundingClientRect(), viewportWidth = window.innerWidth;
             if (tooltipRect.right > viewportWidth - 5) { tooltip.style.transform = `translateX(calc(-50% - ${tooltipRect.right - viewportWidth + 10}px))`; }
             else if (tooltipRect.left < 5) { tooltip.style.transform = `translateX(calc(-50% + ${10 - tooltipRect.left}px))`; }
         }
-
         function processNode(node) {
             if (node.nodeType === Node.TEXT_NODE) {
                 const text = node.textContent; if (!text.trim()) return node;
@@ -662,13 +655,12 @@
             }
             return node.cloneNode(true);
         }
-
         function makeClickableArea(elementId) {
             const el = document.getElementById(elementId);
             if(el) { const processed = processNode(el); el.parentNode.replaceChild(processed, el); }
         }
 
-        // --- Reliable Audio Recording & Sharing Logic ---
+        // --- Reliable Audio Recording & Smart Sharing Logic ---
         let mediaRecorder = null; let audioChunks = []; let timerInterval = null; let seconds = 0; let recordedBlob = null; let activeStream = null;
 
         function updateTimerDisplay() {
@@ -683,50 +675,72 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 activeStream = stream;
                 
-                const options = { mimeType: 'audio/webm' };
-                if (!MediaRecorder.isTypeSupported('audio/webm')) {
-                    if (MediaRecorder.isTypeSupported('audio/mp4')) { options.mimeType = 'audio/mp4'; } 
-                    else if (MediaRecorder.isTypeSupported('audio/ogg')) { options.mimeType = 'audio/ogg'; } 
-                    else { options.mimeType = ''; }
+                // 優先選擇跨平台最相容的格式
+                let mimeType = '';
+                const types = [
+                    'audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus'
+                ];
+                for (let type of types) {
+                    if (MediaRecorder.isTypeSupported(type)) {
+                        mimeType = type;
+                        break;
+                    }
                 }
 
-                mediaRecorder = new MediaRecorder(stream, options.mimeType ? options : undefined);
+                const options = mimeType ? { mimeType } : undefined;
+                mediaRecorder = new MediaRecorder(stream, options);
                 audioChunks = []; recordedBlob = null;
 
                 mediaRecorder.ondataavailable = event => { if (event.data && event.data.size > 0) { audioChunks.push(event.data); } };
 
                 mediaRecorder.onstop = () => {
                     if (audioChunks.length === 0) return;
-                    const mimeType = mediaRecorder.mimeType || 'audio/mp4'; 
-                    recordedBlob = new Blob(audioChunks, { type: mimeType }); 
+                    
+                    // 為了確保不論 iOS 或 Android，儲存下來的附檔名都是 WhatsApp 讀得懂的
+                    let finalMime = mediaRecorder.mimeType || 'audio/mp4';
+                    let ext = 'mp4'; // 預設用 MP4，因為 iOS 和 Android 都支援播放
+                    
+                    if (finalMime.includes('webm')) ext = 'webm';
+                    else if (finalMime.includes('ogg')) ext = 'ogg';
+
+                    recordedBlob = new Blob(audioChunks, { type: finalMime }); 
                     
                     const audioUrl = URL.createObjectURL(recordedBlob);
                     const audioEl = document.getElementById('audio-preview');
                     audioEl.src = audioUrl; audioEl.style.display = 'block';
                     
-                    // --- SETUP EXPLICIT DOWNLOAD LINK ---
-                    let ext = 'webm';
-                    if (recordedBlob.type.includes('mp4')) ext = 'm4a';
-                    else if (recordedBlob.type.includes('ogg')) ext = 'ogg';
                     const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
                     const filename = `${pName}_Telemarketing_Pitch.${ext}`;
                     
-                    const btnDownload = document.getElementById('btn-download');
-                    btnDownload.href = audioUrl;
-                    btnDownload.download = filename;
-                    
                     document.getElementById('post-record-actions').style.display = 'flex';
                     
-                    // Conditionally show Native Share Button
+                    // 智慧判斷：是否支援 Native Share
+                    const btnShare = document.getElementById('btn-share');
+                    const btnDownload = document.getElementById('btn-download');
+                    const statusEl = document.getElementById('share-status');
+                    
+                    // Reset
+                    btnShare.style.display = 'none';
+                    btnDownload.style.display = 'none';
+                    statusEl.style.display = 'none';
+
+                    // 綁定下載連結
+                    btnDownload.href = audioUrl;
+                    btnDownload.download = filename;
+
                     try {
-                        const audioFile = new File([recordedBlob], filename, { type: recordedBlob.type });
-                        if (navigator.canShare && navigator.canShare({ files: [audioFile] })) {
-                            document.getElementById('btn-share').style.display = 'flex';
+                        const testFile = new File([recordedBlob], filename, { type: recordedBlob.type });
+                        // 如果是手機，且支援 Share File，就只顯示 Share 按鈕
+                        if (navigator.canShare && navigator.canShare({ files: [testFile] }) && /Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+                            btnShare.style.display = 'flex';
                         } else {
-                            document.getElementById('btn-share').style.display = 'none';
+                            // 電腦版或不支援 Share 的 App 內建瀏覽器，只顯示 Download
+                            btnDownload.style.display = 'flex';
+                            statusEl.style.display = 'block';
+                            statusEl.textContent = "Please save the file and send it to your teacher.";
                         }
                     } catch(e) {
-                        document.getElementById('btn-share').style.display = 'none';
+                        btnDownload.style.display = 'flex';
                     }
 
                     if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
@@ -765,15 +779,19 @@
         
         async function shareAudio() {
             const statusEl = document.getElementById('share-status'); 
+            const btnShare = document.getElementById('btn-share');
+            const btnDownload = document.getElementById('btn-download');
+            
             statusEl.style.display = 'block';
-            statusEl.textContent = "Opening share menu...";
+            statusEl.textContent = "Opening WhatsApp / Share menu...";
             statusEl.style.color = "#6b7280";
             
             if (!recordedBlob) return;
 
-            let ext = 'webm';
-            if (recordedBlob.type.includes('mp4')) ext = 'm4a';
-            else if (recordedBlob.type.includes('ogg')) ext = 'ogg';
+            let finalMime = mediaRecorder.mimeType || 'audio/mp4';
+            let ext = 'mp4'; 
+            if (finalMime.includes('webm')) ext = 'webm';
+            else if (finalMime.includes('ogg')) ext = 'ogg';
             
             const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
             const filename = `${pName}_Telemarketing_Pitch.${ext}`;
@@ -788,8 +806,11 @@
                 statusEl.textContent = "✅ Shared successfully!"; 
                 statusEl.style.color = "#25D366"; 
             } catch (error) {
+                // 如果用戶取消或失敗，立即自動切換成實體下載按鈕，讓學生有備案
                 if (error.name !== "AbortError") {
-                    statusEl.innerHTML = "⚠️ Cannot share directly from this app/browser.<br>Please click the <b>Save to Device</b> button below, then send it via WhatsApp manually."; 
+                    btnShare.style.display = 'none';
+                    btnDownload.style.display = 'flex';
+                    statusEl.innerHTML = "⚠️ Cannot share directly from this app/browser.<br>Please click the <b>Download</b> button above and send it manually."; 
                     statusEl.style.color = "#ef4444"; 
                 } else {
                     statusEl.style.display = 'none';
