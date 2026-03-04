@@ -82,7 +82,7 @@
             background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             border: 1px solid var(--glass-border); border-radius: 24px;
             padding: 40px 20px; margin-bottom: 30px; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2); color: white;
-            transition: transform 0.3s ease, box-shadow 0.3s ease; max-width: 90%; margin-left: auto; margin-right: auto;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; max-width: 95%; margin-left: auto; margin-right: auto;
         }
         @media (min-width: 768px) { .glass-panel:hover { transform: translateY(-5px); box-shadow: 0 15px 40px 0 rgba(0,0,0,0.3); } }
         .glass-panel h3 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 3px; margin: 0 0 8px 0; font-weight: 700; }
@@ -90,17 +90,31 @@
         .emoji-float { display: inline-block; transition: transform 0.2s ease; cursor: pointer; }
         .emoji-float:hover { transform: scale(1.4) rotate(10deg); }
         
+        /* 🚀 FIX: Responsive Main Title */
         .main-title { 
-            font-size: 2.3rem; font-family: var(--font-title); font-weight: 700;
-            text-shadow: 2px 3px 5px rgba(0,0,0,0.2); margin: 25px 0; 
-            position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 10px; line-height: 1.2; white-space: nowrap; 
+            /* clamp(min, preferred, max) auto-scales the font size smoothly */
+            font-size: clamp(1.8rem, 8vw, 3.5rem); 
+            font-family: var(--font-title); font-weight: 700;
+            text-shadow: 2px 3px 5px rgba(0,0,0,0.2); 
+            margin: 25px 0; 
+            position: relative; 
+            display: flex; align-items: center; justify-content: center; gap: 8px; 
+            line-height: 1.2; 
+            flex-wrap: wrap; /* Allows wrapping on very narrow screens */
+            text-align: center;
+        }
+        
+        /* Keep text together to prevent odd line breaks */
+        .title-text {
+            display: inline-block;
+            word-break: keep-all;
         }
         
         .sparkle { color: #ffd700; position: absolute; animation: twinkle 1.5s infinite alternate; font-style: normal; pointer-events: none; }
-        .s1 { top: -15px; left: -32px; font-size: 1.4rem; } 
-        .s2 { bottom: -10px; left: -18px; animation-delay: 0.5s; font-size: 0.9rem; }
-        .s3 { top: -10px; right: -32px; animation-delay: 0.2s; font-size: 1.4rem; } 
-        .s4 { bottom: -5px; right: -18px; animation-delay: 0.7s; font-size: 1.1rem; }
+        .s1 { top: -15px; left: -10%; font-size: clamp(1.2rem, 4vw, 1.4rem); } 
+        .s2 { bottom: -10px; left: -5%; animation-delay: 0.5s; font-size: clamp(0.8rem, 3vw, 0.9rem); }
+        .s3 { top: -10px; right: -10%; animation-delay: 0.2s; font-size: clamp(1.2rem, 4vw, 1.4rem); } 
+        .s4 { bottom: -5px; right: -5%; animation-delay: 0.7s; font-size: clamp(0.9rem, 3vw, 1.1rem); }
         
         .subtitle-text { font-size: 1.1rem; margin-top: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); font-weight: 700; }
         .btn-landing {
@@ -113,12 +127,11 @@
         
         @media (min-width: 768px) { 
             .glass-panel { padding: 60px 40px; max-width: 100%; }
-            .main-title { font-size: 3.5rem; margin: 30px 0; gap: 16px; } 
+            .main-title { margin: 30px 0; gap: 16px; } 
             .s1 { left: -50px; top: -20px; font-size: 2rem; } .s3 { right: -50px; top: -15px; font-size: 2rem; }
             .s2 { left: -30px; bottom: -10px; font-size: 1.2rem; } .s4 { right: -30px; bottom: -5px; font-size: 1.4rem; }
             .btn-landing { width: auto; font-size: 1.4rem; padding: 18px 50px; }
         }
-        @media (max-width: 380px) { .main-title { font-size: 1.8rem; gap: 8px; } }
 
         /* --- Menu Page --- */
         .option-list { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
@@ -213,10 +226,11 @@
             <h3>Vocational English 3A</h3>
             <h4>Language Centre</h4>
             
+            <!-- 🚀 FIX: HTML structure updated for proper flex wrapping -->
             <div class="main-title">
                 <span class="sparkle s1">✦</span><span class="sparkle s2">✧</span>
                 <span class="emoji-float">📞</span>
-                <span>Telemarketing Pro</span>
+                <span class="title-text">Telemarketing Pro</span>
                 <span class="emoji-float">✨</span>
                 <span class="sparkle s3">✦</span><span class="sparkle s4">✧</span>
             </div>
@@ -638,14 +652,12 @@
             if (node.nodeType === Node.TEXT_NODE) {
                 const text = node.textContent; if (!text.trim()) return node;
                 const fragment = document.createDocumentFragment();
-                // Modified regex to include numbers: a-zA-Z0-9
                 const tokens = text.match(/[\w']+|[^\w']+/g) || [];
                 tokens.forEach(token => {
                     if (/^[a-zA-Z0-9]+$/.test(token)) {
                         const span = document.createElement('span'); span.className = 'clickable-word'; span.textContent = token;
                         const lowerToken = token.toLowerCase(); let syllables = syllableDict[lowerToken]; const customMeaning = meaningDict[lowerToken]; 
                         
-                        // Don't auto-generate syllables for numbers
                         if (!/^[0-9]+$/.test(token) && !syllables && token.length > 4 && countSyllables(token) > 1) { syllables = generateSyllables(token); }
                         let sylTooltip = null; let meaningTooltip = null;
                         
