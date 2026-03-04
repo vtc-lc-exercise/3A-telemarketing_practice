@@ -63,7 +63,7 @@
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
             position: sticky; top: 0; z-index: 100;
             display: none; width: 100%; box-sizing: border-box;
-            padding-top: calc(1rem + env(safe-area-inset-top)); /* Safe area for modern phones */
+            padding-top: calc(1rem + env(safe-area-inset-top)); 
         }
         body:not(.landing-active) header { display: block; }
         header h1 { margin: 0; font-size: 1.4rem; font-family: var(--font-body); font-weight: 700; }
@@ -307,7 +307,7 @@
             </div>
         </div>
 
-        <!-- ================= PAGE 3: Sample (+ RECORDER) ================= -->
+        <!-- ================= PAGE 3: POSSIBLE SAMPLE (+ RECORDER) ================= -->
         <div id="page-sample" class="page">
             <div class="btn-container">
                 <button class="btn btn-outline" onclick="navTo('page-practice')">← Paper</button>
@@ -319,7 +319,7 @@
             
             <!-- RECORDING UI -->
             <div class="recorder-container">
-                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record here!</div>
+                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record your Pitch here!</div>
                 <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
                 <div class="timer-display" id="timer">00:00</div>
                 <div class="controls-row">
@@ -332,22 +332,20 @@
                 </div>
                 <audio id="audio-preview" controls style="display: none; width: 100%; margin-top: 5px;"></audio>
                 
-                <!-- NEW ACTION BUTTONS LAYOUT -->
+                <!-- CLEAN DOWNLOAD ONLY LAYOUT -->
                 <div id="post-record-actions" style="display: none; flex-direction: column; width: 100%; align-items: center; gap: 10px; margin-top: 15px;">
                     
-                    <a id="btn-download" class="rec-btn" target="_blank" style="background: #f59e0b; color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);">
+                    <a id="btn-download" class="rec-btn" target="_blank" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);">
                         📥 Download Recording
                     </a>
-
-                    <button class="rec-btn" id="btn-share" onclick="shareAudio()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg> Share directly
-                    </button>
                     
-                    <p id="share-status" style="font-size: 0.85rem; color: #ef4444; display: none; text-align: center; margin: 0; padding: 0 10px; line-height: 1.3; font-weight: 600;"></p>
+                    <div style="font-size: 0.85rem; color: #6b7280; text-align: center; margin-top: 5px; font-weight: 600; padding: 0 10px;">
+                        Click above to save your audio file,<br>then send it to your teacher.
+                    </div>
                 </div>
             </div>
             
-            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Sample</h2>
+            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Possible Sample</h2>
             <div class="hint"><span style="margin-right: 8px;">▶️</span> Tap play for the whole sentence, or tap words for syllables!</div>
             <div class="box" id="sample-container" style="display: flex; flex-direction: column; gap: 12px; padding: 12px;"></div>
         </div>
@@ -360,7 +358,7 @@
                 <button class="btn" onclick="navTo('page-menu')">🏠 Menu</button>
             </div>
             <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700; font-family: var(--font-title);">Useful Expressions</h2>
-            <p style="font-size: 0.9rem; color: #6b7280; font-weight: 600;">Use these templates for your speaking assessment. The orange parts can be changed!</p>
+            <p style="font-size: 0.9rem; color: #6b7280; font-weight: 600;">Use these templates for your speaking assessment. The red parts can be changed!</p>
             <div id="expressions-container"></div>
         </div>
 
@@ -548,7 +546,6 @@
             if(mediaRecorder && mediaRecorder.state !== 'inactive') { stopRecording(); }
             document.getElementById('audio-preview').style.display = 'none';
             document.getElementById('post-record-actions').style.display = 'none';
-            document.getElementById('share-status').style.display = 'none';
             document.getElementById('timer').textContent = "00:00";
             
             navTo('page-practice');
@@ -695,7 +692,7 @@
             if(el) { const processed = processNode(el); el.parentNode.replaceChild(processed, el); }
         }
 
-        // --- Reliable Audio Recording & Smart Sharing Logic ---
+        // --- Reliable Audio Recording Logic ---
         let mediaRecorder = null; let audioChunks = []; let timerInterval = null; let seconds = 0; let recordedBlob = null; let activeStream = null;
 
         function updateTimerDisplay() {
@@ -711,9 +708,7 @@
                 activeStream = stream;
                 
                 let mimeType = '';
-                const types = [
-                    'audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus'
-                ];
+                const types = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus'];
                 for (let type of types) {
                     if (MediaRecorder.isTypeSupported(type)) { mimeType = type; break; }
                 }
@@ -729,7 +724,6 @@
                     
                     let finalMime = mediaRecorder.mimeType || 'audio/mp4';
                     let ext = 'mp4'; 
-                    
                     if (finalMime.includes('webm')) ext = 'webm';
                     else if (finalMime.includes('ogg')) ext = 'ogg';
 
@@ -742,24 +736,14 @@
                     const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
                     const filename = `${pName}_Telemarketing_Pitch.${ext}`;
                     
+                    // Show download section
                     document.getElementById('post-record-actions').style.display = 'flex';
                     
-                    const btnShare = document.getElementById('btn-share');
                     const btnDownload = document.getElementById('btn-download');
-                    const statusEl = document.getElementById('share-status');
-                    
-                    statusEl.style.display = 'none';
-
-                    // Both buttons are always visible now. Share is a bonus, Download is the reliable fallback.
-                    btnDownload.href = audioUrl; btnDownload.download = filename;
-                    btnDownload.style.display = 'flex';
-                    
-                    // Show Share button only if Web Share API is available
-                    if (navigator.share) {
-                        btnShare.style.display = 'flex';
-                    } else {
-                        btnShare.style.display = 'none';
-                    }
+                    // Change button color to green to make it the primary call to action
+                    btnDownload.style.background = '#25D366';
+                    btnDownload.href = audioUrl; 
+                    btnDownload.download = filename;
 
                     if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
                 };
@@ -768,7 +752,6 @@
                 
                 document.getElementById('btn-start').style.display = 'none'; document.getElementById('btn-stop').style.display = 'flex';
                 document.getElementById('audio-preview').style.display = 'none'; document.getElementById('post-record-actions').style.display = 'none';
-                document.getElementById('share-status').style.display = 'none';
                 
                 const timerEl = document.getElementById('timer'); timerEl.classList.add('recording');
                 
@@ -788,38 +771,6 @@
                 document.getElementById('btn-start').style.display = 'flex';
                 document.getElementById('btn-start').innerHTML = '<span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Record Again';
                 document.getElementById('btn-stop').style.display = 'none';
-            }
-        }
-        
-        async function shareAudio() {
-            const statusEl = document.getElementById('share-status'); 
-            
-            if (!recordedBlob) return;
-
-            let finalMime = mediaRecorder.mimeType || 'audio/mp4'; let ext = 'mp4'; 
-            if (finalMime.includes('webm')) ext = 'webm'; else if (finalMime.includes('ogg')) ext = 'ogg';
-            
-            const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
-            const filename = `${pName}_Telemarketing_Pitch.${ext}`;
-            const audioFile = new File([recordedBlob], filename, { type: recordedBlob.type });
-
-            try {
-                // Check if the browser allows sharing FILES (iOS Safari often blocks this for audio)
-                if (navigator.canShare && navigator.canShare({ files: [audioFile] })) {
-                    await navigator.share({
-                        title: 'VE3A Telemarketing Assessment',
-                        text: 'Teacher, here is my recording!',
-                        files: [audioFile]
-                    });
-                } else {
-                    // Fallback to text only share if files aren't allowed
-                     throw new Error("Files not supported");
-                }
-            } catch (error) {
-                if (error.name !== "AbortError") {
-                    statusEl.innerHTML = "⚠️ Your browser blocks direct audio sharing.<br>Please click the <b>Download</b> button above and send it manually."; 
-                    statusEl.style.display = 'block';
-                }
             }
         }
 
