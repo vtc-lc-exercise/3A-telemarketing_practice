@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VE3A Telemarketing Practice</title>
-    <!-- Import Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* CSS Variables */
         :root {
             --primary: #4f46e5;      
             --primary-hover: #4338ca;
@@ -21,115 +19,46 @@
             --glass-border: rgba(255, 255, 255, 0.3);
             --text-dark: #1f2937;
             --card-bg: #ffffff;
-            
-            /* Font Definitions */
             --font-body: 'Nunito', system-ui, -apple-system, sans-serif;
             --font-title: 'Quicksand', 'Century Gothic', sans-serif; 
             --font-paper-title: 'Fredoka', cursive;
         }
 
-        body {
-            font-family: var(--font-body);
-            margin: 0; padding: 0; line-height: 1.6;
-            min-height: 100vh;
-            background-color: #f3f4f6; color: var(--text-dark);
-            transition: background 0.5s ease;
-            overflow-x: hidden; width: 100vw;
-        }
+        body { font-family: var(--font-body); margin: 0; padding: 0; line-height: 1.6; min-height: 100vh; background-color: #f3f4f6; color: var(--text-dark); transition: background 0.5s ease; overflow-x: hidden; width: 100vw; }
+        body.landing-active { background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), #3b82f6); background-size: 400% 400%; animation: gradientBG 10s ease infinite; display: flex; align-items: center; justify-content: center; }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        body.landing-active {
-            background: linear-gradient(-45deg, var(--bg-grad-1), var(--bg-grad-2), #3b82f6);
-            background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            padding: 1rem; max-width: 850px; margin: 0 auto;
-            display: none; width: 100%; box-sizing: border-box;
-        }
+        .container { padding: 1rem; max-width: 850px; margin: 0 auto; display: none; width: 100%; box-sizing: border-box; }
         body:not(.landing-active) .container { display: block; }
 
-        header {
-            background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2));
-            color: white; padding: 1rem; text-align: center;
-            border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-            position: sticky; top: 0; z-index: 100;
-            display: none; width: 100%; box-sizing: border-box;
-            padding-top: calc(1rem + env(safe-area-inset-top)); 
-        }
+        header { background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2)); color: white; padding: 1rem; text-align: center; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; display: none; width: 100%; box-sizing: border-box; padding-top: calc(1rem + env(safe-area-inset-top)); }
         body:not(.landing-active) header { display: block; }
         header h1 { margin: 0; font-size: 1.4rem; font-family: var(--font-body); font-weight: 700; }
         header p { margin: 0.2rem 0 0; opacity: 0.9; font-size: 0.9rem; }
 
         .page { display: none; animation: fadeIn 0.4s ease-out; width: 100%; box-sizing: border-box; }
         .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Landing Page --- */
         #page-landing { text-align: center; padding: 20px; width: 100%; max-width: 800px; margin: 0 auto; font-family: var(--font-title); }
-        .glass-panel {
-            background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border); border-radius: 24px;
-            padding: 40px 20px; margin-bottom: 30px; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2); color: white;
-            transition: transform 0.3s ease, box-shadow 0.3s ease; max-width: 95%; margin-left: auto; margin-right: auto;
-        }
+        .glass-panel { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px 20px; margin-bottom: 30px; box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2); color: white; transition: transform 0.3s ease, box-shadow 0.3s ease; max-width: 95%; margin-left: auto; margin-right: auto; }
         @media (min-width: 768px) { .glass-panel:hover { transform: translateY(-5px); box-shadow: 0 15px 40px 0 rgba(0,0,0,0.3); } }
         .glass-panel h3 { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 3px; margin: 0 0 8px 0; font-weight: 700; }
         .glass-panel h4 { font-size: 1rem; margin: 0 0 25px 0; border-bottom: 2px solid rgba(255,255,255,0.6); display: inline-block; padding-bottom: 5px; font-weight: 700;}
         .emoji-float { display: inline-block; transition: transform 0.2s ease; cursor: pointer; }
         .emoji-float:hover { transform: scale(1.4) rotate(10deg); }
         
-        /* Responsive Main Title */
-        .main-title { 
-            font-size: clamp(1.8rem, 8vw, 3.5rem); 
-            font-family: var(--font-title); font-weight: 700;
-            text-shadow: 2px 3px 5px rgba(0,0,0,0.2); 
-            margin: 25px 0; 
-            position: relative; 
-            display: flex; align-items: center; justify-content: center; gap: 8px; 
-            line-height: 1.2; 
-            flex-wrap: wrap; 
-            text-align: center;
-        }
-        
+        .main-title { font-size: clamp(1.8rem, 8vw, 3.5rem); font-family: var(--font-title); font-weight: 700; text-shadow: 2px 3px 5px rgba(0,0,0,0.2); margin: 25px 0; position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1.2; flex-wrap: wrap; text-align: center; }
         .title-text { display: inline-block; word-break: keep-all; }
-        
         .sparkle { color: #ffd700; position: absolute; animation: twinkle 1.5s infinite alternate; font-style: normal; pointer-events: none; }
-        .s1 { top: -15px; left: -10%; font-size: clamp(1.2rem, 4vw, 1.4rem); } 
-        .s2 { bottom: -10px; left: -5%; animation-delay: 0.5s; font-size: clamp(0.8rem, 3vw, 0.9rem); }
-        .s3 { top: -10px; right: -10%; animation-delay: 0.2s; font-size: clamp(1.2rem, 4vw, 1.4rem); } 
-        .s4 { bottom: -5px; right: -5%; animation-delay: 0.7s; font-size: clamp(0.9rem, 3vw, 1.1rem); }
+        .s1 { top: -15px; left: -10%; font-size: clamp(1.2rem, 4vw, 1.4rem); } .s2 { bottom: -10px; left: -5%; animation-delay: 0.5s; font-size: clamp(0.8rem, 3vw, 0.9rem); }
+        .s3 { top: -10px; right: -10%; animation-delay: 0.2s; font-size: clamp(1.2rem, 4vw, 1.4rem); } .s4 { bottom: -5px; right: -5%; animation-delay: 0.7s; font-size: clamp(0.9rem, 3vw, 1.1rem); }
         
         .subtitle-text { font-size: 1.1rem; margin-top: 20px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); font-weight: 700; }
-        .btn-landing {
-            font-family: var(--font-title);
-            background: white; color: var(--primary); border: none; padding: 16px 40px; border-radius: 50px; font-size: 1.3rem; font-weight: 700; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 350px;
-            transition: all 0.3s ease; -webkit-tap-highlight-color: transparent;
-        }
+        .btn-landing { font-family: var(--font-title); background: white; color: var(--primary); border: none; padding: 16px 40px; border-radius: 50px; font-size: 1.3rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 350px; transition: all 0.3s ease; -webkit-tap-highlight-color: transparent; }
         .btn-landing:active { transform: scale(0.96); }
-        
-        @media (min-width: 768px) { 
-            .glass-panel { padding: 60px 40px; max-width: 100%; }
-            .main-title { margin: 30px 0; gap: 16px; } 
-            .s1 { left: -50px; top: -20px; font-size: 2rem; } .s3 { right: -50px; top: -15px; font-size: 2rem; }
-            .s2 { left: -30px; bottom: -10px; font-size: 1.2rem; } .s4 { right: -30px; bottom: -5px; font-size: 1.4rem; }
-            .btn-landing { width: auto; font-size: 1.4rem; padding: 18px 50px; }
-        }
+        @media (min-width: 768px) { .glass-panel { padding: 60px 40px; max-width: 100%; } .main-title { margin: 30px 0; gap: 16px; } .btn-landing { width: auto; font-size: 1.4rem; padding: 18px 50px; } }
 
-        /* --- Menu Page --- */
         .option-list { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
         .option-card { background: var(--card-bg); border-radius: 12px; padding: 15px; display: flex; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 2px solid transparent; cursor: pointer; transition: all 0.2s;}
         .option-card:active { transform: scale(0.98); border-color: var(--primary); }
@@ -137,40 +66,23 @@
         .option-text h3 { margin: 0 0 3px 0; color: var(--primary); font-size: 1.1rem; font-family: var(--font-title); font-weight: 700; }
         .option-text p { margin: 0; color: #6b7280; font-size: 0.9rem; font-weight: 600; }
 
-        /* --- Paper Layout --- */
         .paper-layout { margin-top: 15px; position: relative; }
         .box { background: var(--card-bg); border: 2px solid #e5e7eb; border-radius: 10px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-size: 0.95rem; }
         .box-left { border-color: #94a3b8; }
         .target-offer-box { border: 2px dashed #9ca3af; padding: 10px; text-align: center; border-radius: 8px; margin: 15px 0; background: #f9fafb; position: relative; }
         
-        .mobile-hint-btn {
-            font-family: var(--font-body);
-            display: inline-flex; align-items: center; justify-content: center; background: #fef3c7; color: #d97706; border: 1px solid #fde68a;
-            padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-left: 10px; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            vertical-align: middle; -webkit-tap-highlight-color: transparent;
-        }
+        .mobile-hint-btn { font-family: var(--font-body); display: inline-flex; align-items: center; justify-content: center; background: #fef3c7; color: #d97706; border: 1px solid #fde68a; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; margin-left: 10px; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); vertical-align: middle; -webkit-tap-highlight-color: transparent; }
         .mobile-hint-btn:active { background: #fde68a; transform: scale(0.95); }
-
-        @media (min-width: 768px) {
-            .paper-layout { display: flex; gap: 30px; align-items: stretch; }
-            .paper-left { flex: 1.2; }
-            .desktop-hints-container { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; }
-            .mobile-hint-btn { display: none; }
-            .box { padding: 20px; font-size: 1rem; }
-            .box-right { border-color: var(--accent); position: relative; }
-            .svg-arrow { display: block; position: absolute; left: -45px; width: 45px; height: 20px; z-index: 10; }
-        }
+        @media (min-width: 768px) { .paper-layout { display: flex; gap: 30px; align-items: stretch; } .paper-left { flex: 1.2; } .desktop-hints-container { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 20px; } .mobile-hint-btn { display: none; } .box { padding: 20px; font-size: 1rem; } .box-right { border-color: var(--accent); position: relative; } .svg-arrow { display: block; position: absolute; left: -45px; width: 45px; height: 20px; z-index: 10; } }
         @media (max-width: 767px) { .desktop-hints-container { display: none; } .svg-arrow { display: none; } }
         .box-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 10px; border-bottom: 2px solid #f3f4f6; padding-bottom: 5px; display: flex; align-items: center; gap: 5px; color: var(--text-dark); }
 
-        /* --- Modals --- */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; opacity: 0; transition: opacity 0.3s; align-items: flex-end; }
         .modal.show { display: flex; opacity: 1; }
         .modal-content { background: white; width: 100%; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 25px 20px; box-sizing: border-box; transform: translateY(100%); transition: transform 0.3s ease-out; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); border-top: 5px solid var(--accent); }
         .modal.show .modal-content { transform: translateY(0); }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; font-weight: bold; color: #9ca3af; cursor: pointer; background: none; border: none; padding: 5px; }
 
-        /* --- Common UI --- */
         .settings-panel { background: white; border-radius: 10px; padding: 12px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; border-left: 4px solid var(--primary); }
         .setting-group { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; font-weight: 600; }
         select { font-family: var(--font-body); padding: 6px 10px; border-radius: 6px; border: 1px solid #d1d5db; background: #f9fafb; font-size: 0.9rem; font-weight: 700; min-height: 36px; cursor: pointer; }
@@ -184,7 +96,7 @@
         .syllable-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #1f2937 transparent transparent transparent; }
         .clickable-word.show-tooltip .syllable-tooltip { opacity: 1; visibility: visible; }
 
-        /* --- Recoder UI --- */
+        /* Recorder UI */
         .recorder-container { background: #fef2f2; border-radius: 12px; padding: 15px; margin: 20px 0; box-shadow: 0 4px 6px -1px rgba(239,68,68,0.1); border: 2px dashed #fca5a5; display: flex; flex-direction: column; align-items: center; gap: 12px; }
         .timer-display { font-size: 1.5rem; font-family: monospace; font-weight: bold; color: var(--text-dark); background: #fff; padding: 3px 15px; border-radius: 8px; border: 1px solid #fca5a5; }
         .timer-display.recording { color: #ef4444; background: #fee2e2; border-color: #ef4444; animation: pulse 1.5s infinite; }
@@ -211,137 +123,64 @@
 </head>
 <body class="landing-active" id="main-body">
 
-    <header>
-        <h1>VE3A Telemarketing</h1>
-        <p>Interactive Practices</p>
-    </header>
+    <header><h1>VE3A Telemarketing</h1><p>Interactive Practices</p></header>
 
-    <!-- ================= PAGE 1: LANDING ================= -->
     <div id="page-landing" class="page active">
         <div class="glass-panel">
-            <h3>Vocational English 3A</h3>
-            <h4>Language Centre</h4>
-            
-            <div class="main-title">
-                <span class="sparkle s1">✦</span><span class="sparkle s2">✧</span>
-                <span class="emoji-float">📞</span>
-                <span class="title-text">Telemarketing Pro</span>
-                <span class="emoji-float">✨</span>
-                <span class="sparkle s3">✦</span><span class="sparkle s4">✧</span>
-            </div>
-            
+            <h3>Vocational English 3A</h3><h4>Language Centre</h4>
+            <div class="main-title"><span class="sparkle s1">✦</span><span class="sparkle s2">✧</span><span class="emoji-float">📞</span><span class="title-text">Telemarketing Pro</span><span class="emoji-float">✨</span><span class="sparkle s3">✦</span><span class="sparkle s4">✧</span></div>
             <p class="subtitle-text">Ready to master your speaking skills? <span class="emoji-float">🎙️</span></p>
         </div>
         <button class="btn-landing" onclick="navToMenu()">Let's get started! <span class="emoji-float" style="margin-left:5px;">🚀</span></button>
     </div>
 
-    <!-- INTERNAL CONTAINER -->
     <div class="container">
-
-        <!-- ================= PAGE 1.5: MENU ================= -->
         <div id="page-menu" class="page">
             <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700; font-family: var(--font-title);">Select a Practice</h2>
             <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 15px; font-weight: 600;">Choose a paper below to begin.</p>
             <div class="option-list">
-                <div class="option-card" onclick="loadPractice('p1')">
-                    <div class="option-icon">1</div>
-                    <div class="option-text">
-                        <h3>Practice 1 🍎</h3>
-                        <p>Apple Tree Learning Centre</p>
-                    </div>
-                </div>
-                <div class="option-card" onclick="loadPractice('p2')">
-                    <div class="option-icon">2</div>
-                    <div class="option-text">
-                        <h3>Practice 2 🧠</h3>
-                        <p>United Charity</p>
-                    </div>
-                </div>
-                <div class="option-card" onclick="loadPractice('p3')">
-                    <div class="option-icon">3</div>
-                    <div class="option-text">
-                        <h3>Practice 3 💖</h3>
-                        <p>Graceful Heart</p>
-                    </div>
-                </div>
-                <div class="option-card" onclick="loadPractice('p4')">
-                    <div class="option-icon">4</div>
-                    <div class="option-text">
-                        <h3>Practice 4 🏕️</h3>
-                        <p>Miles Community Centre</p>
-                    </div>
-                </div>
+                <div class="option-card" onclick="loadPractice('p1')"><div class="option-icon">1</div><div class="option-text"><h3>Practice 1 🍎</h3><p>Apple Tree Learning Centre</p></div></div>
+                <div class="option-card" onclick="loadPractice('p2')"><div class="option-icon">2</div><div class="option-text"><h3>Practice 2 🧠</h3><p>United Charity</p></div></div>
+                <div class="option-card" onclick="loadPractice('p3')"><div class="option-icon">3</div><div class="option-text"><h3>Practice 3 💖</h3><p>Graceful Heart</p></div></div>
+                <div class="option-card" onclick="loadPractice('p4')"><div class="option-icon">4</div><div class="option-text"><h3>Practice 4 🏕️</h3><p>Miles Community Centre</p></div></div>
             </div>
-            <div style="margin-top: 25px; text-align: center;">
-                <button class="btn btn-outline" style="width: auto; padding: 10px 20px; display: inline-flex;" onclick="navToLanding()">← Back to Cover</button>
-            </div>
+            <div style="margin-top: 25px; text-align: center;"><button class="btn btn-outline" style="width: auto; padding: 10px 20px; display: inline-flex;" onclick="navToLanding()">← Back to Cover</button></div>
         </div>
 
-        <!-- ================= PAGE 2: PRACTICE PAPER ================= -->
         <div id="page-practice" class="page">
-            <div class="btn-container">
-                <button class="btn btn-outline" onclick="navTo('page-menu')">← Menu</button>
-                <button class="btn" onclick="navTo('page-sample')">Sample →</button>
-            </div>
-
+            <div class="btn-container"><button class="btn btn-outline" onclick="navTo('page-menu')">← Menu</button><button class="btn" onclick="navTo('page-sample')">Sample →</button></div>
             <div class="settings-panel">
-                <div class="setting-group">
-                    <label>🗣️ Accent:</label>
-                    <select id="accent-select" onchange="updateVoice()"><option value="UK">British (UK)</option><option value="US">American (US)</option></select>
-                </div>
-                <div class="setting-group" style="margin-left: 10px;">
-                    <label>⏱️ Speed:</label>
-                    <select id="speed-select"><option value="0.75">Slow</option><option value="0.9" selected>Normal</option><option value="1.1">Fast</option></select>
-                </div>
+                <div class="setting-group"><label>🗣️ Accent:</label><select id="accent-select" onchange="updateVoice()"><option value="UK">British (UK)</option><option value="US">American (US)</option></select></div>
+                <div class="setting-group" style="margin-left: 10px;"><label>⏱️ Speed:</label><select id="speed-select"><option value="0.75">Slow</option><option value="0.9" selected>Normal</option><option value="1.1">Fast</option></select></div>
             </div>
-
             <div class="hint"><span style="margin-right: 8px;">💡</span> Tap any word or number to hear it!</div>
-
-            <div class="paper-layout">
-                <div class="paper-left" id="paper-left-container"></div>
-                <div class="desktop-hints-container" id="desktop-hints-container"></div>
-            </div>
-            
-            <div class="btn-container" style="margin-top: 25px;">
-                <button class="btn" style="background-color: var(--accent); color: #fff;" onclick="navTo('page-expressions')">Useful Expressions 📝</button>
-            </div>
+            <div class="paper-layout"><div class="paper-left" id="paper-left-container"></div><div class="desktop-hints-container" id="desktop-hints-container"></div></div>
+            <div class="btn-container" style="margin-top: 25px;"><button class="btn" style="background-color: var(--accent); color: #fff;" onclick="navTo('page-expressions')">Useful Expressions 📝</button></div>
         </div>
 
-        <!-- ================= PAGE 3: Sample (+ RECORDER) ================= -->
         <div id="page-sample" class="page">
-            <div class="btn-container">
-                <button class="btn btn-outline" onclick="navTo('page-practice')">← Paper</button>
-                <button class="btn" style="background-color: var(--accent); color: #fff;" onclick="navTo('page-expressions')">Expressions →</button>
-            </div>
-            <div class="settings-panel">
-                <div class="setting-group"><label>🗣️ Accent:</label><select id="accent-select-2" onchange="syncAccents(this.value)"><option value="UK">British (UK)</option><option value="US">American (US)</option></select></div>
-            </div>
+            <div class="btn-container"><button class="btn btn-outline" onclick="navTo('page-practice')">← Paper</button><button class="btn" style="background-color: var(--accent); color: #fff;" onclick="navTo('page-expressions')">Expressions →</button></div>
+            <div class="settings-panel"><div class="setting-group"><label>🗣️ Accent:</label><select id="accent-select-2" onchange="syncAccents(this.value)"><option value="UK">British (UK)</option><option value="US">American (US)</option></select></div></div>
             
-            <!-- RECORDING UI -->
             <div class="recorder-container">
-                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record Here!</div>
+                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record Here!!</div>
                 <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
                 <div class="timer-display" id="timer">00:00</div>
                 <div class="controls-row">
-                    <button class="rec-btn btn-start-rec" id="btn-start" onclick="startRecording()">
-                        <span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Start
-                    </button>
-                    <button class="rec-btn btn-stop-rec" id="btn-stop" onclick="stopRecording()">
-                        <span style="background: white; width: 12px; height: 12px; display: inline-block;"></span> Stop
-                    </button>
+                    <button class="rec-btn btn-start-rec" id="btn-start" onclick="startRecording()"><span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Start</button>
+                    <button class="rec-btn btn-stop-rec" id="btn-stop" onclick="stopRecording()"><span style="background: white; width: 12px; height: 12px; display: inline-block;"></span> Stop</button>
                 </div>
                 <audio id="audio-preview" controls style="display: none; width: 100%; margin-top: 5px;"></audio>
                 
-                <!-- CLEAN DOWNLOAD ONLY LAYOUT -->
                 <div id="post-record-actions" style="display: none; flex-direction: column; width: 100%; align-items: center; gap: 10px; margin-top: 15px;">
-                    
-                    <a id="btn-download" class="rec-btn" target="_blank" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);">
-                        📥 Download Recording
-                    </a>
-                    
-                    <div style="font-size: 0.85rem; color: #6b7280; text-align: center; margin-top: 5px; font-weight: 600; padding: 0 10px;">
-                        Click above to save your audio file,<br>then send it to your teacher.
-                    </div>
+                    <!-- Native Share Button for Mobile -->
+                    <button id="btn-share" class="rec-btn" onclick="shareAudioFile()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3); display:none;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        Send via WhatsApp
+                    </button>
+                    <!-- Fallback Download Button -->
+                    <a id="btn-download" class="rec-btn" target="_blank" style="background: var(--primary); color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3);">📥 Download Audio</a>
+                    <div id="share-status" style="font-size: 0.85rem; color: #6b7280; text-align: center; margin-top: 5px; font-weight: 600; padding: 0 10px; display:none;"></div>
                 </div>
             </div>
             
@@ -350,39 +189,23 @@
             <div class="box" id="sample-container" style="display: flex; flex-direction: column; gap: 12px; padding: 12px;"></div>
         </div>
 
-        <!-- ================= PAGE 4: USEFUL EXPRESSIONS ================= -->
         <div id="page-expressions" class="page">
-            <div class="btn-container">
-                <button class="btn btn-outline" onclick="navTo('page-practice')">← Paper</button>
-                <button class="btn btn-outline" onclick="navTo('page-sample')">Sample</button>
-                <button class="btn" onclick="navTo('page-menu')">🏠 Menu</button>
-            </div>
+            <div class="btn-container"><button class="btn btn-outline" onclick="navTo('page-practice')">← Paper</button><button class="btn btn-outline" onclick="navTo('page-sample')">Sample</button><button class="btn" onclick="navTo('page-menu')">🏠 Menu</button></div>
             <h2 style="font-size: 1.4rem; margin-top: 0; font-weight: 700; font-family: var(--font-title);">Useful Expressions</h2>
-            <p style="font-size: 0.9rem; color: #6b7280; font-weight: 600;">Use these templates for your speaking assessment. The orange parts can be changed!</p>
+            <p style="font-size: 0.9rem; color: #6b7280; font-weight: 600;">Use these templates for your speaking assessment. The <span style="color:#f59e0b;font-weight:700;">orange</span> parts can be changed!</p>
             <div id="expressions-container"></div>
         </div>
-
     </div>
 
-    <!-- ================= MODALS (Mobile Only) ================= -->
+    <!-- Modals -->
     <div id="modal-why" class="modal" onclick="closeModalOnBG(event, 'modal-why')">
-        <div class="modal-content" id="modal-content-why">
-            <button class="modal-close" onclick="closeModal('modal-why')">&times;</button>
-            <div class="box-title" style="font-size: 1.2rem; border-color: var(--accent); color: var(--accent);">💡 Why joining?</div>
-            <ul id="modal-content-why-list" style="padding-left: 20px; font-size: 1.05rem; margin-top: 15px;"></ul>
-        </div>
+        <div class="modal-content" id="modal-content-why"><button class="modal-close" onclick="closeModal('modal-why')">&times;</button><div class="box-title" style="font-size: 1.2rem; border-color: var(--accent); color: var(--accent);">💡 Why joining?</div><ul id="modal-content-why-list" style="padding-left: 20px; font-size: 1.05rem; margin-top: 15px;"></ul></div>
     </div>
-
     <div id="modal-offers" class="modal" onclick="closeModalOnBG(event, 'modal-offers')">
-        <div class="modal-content" id="modal-content-offers">
-            <button class="modal-close" onclick="closeModal('modal-offers')">&times;</button>
-            <div class="box-title" style="font-size: 1.2rem; border-color: var(--accent); color: var(--accent);">🎁 Offers to participants</div>
-            <ul id="modal-content-offers-list" style="padding-left: 20px; font-size: 1.05rem; margin-top: 15px;"></ul>
-        </div>
+        <div class="modal-content" id="modal-content-offers"><button class="modal-close" onclick="closeModal('modal-offers')">&times;</button><div class="box-title" style="font-size: 1.2rem; border-color: var(--accent); color: var(--accent);">🎁 Offers to participants</div><ul id="modal-content-offers-list" style="padding-left: 20px; font-size: 1.05rem; margin-top: 15px;"></ul></div>
     </div>
 
     <script>
-        // --- 4 Practices Database (Dates unchanged to match paper) ---
         const pData = {
             p1: {
                 title: "Apple Tree Learning Centre<br>English Fun Day",
@@ -491,7 +314,6 @@
 
         let currentPracticeId = 'p1';
 
-        // --- Navigation & Dynamic Loading ---
         function navToLanding() { document.getElementById('main-body').classList.add('landing-active'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('page-landing').classList.add('active'); window.scrollTo(0, 0); }
         function navToMenu() { document.getElementById('main-body').classList.remove('landing-active'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('page-menu').classList.add('active'); window.scrollTo(0, 0); }
         function navTo(pageId) { 
@@ -546,17 +368,15 @@
             if(mediaRecorder && mediaRecorder.state !== 'inactive') { stopRecording(); }
             document.getElementById('audio-preview').style.display = 'none';
             document.getElementById('post-record-actions').style.display = 'none';
+            document.getElementById('share-status').style.display = 'none';
             document.getElementById('timer').textContent = "00:00";
             
             navTo('page-practice');
         }
 
-        // --- Modals Logic (Mobile) ---
         function openModal(id) { const modal = document.getElementById(id); modal.style.display = 'flex'; setTimeout(() => { modal.classList.add('show'); }, 10); document.body.style.overflow = 'hidden'; }
         function closeModal(id) { const modal = document.getElementById(id); modal.classList.remove('show'); setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 300); }
         function closeModalOnBG(event, id) { if (event.target.id === id) { closeModal(id); } }
-
-        // --- Desktop Arrows Alignment ---
         function adjustArrows() {
             if (window.innerWidth < 768) return; 
             const targetDetails = document.getElementById('target-details'); const boxWhy = document.getElementById('box-why'); const whyArrow = document.getElementById('why-arrow');
@@ -566,59 +386,24 @@
         }
         window.addEventListener('resize', adjustArrows);
 
-        // --- Syllable Dict & TTS ---
-        const syllableDict = {
-            "learning": "learn·ing", "centre": "cen·tre", "english": "eng·lish", "children": "chil·dren", "multi": "mul·ti", "purpose": "pur·pose", 
-            "activities": "ac·tiv·i·ties", "language": "lan·guage", "storytelling": "sto·ry·tell·ing", "enrolment": "en·rol·ment", "method": "meth·od", 
-            "online": "on·line", "participant": "par·tic·i·pant", "participants": "par·tic·i·pants", "deadline": "dead·line", "special": "spe·cial", 
-            "offers": "of·fers", "sponsored": "spon·sored", "education": "ed·u·ca·tion", "environment": "en·vi·ron·ment", "everyone": "ev·ery·one", 
-            "benefit": "ben·e·fit", "elaboration": "e·lab·o·ra·tion", "enquiry": "en·qui·ry", "information": "in·for·ma·tion", "morning": "morn·ing", 
-            "calling": "call·ing", "hotline": "hot·line", "excited": "ex·cit·ed", "perfect": "per·fect", "seven": "sev·en", "twelve": "twelve", 
-            "lineup": "line·up", "ready": "read·y", "practicing": "prac·tic·ing", "friendly": "friend·ly", "speaking": "speak·ing", "confidence": "con·fi·dence", 
-            "everyday": "ev·ery·day", "communication": "com·mu·ni·ca·tion", "secure": "se·cure", "visiting": "vis·it·ing", "before": "be·fore", 
-            "dollars": "dol·lars", "bonus": "bo·nus", "phonics": "phon·ics", "workbook": "work·book", "junior": "jun·ior", "master": "mas·ter", 
-            "certificate": "cer·tif·i·cate", "goodbye": "good·bye", "apple": "ap·ple", "july": "ju·ly",
-            "united": "u·nit·ed", "charity": "char·i·ty", "mental": "men·tal", "health": "health", "adults": "a·dults", "november": "no·vem·ber", "central": "cen·tral",
-            "different": "dif·fer·ent", "sharing": "shar·ing", "sessions": "ses·sions", "management": "man·age·ment", "workshops": "work·shops",
-            "relaxation": "re·lax·a·tion", "exercises": "ex·er·cis·es", "useful": "use·ful", "experts": "ex·perts", "practical": "prac·ti·cal", "techniques": "tech·niques", 
-            "effectively": "ef·fec·tive·ly", "balance": "bal·ance", "demands": "de·mands", "personal": "per·son·al", "enrol": "en·rol", "website": "web·site", 
-            "october": "oc·to·ber", "person": "per·son", "sponsorship": "spon·sor·ship", "receive": "re·ceive", "guided": "guid·ed", "meditation": "med·i·ta·tion", 
-            "audio": "au·di·o", "sensory": "sen·so·ry", "toolkit": "tool·kit", "details": "de·tails", "graceful": "grace·ful", "service": "ser·vice",
-            "warmly": "warm·ly", "invite": "in·vite", "students": "stu·dents", "january": "jan·u·ar·y", "college": "col·lege", "caring": "car·ing", "visits": "vis·its", 
-            "donation": "do·na·tion", "tutoring": "tu·tor·ing", "meaningful": "mean·ing·ful", "volunteer": "vol·un·teer", "minded": "mind·ed",
-            "contributing": "con·trib·ut·ing", "supportive": "sup·por·tive", "setting": "set·ting", "applications": "ap·pli·ca·tions", "participation": "par·tic·i·pa·tion",
-            "official": "of·fi·cial", "appreciation": "ap·pre·ci·a·tion", "limited": "lim·it·ed", "edition": "e·di·tion", "development": "de·vel·op·ment", "lovely": "love·ly", 
-            "community": "com·mu·ni·ty", "contacting": "con·tact·ing", "announce": "an·nounce", "leadership": "lead·er·ship", "training": "train·ing", 
-            "scheduled": "sched·uled", "running": "run·ning", "lantau": "lan·tau", "island": "is·land", "feature": "fea·ture", "various": "var·i·ous",
-            "outdoor": "out·door", "shelter": "shel·ter", "nature": "na·ture", "highly": "high·ly", "recommend": "rec·om·mend", "furthermore": "fur·ther·more", 
-            "strengthen": "strength·en", "resilience": "re·sil·ience", "dramatically": "dra·mat·i·cal·ly", "improve": "im·prove", "ability": "a·bil·i·ty", 
-            "pressure": "pres·sure", "registration": "reg·is·tra·tion", "mention": "men·tion", "talent": "tal·ent", "support": "sup·port", 
-            "complimentary": "com·pli·men·ta·ry", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles", "enquiries": "en·qui·ries"
-        };
-        const meaningDict = { 
-            "jul": { spoken: "July", meaning: "July" }, 
-            "oct": { spoken: "October", meaning: "October" }, 
-            "nov": { spoken: "November", meaning: "November" }, 
-            "jan": { spoken: "January", meaning: "January" }, 
-            "may": { spoken: "May", meaning: "May" },
-            "feb": { spoken: "February", meaning: "February" },
-            "am":  { spoken: "a. m.", meaning: "Morning" },
-            "pm":  { spoken: "p. m.", meaning: "Afternoon" },
-            "org": { spoken: "dot org", meaning: ".org = organisation" },
-            "hk":  { spoken: "dot H K", meaning: ".hk = Hong Kong" },
-            "com": { spoken: "dot com", meaning: ".com = commercial" },
-            "www": { spoken: "W W W", meaning: "World Wide Web" }
-        };
-        
-        // Ordinal mapper for dates
+        // --- Syllable & TTS ---
+        const syllableDict = {"learning": "learn·ing", "centre": "cen·tre", "english": "eng·lish", "children": "chil·dren", "multi": "mul·ti", "purpose": "pur·pose", "activities": "ac·tiv·i·ties", "language": "lan·guage", "storytelling": "sto·ry·tell·ing", "enrolment": "en·rol·ment", "method": "meth·od", "online": "on·line", "participant": "par·tic·i·pant", "participants": "par·tic·i·pants", "deadline": "dead·line", "special": "spe·cial", "offers": "of·fers", "sponsored": "spon·sored", "education": "ed·u·ca·tion", "environment": "en·vi·ron·ment", "everyone": "ev·ery·one", "benefit": "ben·e·fit", "elaboration": "e·lab·o·ra·tion", "enquiry": "en·qui·ry", "information": "in·for·ma·tion", "morning": "morn·ing", "calling": "call·ing", "hotline": "hot·line", "excited": "ex·cit·ed", "perfect": "per·fect", "seven": "sev·en", "twelve": "twelve", "lineup": "line·up", "ready": "read·y", "practicing": "prac·tic·ing", "friendly": "friend·ly", "speaking": "speak·ing", "confidence": "con·fi·dence", "everyday": "ev·ery·day", "communication": "com·mu·ni·ca·tion", "secure": "se·cure", "visiting": "vis·it·ing", "before": "be·fore", "dollars": "dol·lars", "bonus": "bo·nus", "phonics": "phon·ics", "workbook": "work·book", "junior": "jun·ior", "master": "mas·ter", "certificate": "cer·tif·i·cate", "goodbye": "good·bye", "apple": "ap·ple", "july": "ju·ly", "united": "u·nit·ed", "charity": "char·i·ty", "mental": "men·tal", "health": "health", "adults": "a·dults", "november": "no·vem·ber", "central": "cen·tral", "different": "dif·fer·ent", "sharing": "shar·ing", "sessions": "ses·sions", "management": "man·age·ment", "workshops": "work·shops", "relaxation": "re·lax·a·tion", "exercises": "ex·er·cis·es", "useful": "use·ful", "experts": "ex·perts", "practical": "prac·ti·cal", "techniques": "tech·niques", "effectively": "ef·fec·tive·ly", "balance": "bal·ance", "demands": "de·mands", "personal": "per·son·al", "enrol": "en·rol", "website": "web·site", "october": "oc·to·ber", "person": "per·son", "sponsorship": "spon·sor·ship", "receive": "re·ceive", "guided": "guid·ed", "meditation": "med·i·ta·tion", "audio": "au·di·o", "sensory": "sen·so·ry", "toolkit": "tool·kit", "details": "de·tails", "graceful": "grace·ful", "service": "ser·vice", "warmly": "warm·ly", "invite": "in·vite", "students": "stu·dents", "january": "jan·u·ar·y", "college": "col·lege", "caring": "car·ing", "visits": "vis·its", "donation": "do·na·tion", "tutoring": "tu·tor·ing", "meaningful": "mean·ing·ful", "volunteer": "vol·un·teer", "minded": "mind·ed", "contributing": "con·trib·ut·ing", "supportive": "sup·por·tive", "setting": "set·ting", "applications": "ap·pli·ca·tions", "participation": "par·tic·i·pa·tion", "official": "of·fi·cial", "appreciation": "ap·pre·ci·a·tion", "limited": "lim·it·ed", "edition": "e·di·tion", "development": "de·vel·op·ment", "lovely": "love·ly", "community": "com·mu·ni·ty", "contacting": "con·tact·ing", "announce": "an·nounce", "leadership": "lead·er·ship", "training": "train·ing", "scheduled": "sched·uled", "running": "run·ning", "lantau": "lan·tau", "island": "is·land", "feature": "fea·ture", "various": "var·i·ous", "outdoor": "out·door", "shelter": "shel·ter", "nature": "na·ture", "highly": "high·ly", "recommend": "rec·om·mend", "furthermore": "fur·ther·more", "strengthen": "strength·en", "resilience": "re·sil·ience", "dramatically": "dra·mat·i·cal·ly", "improve": "im·prove", "ability": "a·bil·i·ty", "pressure": "pres·sure", "registration": "reg·is·tra·tion", "mention": "men·tion", "talent": "tal·ent", "support": "sup·port", "complimentary": "com·pli·men·ta·ry", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles", "enquiries": "en·qui·ries"};
+        const meaningDict = { "jul": { spoken: "July", meaning: "July" }, "oct": { spoken: "October", meaning: "October" }, "nov": { spoken: "November", meaning: "November" }, "jan": { spoken: "January", meaning: "January" }, "may": { spoken: "May", meaning: "May" }, "feb": { spoken: "February", meaning: "February" }, "am": { spoken: "a. m.", meaning: "Morning" }, "pm": { spoken: "p. m.", meaning: "Afternoon" }, "org": { spoken: "dot org", meaning: ".org = organisation" }, "hk": { spoken: "dot H K", meaning: ".hk = Hong Kong" }, "com": { spoken: "dot com", meaning: ".com = commercial" }, "www": { spoken: "W W W", meaning: "World Wide Web" } };
         const ordinalMap = { "1": "first", "8": "eighth", "15": "fifteenth", "20": "twentieth", "21": "twenty-first", "31": "thirty-first" };
         const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
         const synth = window.speechSynthesis; let voiceUK = null, voiceUS = null;
+        
+        // --- 尋找最靚、最Natural的聲線引擎 (保證純英文) ---
         function initVoices() {
             const voices = synth.getVoices();
-            voiceUK = voices.find(v => v.lang === 'en-GB' && v.name.includes('Google')) || voices.find(v => v.lang === 'en-GB' && v.name.includes('Siri')) || voices.find(v => v.lang === 'en-GB') || voices[0];
-            voiceUS = voices.find(v => v.lang === 'en-US' && v.name.includes('Google')) || voices.find(v => v.lang === 'en-US' && v.name.includes('Siri')) || voices.find(v => v.lang === 'en-US') || voices[0];
+            const findBest = (lang) => {
+                return voices.find(v => v.lang.startsWith(lang) && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Enhanced') || v.name.includes('Siri'))) 
+                    || voices.find(v => v.lang.startsWith(lang)) 
+                    || voices[0];
+            };
+            voiceUK = findBest('en-GB');
+            voiceUS = findBest('en-US');
         }
         if (speechSynthesis.onvoiceschanged !== undefined) { speechSynthesis.onvoiceschanged = initVoices; }
         function syncAccents(val) { document.getElementById('accent-select').value = val; document.getElementById('accent-select-2').value = val; }
@@ -629,115 +414,52 @@
             if (!voiceUK || !voiceUS) initVoices();
             const utterThis = new SpeechSynthesisUtterance(text);
             utterThis.voice = (document.getElementById('accent-select').value === 'UK') ? voiceUK : voiceUS;
-            utterThis.rate = parseFloat(document.getElementById('speed-select').value);
+            // 微微調慢語速，令發音更有感情
+            utterThis.rate = parseFloat(document.getElementById('speed-select').value) * 0.95; 
             synth.speak(utterThis);
         }
 
-        // --- Syllable Auto-Generator ---
-        function countSyllables(word) {
-            word = word.toLowerCase(); if(word.length <= 3) return 1;
-            word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, ''); word = word.replace(/^y/, '');
-            return word.match(/[aeiouy]{1,2}/g)?.length || 1;
-        }
-        function generateSyllables(word) {
-            let count = countSyllables(word); if (count <= 1) return word; 
-            let w = word.toLowerCase(); let result = ""; let chunk = Math.ceil(w.length / count);
-            for(let i=0; i<w.length; i+=chunk) { result += w.substring(i, i+chunk) + (i+chunk < w.length ? "·" : ""); }
-            return result;
-        }
-        function adjustTooltipPosition(tooltip, spanRect) {
-            tooltip.style.transform = 'translateX(-50%)'; tooltip.style.left = '50%';
-            const tooltipRect = tooltip.getBoundingClientRect(), viewportWidth = window.innerWidth;
-            if (tooltipRect.right > viewportWidth - 5) { tooltip.style.transform = `translateX(calc(-50% - ${tooltipRect.right - viewportWidth + 10}px))`; }
-            else if (tooltipRect.left < 5) { tooltip.style.transform = `translateX(calc(-50% + ${10 - tooltipRect.left}px))`; }
-        }
+        function countSyllables(word) { word = word.toLowerCase(); if(word.length <= 3) return 1; word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, ''); word = word.replace(/^y/, ''); return word.match(/[aeiouy]{1,2}/g)?.length || 1; }
+        function generateSyllables(word) { let count = countSyllables(word); if (count <= 1) return word; let w = word.toLowerCase(); let result = ""; let chunk = Math.ceil(w.length / count); for(let i=0; i<w.length; i+=chunk) { result += w.substring(i, i+chunk) + (i+chunk < w.length ? "·" : ""); } return result; }
+        function adjustTooltipPosition(tooltip, spanRect) { tooltip.style.transform = 'translateX(-50%)'; tooltip.style.left = '50%'; const tooltipRect = tooltip.getBoundingClientRect(), viewportWidth = window.innerWidth; if (tooltipRect.right > viewportWidth - 5) { tooltip.style.transform = `translateX(calc(-50% - ${tooltipRect.right - viewportWidth + 10}px))`; } else if (tooltipRect.left < 5) { tooltip.style.transform = `translateX(calc(-50% + ${10 - tooltipRect.left}px))`; } }
         
         function processNode(node) {
             if (node.nodeType === Node.TEXT_NODE) {
                 const text = node.textContent; if (!text.trim()) return node;
                 const fragment = document.createDocumentFragment();
                 const tokens = text.match(/[\w']+|[^\w']+/g) || [];
-                
                 tokens.forEach((token, index) => {
                     if (/^[a-zA-Z0-9]+$/.test(token)) {
                         const span = document.createElement('span'); span.className = 'clickable-word'; span.textContent = token;
                         const lowerToken = token.toLowerCase(); 
-                        
-                        let syllables = syllableDict[lowerToken]; 
-                        let customMeaning = meaningDict[lowerToken]; 
-                        
-                        // MAGIC: Check if this is a Date Number! 
-                        let spokenText = token;
-                        let tooltipText = null;
-                        
+                        let syllables = syllableDict[lowerToken]; let customMeaning = meaningDict[lowerToken]; 
+                        let spokenText = token; let tooltipText = null;
                         if (/^[0-9]+$/.test(token) && ordinalMap[token]) {
-                            // Look ahead to see if the next word is a month
                             let isDate = false;
                             for (let i = index + 1; i < index + 5 && i < tokens.length; i++) {
                                 if (tokens[i].trim() === '') continue;
                                 if (months.includes(tokens[i].toLowerCase())) { isDate = true; break; }
-                                break; // Stop looking if we hit a non-space word that isn't a month
+                                break; 
                             }
-                            if (isDate) {
-                                spokenText = ordinalMap[token];
-                                tooltipText = ordinalMap[token]; // e.g., "twenty-first"
-                            }
+                            if (isDate) { spokenText = ordinalMap[token]; tooltipText = ordinalMap[token]; }
                         }
-
                         if (!/^[0-9]+$/.test(token) && !syllables && token.length > 4 && countSyllables(token) > 1) { syllables = generateSyllables(token); }
-                        
                         let sylTooltip = null; let meaningTooltip = null;
-                        
-                        if (syllables && syllables !== lowerToken) {
-                            sylTooltip = document.createElement('span'); sylTooltip.className = 'syllable-tooltip'; 
-                            sylTooltip.textContent = syllables; span.appendChild(sylTooltip);
-                        }
-                        
-                        // Add Date Tooltip or Normal Meaning Tooltip
-                        if (customMeaning || tooltipText) {
-                            meaningTooltip = document.createElement('span'); meaningTooltip.className = 'meaning-tooltip'; 
-                            meaningTooltip.textContent = tooltipText || customMeaning.meaning;
-                            if (sylTooltip) { sylTooltip.style.bottom = "calc(100% + 30px)"; }
-                            span.appendChild(meaningTooltip);
-                        }
-                        
-                        span.addEventListener('click', function(e) {
-                            e.preventDefault(); e.stopPropagation();
-                            if(synth.state === 'suspended') synth.resume();
-                            
-                            speak(customMeaning ? customMeaning.spoken : spokenText);
-                            
-                            this.style.backgroundColor = 'var(--primary)'; this.style.color = 'white'; this.classList.add('show-tooltip');
-                            if (sylTooltip) setTimeout(() => adjustTooltipPosition(sylTooltip, this.getBoundingClientRect()), 10);
-                            if (meaningTooltip) setTimeout(() => adjustTooltipPosition(meaningTooltip, this.getBoundingClientRect()), 10);
-                            setTimeout(() => { this.style.backgroundColor = ''; this.style.color = ''; this.classList.remove('show-tooltip'); }, 1500);
-                        });
+                        if (syllables && syllables !== lowerToken) { sylTooltip = document.createElement('span'); sylTooltip.className = 'syllable-tooltip'; sylTooltip.textContent = syllables; span.appendChild(sylTooltip); }
+                        if (customMeaning || tooltipText) { meaningTooltip = document.createElement('span'); meaningTooltip.className = 'meaning-tooltip'; meaningTooltip.textContent = tooltipText || customMeaning.meaning; if (sylTooltip) { sylTooltip.style.bottom = "calc(100% + 30px)"; } span.appendChild(meaningTooltip); }
+                        span.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); if(synth.state === 'suspended') synth.resume(); speak(customMeaning ? customMeaning.spoken : spokenText); this.style.backgroundColor = 'var(--primary)'; this.style.color = 'white'; this.classList.add('show-tooltip'); if (sylTooltip) setTimeout(() => adjustTooltipPosition(sylTooltip, this.getBoundingClientRect()), 10); if (meaningTooltip) setTimeout(() => adjustTooltipPosition(meaningTooltip, this.getBoundingClientRect()), 10); setTimeout(() => { this.style.backgroundColor = ''; this.style.color = ''; this.classList.remove('show-tooltip'); }, 1500); });
                         fragment.appendChild(span);
                     } else { fragment.appendChild(document.createTextNode(token)); }
-                });
-                return fragment;
-            } else if (node.nodeType === Node.ELEMENT_NODE) {
-                if (['SCRIPT','STYLE','SELECT','OPTION','SVG','BUTTON','A'].includes(node.tagName)) return node;
-                const newElement = node.cloneNode(false);
-                Array.from(node.childNodes).forEach(child => { newElement.appendChild(processNode(child)); });
-                return newElement;
-            }
-            return node.cloneNode(true);
+                }); return fragment;
+            } else if (node.nodeType === Node.ELEMENT_NODE) { if (['SCRIPT','STYLE','SELECT','OPTION','SVG','BUTTON','A'].includes(node.tagName)) return node; const newElement = node.cloneNode(false); Array.from(node.childNodes).forEach(child => { newElement.appendChild(processNode(child)); }); return newElement; } return node.cloneNode(true);
         }
-        
-        function makeClickableArea(elementId) {
-            const el = document.getElementById(elementId);
-            if(el) { const processed = processNode(el); el.parentNode.replaceChild(processed, el); }
-        }
+        function makeClickableArea(elementId) { const el = document.getElementById(elementId); if(el) { const processed = processNode(el); el.parentNode.replaceChild(processed, el); } }
 
-        // --- Reliable Audio Recording Logic ---
+        // --- 超強兼容版 Recorder (100% Android / iOS 通用) ---
         let mediaRecorder = null; let audioChunks = []; let timerInterval = null; let seconds = 0; let recordedBlob = null; let activeStream = null;
+        let finalExtension = 'mp3'; let finalMimeType = 'audio/mpeg'; 
 
-        function updateTimerDisplay() {
-            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-            const secs = (seconds % 60).toString().padStart(2, '0');
-            document.getElementById('timer').textContent = `${mins}:${secs}`;
-        }
+        function updateTimerDisplay() { const mins = Math.floor(seconds / 60).toString().padStart(2, '0'); const secs = (seconds % 60).toString().padStart(2, '0'); document.getElementById('timer').textContent = `${mins}:${secs}`; }
 
         async function startRecording() {
             try {
@@ -746,76 +468,82 @@
                 activeStream = stream;
                 
                 let mimeType = '';
-                const types = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus'];
-                for (let type of types) {
-                    if (MediaRecorder.isTypeSupported(type)) { mimeType = type; break; }
-                }
-
+                if (MediaRecorder.isTypeSupported('audio/mp4')) { mimeType = 'audio/mp4'; finalExtension = 'mp4'; finalMimeType = 'audio/mp4'; } 
+                else if (MediaRecorder.isTypeSupported('audio/webm')) { mimeType = 'audio/webm'; finalExtension = 'webm'; finalMimeType = 'audio/webm'; } 
+                else if (MediaRecorder.isTypeSupported('audio/ogg')) { mimeType = 'audio/ogg'; finalExtension = 'ogg'; finalMimeType = 'audio/ogg'; }
+                
                 const options = mimeType ? { mimeType } : undefined;
                 mediaRecorder = new MediaRecorder(stream, options);
                 audioChunks = []; recordedBlob = null;
 
                 mediaRecorder.ondataavailable = event => { if (event.data && event.data.size > 0) { audioChunks.push(event.data); } };
-
                 mediaRecorder.onstop = () => {
                     if (audioChunks.length === 0) return;
                     
-                    let finalMime = mediaRecorder.mimeType || 'audio/mp4';
-                    let ext = 'm4a'; 
-                    
-                    if (finalMime.includes('webm')) ext = 'webm';
-                    else if (finalMime.includes('ogg')) ext = 'ogg';
-
-                    recordedBlob = new Blob(audioChunks, { type: finalMime }); 
-                    
+                    recordedBlob = new Blob(audioChunks, { type: finalMimeType }); 
                     const audioUrl = URL.createObjectURL(recordedBlob);
                     const audioEl = document.getElementById('audio-preview');
                     audioEl.src = audioUrl; audioEl.style.display = 'block';
                     
                     const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
-                    const filename = `${pName}_Telemarketing_Pitch.${ext}`;
+                    const filename = `${pName}_Pitch.${finalExtension}`;
                     
-                    // Show download section
                     document.getElementById('post-record-actions').style.display = 'flex';
                     
                     const btnDownload = document.getElementById('btn-download');
-                    btnDownload.style.background = '#25D366';
-                    btnDownload.href = audioUrl; 
-                    btnDownload.download = filename;
+                    btnDownload.href = audioUrl; btnDownload.download = filename;
+
+                    if (navigator.canShare && navigator.canShare({ files: [new File([recordedBlob], filename, { type: finalMimeType })] })) {
+                        document.getElementById('btn-share').style.display = 'flex';
+                    } else {
+                        document.getElementById('btn-share').style.display = 'none';
+                        document.getElementById('share-status').style.display = 'block';
+                        document.getElementById('share-status').textContent = '💡 Please use the Download button on your computer.';
+                    }
 
                     if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
                 };
 
                 mediaRecorder.start();
-                
                 document.getElementById('btn-start').style.display = 'none'; document.getElementById('btn-stop').style.display = 'flex';
-                document.getElementById('audio-preview').style.display = 'none'; document.getElementById('post-record-actions').style.display = 'none';
-                
-                const timerEl = document.getElementById('timer'); timerEl.classList.add('recording');
-                
+                document.getElementById('audio-preview').style.display = 'none'; document.getElementById('post-record-actions').style.display = 'none'; document.getElementById('share-status').style.display = 'none';
+                document.getElementById('timer').classList.add('recording');
                 seconds = 0; updateTimerDisplay(); clearInterval(timerInterval);
                 timerInterval = setInterval(() => { seconds++; updateTimerDisplay(); }, 1000);
-                
-            } catch (err) {
-                alert("Cannot access microphone. Please ensure you have granted permission in your browser settings.");
-            }
+            } catch (err) { alert("Cannot access microphone. Please ensure you have granted permission in your browser settings."); }
         }
 
         function stopRecording() {
             if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                mediaRecorder.stop();
-                clearInterval(timerInterval);
+                mediaRecorder.stop(); clearInterval(timerInterval);
                 document.getElementById('timer').classList.remove('recording');
-                document.getElementById('btn-start').style.display = 'flex';
-                document.getElementById('btn-start').innerHTML = '<span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Record Again';
+                document.getElementById('btn-start').style.display = 'flex'; document.getElementById('btn-start').innerHTML = '<span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Record Again';
                 document.getElementById('btn-stop').style.display = 'none';
             }
         }
 
-        window.onload = function() {
-            setTimeout(initVoices, 100);
-            document.body.addEventListener('touchstart', function() { if (synth.state === 'suspended') synth.resume(); }, { once: true });
-        };
+        // --- Web Share API ---
+        async function shareAudioFile() {
+            if (!recordedBlob) return;
+            const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
+            const filename = `${pName}_Pitch.${finalExtension}`;
+            const file = new File([recordedBlob], filename, { type: finalMimeType });
+            const statusEl = document.getElementById('share-status');
+            
+            try {
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    statusEl.style.display = 'block'; statusEl.style.color = '#f59e0b'; statusEl.textContent = 'Opening share menu...';
+                    await navigator.share({ files: [file], title: 'My Pitch', text: 'Here is my recorded pitch!' });
+                    statusEl.style.color = '#25D366'; statusEl.textContent = 'Shared successfully!';
+                    setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+                }
+            } catch (error) {
+                if (error.name !== "AbortError") { statusEl.style.color = '#ef4444'; statusEl.textContent = 'Failed to share. Please use Download instead.'; }
+                else { statusEl.style.display = 'none'; }
+            }
+        }
+
+        window.onload = function() { setTimeout(initVoices, 100); document.body.addEventListener('touchstart', function() { if (synth.state === 'suspended') synth.resume(); }, { once: true }); };
     </script>
 </body>
 </html>
