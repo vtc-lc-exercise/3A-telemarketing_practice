@@ -303,13 +303,13 @@
                 </div>
                 <audio id="audio-preview" controls style="display: none; width: 100%; margin-top: 5px;"></audio>
                 
-                <!-- Share Button that actually works -->
-                <button class="rec-btn btn-share" id="btn-share" onclick="handleShareClick()" style="background-color: var(--primary);">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    Save Audio
+                <!-- Send to Teacher button (Native Share with Fallback) -->
+                <button class="rec-btn btn-share" id="btn-share" onclick="shareAudio()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                    Send to Teacher
                 </button>
                 
-                <p id="share-status" style="font-size: 0.85rem; color: #6b7280; display: none; text-align: center; margin: 0;"></p>
+                <p id="share-status" style="font-size: 0.85rem; color: #6b7280; display: none; text-align: center; margin: 0; padding: 0 10px;"></p>
             </div>
             
             <h2 style="font-size: 1.4rem; margin-top: 15px;">Possible Sample</h2>
@@ -759,7 +759,7 @@
             }
         }
 
-        // --- Reliable Audio Recording Logic ---
+        // --- Reliable Audio Recording & Sharing Logic ---
         let mediaRecorder = null; 
         let audioChunks = []; 
         let timerInterval = null; 
@@ -775,61 +775,37 @@
 
         async function startRecording() {
             try {
-                // Ensure previous stream is closed before opening a new one
-                if (activeStream) {
-                    activeStream.getTracks().forEach(track => track.stop());
-                }
-
-                // Request microphone access
+                if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 activeStream = stream;
                 
-                // Fallback mime types to ensure cross-browser compatibility (especially iOS Safari)
                 const options = { mimeType: 'audio/webm' };
                 if (!MediaRecorder.isTypeSupported('audio/webm')) {
-                    if (MediaRecorder.isTypeSupported('audio/mp4')) {
-                        options.mimeType = 'audio/mp4';
-                    } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
-                        options.mimeType = 'audio/ogg';
-                    } else {
-                        // iOS Safari fallback
-                        options.mimeType = ''; 
-                    }
+                    if (MediaRecorder.isTypeSupported('audio/mp4')) { options.mimeType = 'audio/mp4'; } 
+                    else if (MediaRecorder.isTypeSupported('audio/ogg')) { options.mimeType = 'audio/ogg'; } 
+                    else { options.mimeType = ''; }
                 }
 
                 mediaRecorder = new MediaRecorder(stream, options.mimeType ? options : undefined);
-                audioChunks = []; 
-                recordedBlob = null;
+                audioChunks = []; recordedBlob = null;
 
-                mediaRecorder.ondataavailable = event => { 
-                    if (event.data && event.data.size > 0) {
-                        audioChunks.push(event.data); 
-                    }
-                };
+                mediaRecorder.ondataavailable = event => { if (event.data && event.data.size > 0) { audioChunks.push(event.data); } };
 
                 mediaRecorder.onstop = () => {
                     if (audioChunks.length === 0) return;
-                    
-                    const mimeType = mediaRecorder.mimeType || 'audio/mp4'; // Fallback to mp4 extension for iOS
+                    const mimeType = mediaRecorder.mimeType || 'audio/mp4'; 
                     recordedBlob = new Blob(audioChunks, { type: mimeType }); 
                     
                     const audioUrl = URL.createObjectURL(recordedBlob);
                     const audioEl = document.getElementById('audio-preview');
-                    audioEl.src = audioUrl; 
-                    audioEl.style.display = 'block';
+                    audioEl.src = audioUrl; audioEl.style.display = 'block';
                     
                     document.getElementById('btn-share').style.display = 'flex';
-                    
-                    // Stop all microphone tracks to release mic icon
-                    if (activeStream) {
-                        activeStream.getTracks().forEach(track => track.stop());
-                    }
+                    if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
                 };
 
-                // Start recording
                 mediaRecorder.start();
                 
-                // UI Updates
                 document.getElementById('btn-start').style.display = 'none';
                 document.getElementById('btn-stop').style.display = 'flex';
                 document.getElementById('audio-preview').style.display = 'none';
@@ -839,8 +815,7 @@
                 const timerEl = document.getElementById('timer');
                 timerEl.classList.add('recording');
                 
-                seconds = 0; 
-                updateTimerDisplay();
+                seconds = 0; updateTimerDisplay();
                 clearInterval(timerInterval);
                 timerInterval = setInterval(() => { seconds++; updateTimerDisplay(); }, 1000);
                 
@@ -861,26 +836,46 @@
             }
         }
         
-        function handleShareClick() {
-            if (!recordedBlob) return;
-            
+        async function shareAudio() {
             const statusEl = document.getElementById('share-status'); 
             statusEl.style.display = 'block';
-            
-            // Determine file extension based on MIME type
+            if (!recordedBlob) return;
+
             let ext = 'webm';
             if (recordedBlob.type.includes('mp4')) ext = 'm4a';
             else if (recordedBlob.type.includes('ogg')) ext = 'ogg';
             
             const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
             const filename = `${pName}_Telemarketing_Pitch.${ext}`;
-            
-            // On mobile/desktop browsers, we'll force a download as it's the most reliable way 
-            // for HTML files run locally to save the audio.
-            downloadAudio(filename);
-            
-            statusEl.textContent = "Audio saved to your device! 📥"; 
-            statusEl.style.color = "#25D366";
+            const audioFile = new File([recordedBlob], filename, { type: recordedBlob.type });
+
+            // 嘗試使用原生的 Web Share API (會彈出分享選單，例如 WhatsApp)
+            if (navigator.canShare && navigator.canShare({ files: [audioFile] })) {
+                try {
+                    await navigator.share({
+                        title: 'VE3A Telemarketing Assessment',
+                        text: 'Teacher, here is my Telemarketing Practice recording!',
+                        files: [audioFile]
+                    });
+                    statusEl.textContent = "Audio shared successfully! ✅"; 
+                    statusEl.style.color = "#25D366"; 
+                } catch (error) {
+                    // 如果使用者取消分享 (AbortError)，或者發生其他錯誤，提供自動下載備案
+                    if (error.name !== "AbortError") {
+                        statusEl.innerHTML = "Cannot share directly. <br>The file has been saved to your device. Please send it manually! 📥"; 
+                        statusEl.style.color = "#d97706"; // Amber warning color
+                        downloadAudio(filename);
+                    } else {
+                        statusEl.textContent = "Share cancelled."; 
+                        statusEl.style.color = "#6b7280";
+                    }
+                }
+            } else {
+                // 如果瀏覽器不支援 Web Share API (例如 Desktop 或舊手機)，直接觸發下載
+                statusEl.innerHTML = "Direct sharing is not supported on this browser. <br>The file has been saved to your device instead! 📥"; 
+                statusEl.style.color = "#d97706";
+                downloadAudio(filename);
+            }
         }
         
         function downloadAudio(filename) {
