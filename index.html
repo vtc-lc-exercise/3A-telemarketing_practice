@@ -213,7 +213,6 @@
             <h2 style="font-size: 1.4rem; margin-top: 0;">Select a Practice</h2>
             <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 15px;">Choose a paper below to begin.</p>
             <div class="option-list">
-                <!-- UPDATED: Menu icons changed to 1, 2, 3, 4 with emojis in titles -->
                 <div class="option-card" onclick="loadPractice('p1')">
                     <div class="option-icon">1</div>
                     <div class="option-text">
@@ -303,10 +302,13 @@
                     </button>
                 </div>
                 <audio id="audio-preview" controls style="display: none; width: 100%; margin-top: 5px;"></audio>
-                <button class="rec-btn btn-share" id="btn-share" onclick="shareAudio()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-                    Send to Teacher
+                
+                <!-- Share Button that actually works -->
+                <button class="rec-btn btn-share" id="btn-share" onclick="handleShareClick()" style="background-color: var(--primary);">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Save Audio
                 </button>
+                
                 <p id="share-status" style="font-size: 0.85rem; color: #6b7280; display: none; text-align: center; margin: 0;"></p>
             </div>
             
@@ -500,6 +502,8 @@
             }
         };
 
+        let currentPracticeId = 'p1';
+
         // --- Navigation & Dynamic Loading ---
         function navToLanding() { document.getElementById('main-body').classList.add('landing-active'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('page-landing').classList.add('active'); window.scrollTo(0, 0); }
         function navToMenu() { document.getElementById('main-body').classList.remove('landing-active'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('page-menu').classList.add('active'); window.scrollTo(0, 0); }
@@ -509,6 +513,7 @@
         }
 
         function loadPractice(id) {
+            currentPracticeId = id;
             const d = pData[id];
             
             // 1. Build Left Box (Paper)
@@ -593,7 +598,7 @@
             makeClickableArea('modal-content-why-list'); 
             makeClickableArea('modal-content-offers-list');
 
-            // Reset recording UI just in case
+            // Reset recording UI
             if(mediaRecorder && mediaRecorder.state !== 'inactive') { stopRecording(); }
             document.getElementById('audio-preview').style.display = 'none';
             document.getElementById('btn-share').style.display = 'none';
@@ -754,8 +759,13 @@
             }
         }
 
-        // --- Audio Recording & Native Web Share Logic ---
-        let mediaRecorder; let audioChunks = []; let timerInterval; let seconds = 0; let recordedBlob = null;
+        // --- Reliable Audio Recording Logic ---
+        let mediaRecorder = null; 
+        let audioChunks = []; 
+        let timerInterval = null; 
+        let seconds = 0; 
+        let recordedBlob = null;
+        let activeStream = null;
 
         function updateTimerDisplay() {
             const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
@@ -765,22 +775,61 @@
 
         async function startRecording() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = []; recordedBlob = null;
+                // Ensure previous stream is closed before opening a new one
+                if (activeStream) {
+                    activeStream.getTracks().forEach(track => track.stop());
+                }
 
-                mediaRecorder.ondataavailable = event => { if (event.data.size > 0) audioChunks.push(event.data); };
-                mediaRecorder.onstop = () => {
-                    recordedBlob = new Blob(audioChunks, { type: 'audio/webm' }); 
-                    const audioUrl = URL.createObjectURL(recordedBlob);
-                    const audioEl = document.getElementById('audio-preview');
-                    audioEl.src = audioUrl; audioEl.style.display = 'block';
-                    document.getElementById('btn-share').style.display = 'flex';
-                    stream.getTracks().forEach(track => track.stop());
+                // Request microphone access
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                activeStream = stream;
+                
+                // Fallback mime types to ensure cross-browser compatibility (especially iOS Safari)
+                const options = { mimeType: 'audio/webm' };
+                if (!MediaRecorder.isTypeSupported('audio/webm')) {
+                    if (MediaRecorder.isTypeSupported('audio/mp4')) {
+                        options.mimeType = 'audio/mp4';
+                    } else if (MediaRecorder.isTypeSupported('audio/ogg')) {
+                        options.mimeType = 'audio/ogg';
+                    } else {
+                        // iOS Safari fallback
+                        options.mimeType = ''; 
+                    }
+                }
+
+                mediaRecorder = new MediaRecorder(stream, options.mimeType ? options : undefined);
+                audioChunks = []; 
+                recordedBlob = null;
+
+                mediaRecorder.ondataavailable = event => { 
+                    if (event.data && event.data.size > 0) {
+                        audioChunks.push(event.data); 
+                    }
                 };
 
+                mediaRecorder.onstop = () => {
+                    if (audioChunks.length === 0) return;
+                    
+                    const mimeType = mediaRecorder.mimeType || 'audio/mp4'; // Fallback to mp4 extension for iOS
+                    recordedBlob = new Blob(audioChunks, { type: mimeType }); 
+                    
+                    const audioUrl = URL.createObjectURL(recordedBlob);
+                    const audioEl = document.getElementById('audio-preview');
+                    audioEl.src = audioUrl; 
+                    audioEl.style.display = 'block';
+                    
+                    document.getElementById('btn-share').style.display = 'flex';
+                    
+                    // Stop all microphone tracks to release mic icon
+                    if (activeStream) {
+                        activeStream.getTracks().forEach(track => track.stop());
+                    }
+                };
+
+                // Start recording
                 mediaRecorder.start();
                 
+                // UI Updates
                 document.getElementById('btn-start').style.display = 'none';
                 document.getElementById('btn-stop').style.display = 'flex';
                 document.getElementById('audio-preview').style.display = 'none';
@@ -790,12 +839,14 @@
                 const timerEl = document.getElementById('timer');
                 timerEl.classList.add('recording');
                 
-                seconds = 0; updateTimerDisplay();
+                seconds = 0; 
+                updateTimerDisplay();
+                clearInterval(timerInterval);
                 timerInterval = setInterval(() => { seconds++; updateTimerDisplay(); }, 1000);
                 
             } catch (err) {
-                alert("Cannot access microphone. Please ensure you have granted permission.");
-                console.error(err);
+                alert("Cannot access microphone. Please ensure you have granted permission in your browser settings.");
+                console.error("Mic Error:", err);
             }
         }
 
@@ -810,35 +861,41 @@
             }
         }
         
-        async function shareAudio() {
-            const statusEl = document.getElementById('share-status'); statusEl.style.display = 'block';
-            if (!recordedBlob) { statusEl.textContent = "Please record an audio first."; return; }
-
-            const audioFile = new File([recordedBlob], 'My_Telemarketing_Pitch.webm', { type: 'audio/webm' });
-
-            if (navigator.canShare && navigator.canShare({ files: [audioFile] })) {
-                try {
-                    await navigator.share({
-                        title: 'VE3A Telemarketing Assessment',
-                        text: 'Teacher, here is my Telemarketing Practice recording!',
-                        files: [audioFile]
-                    });
-                    statusEl.textContent = "Audio shared successfully!"; statusEl.style.color = "#25D366"; 
-                } catch (error) {
-                    if (error.name !== "AbortError") {
-                        statusEl.textContent = "Failed to open Share menu. Downloading instead."; fallbackDownload(audioFile);
-                    } else { statusEl.textContent = "Share cancelled."; }
-                }
-            } else {
-                statusEl.textContent = "Direct sharing is not supported on this browser. Downloading the file instead..."; fallbackDownload(audioFile);
-            }
+        function handleShareClick() {
+            if (!recordedBlob) return;
+            
+            const statusEl = document.getElementById('share-status'); 
+            statusEl.style.display = 'block';
+            
+            // Determine file extension based on MIME type
+            let ext = 'webm';
+            if (recordedBlob.type.includes('mp4')) ext = 'm4a';
+            else if (recordedBlob.type.includes('ogg')) ext = 'ogg';
+            
+            const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
+            const filename = `${pName}_Telemarketing_Pitch.${ext}`;
+            
+            // On mobile/desktop browsers, we'll force a download as it's the most reliable way 
+            // for HTML files run locally to save the audio.
+            downloadAudio(filename);
+            
+            statusEl.textContent = "Audio saved to your device! 📥"; 
+            statusEl.style.color = "#25D366";
         }
         
-        function fallbackDownload(file) {
-            const url = URL.createObjectURL(file);
-            const a = document.createElement('a'); a.style.display = 'none'; a.href = url; a.download = file.name;
-            document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(url);
-            document.getElementById('share-status').innerHTML = "File downloaded! You can attach it in WhatsApp Web.";
+        function downloadAudio(filename) {
+            const url = URL.createObjectURL(recordedBlob);
+            const a = document.createElement('a'); 
+            a.style.display = 'none'; 
+            a.href = url; 
+            a.download = filename;
+            document.body.appendChild(a); 
+            a.click(); 
+            
+            setTimeout(() => {
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }, 100);
         }
 
         window.onload = function() {
