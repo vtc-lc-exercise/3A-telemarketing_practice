@@ -416,26 +416,28 @@
         
         // ★終極尋寶版★ 強行挖出手機內的高音質/真人聲線
         function initVoices() {
-            const voices = synth.getVoices();
-            const findBest = (lang) => {
-                // 第一志願：微軟 Edge 的神級 AI 聲線 (Online / Natural)
-                let best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Online') && v.name.includes('Natural'));
-                // 第二志願：Apple (iOS/Mac) 的高級 Siri 或 Premium 聲線
-                if (!best) best = voices.find(v => v.lang.startsWith(lang) && (v.name.includes('Premium') || v.name.includes('Siri')));
-                // 第三志願：Android / Google 的雲端高音質聲線 (Network)
-                if (!best) best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Network'));
-                // 第四志願：系統內建的增強版聲線 (Enhanced)
-                if (!best) best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Enhanced'));
-                // 第五志願：普通的 Google 聲線
-                if (!best) best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Google'));
-                // 保底：任何一個符合語言的聲線
-                if (!best) best = voices.find(v => v.lang.startsWith(lang));
-                
-                return best || voices[0];
-            };
-            voiceUK = findBest('en-GB');
-            voiceUS = findBest('en-US');
-        }
+    const voices = synth.getVoices();
+    if (voices.length === 0) return; // 確保有聲音才設定
+
+    const findBest = (lang) => {
+        // 優先找高品質的線上/自然聲音
+        let best = voices.find(v => v.lang.startsWith(lang) && (v.name.includes('Online') || v.name.includes('Natural')));
+        // 其次找 iOS/Mac Premium 聲音
+        if (!best) best = voices.find(v => v.lang.startsWith(lang) && (v.name.includes('Premium') || v.name.includes('Siri')));
+        // 其次找 Android 網路聲音
+        if (!best) best = voices.find(v => v.lang.startsWith(lang) && (v.name.includes('Network') || v.name.includes('Enhanced')));
+        
+        // 如果都沒有，就找任何符合該語言的聲音
+        if (!best) best = voices.find(v => v.lang.startsWith(lang));
+        
+        // 🚀 終極防線：如果連該國口音都找不到，就找「任何」英文聲音！絕對不允許 fallback 到系統預設中文
+        if (!best) best = voices.find(v => v.lang.startsWith('en'));
+        
+        return best; // 不要再 || voices[0] 了
+    };
+    voiceUK = findBest('en-GB');
+    voiceUS = findBest('en-US');
+}
         
         if (speechSynthesis.onvoiceschanged !== undefined) { speechSynthesis.onvoiceschanged = initVoices; }
         function syncAccents(val) { document.getElementById('accent-select').value = val; document.getElementById('accent-select-2').value = val; }
