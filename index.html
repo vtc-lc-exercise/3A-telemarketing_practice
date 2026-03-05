@@ -424,10 +424,9 @@
                 
                 if (!voice) voice = voices.find(v => v.lang.startsWith(lang));
                 
-                // 🚀 終極防線：如果找不到英式或美式，就找「任何」英文！絕對不要 fallback 去 voices[0]
                 if (!voice) voice = voices.find(v => v.lang.startsWith('en'));
                 
-                return voice; // <--- 徹底移除了 || voices[0]
+                return voice; 
             };
             
             voiceUK = getBestVoice('en-GB', ['Google', 'Natural', 'Enhanced', 'Serena', 'Daniel']);
