@@ -167,7 +167,7 @@
             <div class="settings-panel"><div class="setting-group"><label>🗣️ Accent:</label><select id="accent-select-2" onchange="syncAccents(this.value)"><option value="UK">British (UK)</option><option value="US">American (US)</option></select></div></div>
             
             <div class="recorder-container">
-                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record Here!</div>
+                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record your Pitch here!</div>
                 <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
                 <div class="timer-display" id="timer">00:00</div>
                 <div class="loading-text" id="loading-text">⚙️ Encoding to MP3... Please wait</div>
@@ -187,7 +187,7 @@
                 </div>
             </div>
             
-            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Sample</h2>
+            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Possible Sample</h2>
             <div class="hint"><span style="margin-right: 8px;">▶️</span> Tap play for the whole sentence, or tap words for syllables!</div>
             <div class="box" id="sample-container" style="display: flex; flex-direction: column; gap: 12px; padding: 12px;"></div>
         </div>
@@ -348,7 +348,7 @@
             d.sample.forEach(sentence => {
                 const row = document.createElement('div'); row.className = 'play-row'; row.style.borderBottom = '1px dashed #e5e7eb'; row.style.paddingBottom = '10px';
                 const btn = document.createElement('button'); btn.className = 'play-btn'; btn.innerHTML = '▶';
-                btn.onclick = (e) => { e.preventDefault(); if(synth.state === 'suspended') synth.resume(); speak(sentence); };
+                btn.onclick = (e) => { e.preventDefault(); speak(sentence); };
                 const textDiv = document.createElement('div'); textDiv.className = 'text-content'; textDiv.textContent = sentence;
                 row.appendChild(btn); row.appendChild(textDiv); sampleContainer.appendChild(row);
                 textDiv.parentNode.replaceChild(processNode(textDiv), textDiv);
@@ -358,7 +358,7 @@
             d.exp.forEach(exp => {
                 const card = document.createElement('div'); card.className = 'exp-card play-row';
                 const btn = document.createElement('button'); btn.className = 'play-btn'; btn.innerHTML = '▶';
-                btn.onclick = (e) => { e.preventDefault(); if(synth.state === 'suspended') synth.resume(); speak(exp.example); };
+                btn.onclick = (e) => { e.preventDefault(); speak(exp.example); };
                 const content = document.createElement('div'); content.className = 'text-content';
                 let formattedPattern = exp.pattern.replace(/\((.*?)\)/g, '<span style="color:#f59e0b; font-weight:700;">($1)</span>');
                 content.innerHTML = `<div style="font-weight:700; font-size:1rem; margin-bottom:6px; color:var(--text-main); line-height:1.4;">${formattedPattern}</div><div style="color:var(--text-muted); font-style:italic; font-size:0.95rem; font-weight: 500;"><span style="font-weight:700; color:var(--primary);">E.g.</span> ${exp.example}</div>`;
@@ -390,78 +390,85 @@
         }
         window.addEventListener('resize', adjustArrows);
 
-        // --- Syllable, TTS, and Pronunciation Fixes ---
         const syllableDict = {"learning": "learn·ing", "centre": "cen·tre", "english": "eng·lish", "children": "chil·dren", "multi": "mul·ti", "purpose": "pur·pose", "activities": "ac·tiv·i·ties", "language": "lan·guage", "storytelling": "sto·ry·tell·ing", "enrolment": "en·rol·ment", "method": "meth·od", "online": "on·line", "participant": "par·tic·i·pant", "participants": "par·tic·i·pants", "deadline": "dead·line", "special": "spe·cial", "offers": "of·fers", "sponsored": "spon·sored", "education": "ed·u·ca·tion", "environment": "en·vi·ron·ment", "everyone": "ev·ery·one", "benefit": "ben·e·fit", "elaboration": "e·lab·o·ra·tion", "enquiry": "en·qui·ry", "information": "in·for·ma·tion", "morning": "morn·ing", "calling": "call·ing", "hotline": "hot·line", "excited": "ex·cit·ed", "perfect": "per·fect", "seven": "sev·en", "twelve": "twelve", "lineup": "line·up", "ready": "read·y", "practicing": "prac·tic·ing", "friendly": "friend·ly", "speaking": "speak·ing", "confidence": "con·fi·dence", "everyday": "ev·ery·day", "communication": "com·mu·ni·ca·tion", "secure": "se·cure", "visiting": "vis·it·ing", "before": "be·fore", "dollars": "dol·lars", "bonus": "bo·nus", "phonics": "phon·ics", "workbook": "work·book", "junior": "jun·ior", "master": "mas·ter", "certificate": "cer·tif·i·cate", "goodbye": "good·bye", "apple": "ap·ple", "july": "ju·ly", "united": "u·nit·ed", "charity": "char·i·ty", "mental": "men·tal", "health": "health", "adults": "a·dults", "november": "no·vem·ber", "central": "cen·tral", "different": "dif·fer·ent", "sharing": "shar·ing", "sessions": "ses·sions", "management": "man·age·ment", "workshops": "work·shops", "relaxation": "re·lax·a·tion", "exercises": "ex·er·cis·es", "useful": "use·ful", "experts": "ex·perts", "practical": "prac·ti·cal", "techniques": "tech·niques", "effectively": "ef·fec·tive·ly", "balance": "bal·ance", "demands": "de·mands", "personal": "per·son·al", "enrol": "en·rol", "website": "web·site", "october": "oc·to·ber", "person": "per·son", "sponsorship": "spon·sor·ship", "receive": "re·ceive", "guided": "guid·ed", "meditation": "med·i·ta·tion", "audio": "au·di·o", "sensory": "sen·so·ry", "toolkit": "tool·kit", "details": "de·tails", "graceful": "grace·ful", "service": "ser·vice", "warmly": "warm·ly", "invite": "in·vite", "students": "stu·dents", "january": "jan·u·ar·y", "college": "col·lege", "caring": "car·ing", "visits": "vis·its", "donation": "do·na·tion", "tutoring": "tu·tor·ing", "meaningful": "mean·ing·ful", "volunteer": "vol·un·teer", "minded": "mind·ed", "contributing": "con·trib·ut·ing", "supportive": "sup·por·tive", "setting": "set·ting", "applications": "ap·pli·ca·tions", "participation": "par·tic·i·pa·tion", "official": "of·fi·cial", "appreciation": "ap·pre·ci·a·tion", "limited": "lim·it·ed", "edition": "e·di·tion", "development": "de·vel·op·ment", "lovely": "love·ly", "community": "com·mu·ni·ty", "contacting": "con·tact·ing", "announce": "an·nounce", "leadership": "lead·er·ship", "training": "train·ing", "scheduled": "sched·uled", "running": "run·ning", "lantau": "lan·tau", "island": "is·land", "feature": "fea·ture", "various": "var·i·ous", "outdoor": "out·door", "shelter": "shel·ter", "nature": "na·ture", "highly": "high·ly", "recommend": "rec·om·mend", "furthermore": "fur·ther·more", "strengthen": "strength·en", "resilience": "re·sil·ience", "dramatically": "dra·mat·i·cal·ly", "improve": "im·prove", "ability": "a·bil·i·ty", "pressure": "pres·sure", "registration": "reg·is·tra·tion", "mention": "men·tion", "talent": "tal·ent", "support": "sup·port", "complimentary": "com·pli·men·ta·ry", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles", "enquiries": "en·qui·ries"};
         
-        // 字典：修正網址和縮寫讀音
         const meaningDict = { 
-            "jul": { spoken: "July", meaning: "July" }, 
-            "oct": { spoken: "October", meaning: "October" }, 
-            "nov": { spoken: "November", meaning: "November" }, 
-            "jan": { spoken: "January", meaning: "January" }, 
-            "may": { spoken: "May", meaning: "May" }, 
-            "feb": { spoken: "February", meaning: "February" }, 
-            "am": { spoken: "A M", meaning: "Morning" }, 
-            "pm": { spoken: "P M", meaning: "Afternoon" }, 
-            "org": { spoken: "dot O R G", meaning: ".org = organisation" }, 
-            "hk": { spoken: "dot H K", meaning: ".hk = Hong Kong" }, 
-            "com": { spoken: "dot C O M", meaning: ".com = commercial" }, 
-            "www": { spoken: "W W W", meaning: "World Wide Web" } 
+            "jul": { spoken: "July", meaning: "July" }, "oct": { spoken: "October", meaning: "October" }, "nov": { spoken: "November", meaning: "November" }, "jan": { spoken: "January", meaning: "January" }, "may": { spoken: "May", meaning: "May" }, "feb": { spoken: "February", meaning: "February" }, 
+            "am": { spoken: "A M", meaning: "Morning" }, "pm": { spoken: "P M", meaning: "Afternoon" }, "org": { spoken: "dot O R G", meaning: ".org = organisation" }, "hk": { spoken: "dot H K", meaning: ".hk = Hong Kong" }, "com": { spoken: "dot C O M", meaning: ".com = commercial" }, "www": { spoken: "W W W", meaning: "World Wide Web" } 
         };
-        
         const ordinalMap = { "1": "first", "8": "eighth", "15": "fifteenth", "20": "twentieth", "21": "twenty-first", "31": "thirty-first" };
         const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
-        const synth = window.speechSynthesis; let voiceUK = null, voiceUS = null;
+        // ==========================================
+        // ★ 發聲核心系統 (雲端優先，完美繞過所有手機問題) ★
+        // ==========================================
+        const synth = window.speechSynthesis; 
+        let voiceUK = null, voiceUS = null;
+        let currentAudioPlayer = null;
         
-        // ★終極尋寶版★ 強行挖出手機內的高音質/真人聲線
+        // 保留本機發音器，只作為「斷網時」的最後防線
         function initVoices() {
             const voices = synth.getVoices();
             const findBest = (lang) => {
-                // 第一志願：微軟 Edge 的神級 AI 聲線 (Online / Natural)
                 let best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Online') && v.name.includes('Natural'));
-                // 第二志願：Apple (iOS/Mac) 的高級 Siri 或 Premium 聲線
                 if (!best) best = voices.find(v => v.lang.startsWith(lang) && (v.name.includes('Premium') || v.name.includes('Siri')));
-                // 第三志願：Android / Google 的雲端高音質聲線 (Network)
                 if (!best) best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Network'));
-                // 第四志願：系統內建的增強版聲線 (Enhanced)
                 if (!best) best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Enhanced'));
-                // 第五志願：普通的 Google 聲線
-                if (!best) best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Google'));
-                // 保底：任何一個符合語言的聲線
                 if (!best) best = voices.find(v => v.lang.startsWith(lang));
-                
                 return best || voices[0];
             };
             voiceUK = findBest('en-GB');
             voiceUS = findBest('en-US');
         }
-        
         if (speechSynthesis.onvoiceschanged !== undefined) { speechSynthesis.onvoiceschanged = initVoices; }
         function syncAccents(val) { document.getElementById('accent-select').value = val; document.getElementById('accent-select-2').value = val; }
         function updateVoice() {}
         
         function speak(text) {
-            if (synth.speaking) synth.cancel();
-            if (!voiceUK || !voiceUS) initVoices();
-            
-            // 讀音修正魔法：在發聲前把網址和時間打散，避免讀錯
+            // 修正網址發音
             let processedText = text.replace(/www\./gi, 'W W W dot ')
                                     .replace(/\.org/gi, ' dot O R G ')
-                                    .replace(/\.com/gi, ' dot C O M ')
                                     .replace(/\.hk/gi, ' dot H K ')
                                     .replace(/a\.m\./gi, ' A M ')
                                     .replace(/p\.m\./gi, ' P M ');
 
-            const utterThis = new SpeechSynthesisUtterance(processedText);
-            
-            // 強制鎖定英文語系，拒絕被手機系統語言干擾
+            // 停掉正在播放的聲音
+            if (synth.speaking) synth.cancel();
+            if (currentAudioPlayer) { currentAudioPlayer.pause(); currentAudioPlayer.currentTime = 0; }
+
             const selectedAccent = document.getElementById('accent-select').value;
-            utterThis.voice = (selectedAccent === 'UK') ? voiceUK : voiceUS;
-            utterThis.lang = (selectedAccent === 'UK') ? 'en-GB' : 'en-US'; 
+            const isUK = selectedAccent === 'UK';
+            const speed = parseFloat(document.getElementById('speed-select').value) * 0.95;
+            const encodedText = encodeURIComponent(processedText);
+
+            // 方案 1: Google Translate 雲端 TTS (完美發音)
+            const googleLang = isUK ? 'en-GB' : 'en-US';
+            const googleUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=${googleLang}&client=tw-ob&q=${encodedText}`;
             
-            utterThis.rate = parseFloat(document.getElementById('speed-select').value) * 0.95; 
-            synth.speak(utterThis);
+            // 方案 2: 有道詞典 雲端 TTS (不會被大陸牆阻擋)
+            const youdaoType = isUK ? 1 : 2;
+            const youdaoUrl = `https://dict.youdao.com/dictvoice?audio=${encodedText}&type=${youdaoType}`;
+
+            // 方案 3: 本機 TTS (斷網保底)
+            const playLocal = () => {
+                if (!voiceUK || !voiceUS) initVoices();
+                const utterThis = new SpeechSynthesisUtterance(processedText);
+                utterThis.voice = isUK ? voiceUK : voiceUS;
+                utterThis.lang = isUK ? 'en-GB' : 'en-US'; 
+                utterThis.rate = speed; 
+                synth.speak(utterThis);
+            };
+
+            const playYoudao = () => {
+                currentAudioPlayer = new Audio(youdaoUrl);
+                currentAudioPlayer.playbackRate = speed;
+                currentAudioPlayer.play().catch(e => playLocal());
+            };
+
+            // 執行發聲：Google -> 失敗轉 Youdao -> 失敗轉 本機
+            currentAudioPlayer = new Audio(googleUrl);
+            currentAudioPlayer.playbackRate = speed;
+            currentAudioPlayer.play().catch(e => { playYoudao(); });
         }
 
         function countSyllables(word) { word = word.toLowerCase(); if(word.length <= 3) return 1; word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, ''); word = word.replace(/^y/, ''); return word.match(/[aeiouy]{1,2}/g)?.length || 1; }
@@ -492,7 +499,7 @@
                         let sylTooltip = null; let meaningTooltip = null;
                         if (syllables && syllables !== lowerToken) { sylTooltip = document.createElement('span'); sylTooltip.className = 'syllable-tooltip'; sylTooltip.textContent = syllables; span.appendChild(sylTooltip); }
                         if (customMeaning || tooltipText) { meaningTooltip = document.createElement('span'); meaningTooltip.className = 'meaning-tooltip'; meaningTooltip.textContent = tooltipText || customMeaning.meaning; if (sylTooltip) { sylTooltip.style.bottom = "calc(100% + 30px)"; } span.appendChild(meaningTooltip); }
-                        span.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); if(synth.state === 'suspended') synth.resume(); speak(customMeaning ? customMeaning.spoken : spokenText); this.style.backgroundColor = 'var(--primary)'; this.style.color = 'white'; this.classList.add('show-tooltip'); if (sylTooltip) setTimeout(() => adjustTooltipPosition(sylTooltip, this.getBoundingClientRect()), 10); if (meaningTooltip) setTimeout(() => adjustTooltipPosition(meaningTooltip, this.getBoundingClientRect()), 10); setTimeout(() => { this.style.backgroundColor = ''; this.style.color = ''; this.classList.remove('show-tooltip'); }, 1500); });
+                        span.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); speak(customMeaning ? customMeaning.spoken : spokenText); this.style.backgroundColor = 'var(--primary)'; this.style.color = 'white'; this.classList.add('show-tooltip'); if (sylTooltip) setTimeout(() => adjustTooltipPosition(sylTooltip, this.getBoundingClientRect()), 10); if (meaningTooltip) setTimeout(() => adjustTooltipPosition(meaningTooltip, this.getBoundingClientRect()), 10); setTimeout(() => { this.style.backgroundColor = ''; this.style.color = ''; this.classList.remove('show-tooltip'); }, 1500); });
                         fragment.appendChild(span);
                     } else { fragment.appendChild(document.createTextNode(token)); }
                 }); return fragment;
@@ -609,7 +616,7 @@
             }
         }
 
-        window.onload = function() { setTimeout(initVoices, 100); document.body.addEventListener('touchstart', function() { if (synth.state === 'suspended') synth.resume(); }, { once: true }); };
+        window.onload = function() { setTimeout(initVoices, 100); };
     </script>
 </body>
 </html>
