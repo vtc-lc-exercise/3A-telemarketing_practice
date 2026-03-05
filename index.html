@@ -167,7 +167,7 @@
             <div class="settings-panel"><div class="setting-group"><label>🗣️ Accent:</label><select id="accent-select-2" onchange="syncAccents(this.value)"><option value="UK">British (UK)</option><option value="US">American (US)</option></select></div></div>
             
             <div class="recorder-container">
-                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record Here!</div>
+                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record your Pitch here!</div>
                 <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
                 <div class="timer-display" id="timer">00:00</div>
                 <div class="loading-text" id="loading-text">⚙️ Encoding to MP3... Please wait</div>
@@ -393,7 +393,7 @@
         // --- Syllable, TTS, and Pronunciation Fixes ---
         const syllableDict = {"learning": "learn·ing", "centre": "cen·tre", "english": "eng·lish", "children": "chil·dren", "multi": "mul·ti", "purpose": "pur·pose", "activities": "ac·tiv·i·ties", "language": "lan·guage", "storytelling": "sto·ry·tell·ing", "enrolment": "en·rol·ment", "method": "meth·od", "online": "on·line", "participant": "par·tic·i·pant", "participants": "par·tic·i·pants", "deadline": "dead·line", "special": "spe·cial", "offers": "of·fers", "sponsored": "spon·sored", "education": "ed·u·ca·tion", "environment": "en·vi·ron·ment", "everyone": "ev·ery·one", "benefit": "ben·e·fit", "elaboration": "e·lab·o·ra·tion", "enquiry": "en·qui·ry", "information": "in·for·ma·tion", "morning": "morn·ing", "calling": "call·ing", "hotline": "hot·line", "excited": "ex·cit·ed", "perfect": "per·fect", "seven": "sev·en", "twelve": "twelve", "lineup": "line·up", "ready": "read·y", "practicing": "prac·tic·ing", "friendly": "friend·ly", "speaking": "speak·ing", "confidence": "con·fi·dence", "everyday": "ev·ery·day", "communication": "com·mu·ni·ca·tion", "secure": "se·cure", "visiting": "vis·it·ing", "before": "be·fore", "dollars": "dol·lars", "bonus": "bo·nus", "phonics": "phon·ics", "workbook": "work·book", "junior": "jun·ior", "master": "mas·ter", "certificate": "cer·tif·i·cate", "goodbye": "good·bye", "apple": "ap·ple", "july": "ju·ly", "united": "u·nit·ed", "charity": "char·i·ty", "mental": "men·tal", "health": "health", "adults": "a·dults", "november": "no·vem·ber", "central": "cen·tral", "different": "dif·fer·ent", "sharing": "shar·ing", "sessions": "ses·sions", "management": "man·age·ment", "workshops": "work·shops", "relaxation": "re·lax·a·tion", "exercises": "ex·er·cis·es", "useful": "use·ful", "experts": "ex·perts", "practical": "prac·ti·cal", "techniques": "tech·niques", "effectively": "ef·fec·tive·ly", "balance": "bal·ance", "demands": "de·mands", "personal": "per·son·al", "enrol": "en·rol", "website": "web·site", "october": "oc·to·ber", "person": "per·son", "sponsorship": "spon·sor·ship", "receive": "re·ceive", "guided": "guid·ed", "meditation": "med·i·ta·tion", "audio": "au·di·o", "sensory": "sen·so·ry", "toolkit": "tool·kit", "details": "de·tails", "graceful": "grace·ful", "service": "ser·vice", "warmly": "warm·ly", "invite": "in·vite", "students": "stu·dents", "january": "jan·u·ar·y", "college": "col·lege", "caring": "car·ing", "visits": "vis·its", "donation": "do·na·tion", "tutoring": "tu·tor·ing", "meaningful": "mean·ing·ful", "volunteer": "vol·un·teer", "minded": "mind·ed", "contributing": "con·trib·ut·ing", "supportive": "sup·por·tive", "setting": "set·ting", "applications": "ap·pli·ca·tions", "participation": "par·tic·i·pa·tion", "official": "of·fi·cial", "appreciation": "ap·pre·ci·a·tion", "limited": "lim·it·ed", "edition": "e·di·tion", "development": "de·vel·op·ment", "lovely": "love·ly", "community": "com·mu·ni·ty", "contacting": "con·tact·ing", "announce": "an·nounce", "leadership": "lead·er·ship", "training": "train·ing", "scheduled": "sched·uled", "running": "run·ning", "lantau": "lan·tau", "island": "is·land", "feature": "fea·ture", "various": "var·i·ous", "outdoor": "out·door", "shelter": "shel·ter", "nature": "na·ture", "highly": "high·ly", "recommend": "rec·om·mend", "furthermore": "fur·ther·more", "strengthen": "strength·en", "resilience": "re·sil·ience", "dramatically": "dra·mat·i·cal·ly", "improve": "im·prove", "ability": "a·bil·i·ty", "pressure": "pres·sure", "registration": "reg·is·tra·tion", "mention": "men·tion", "talent": "tal·ent", "support": "sup·port", "complimentary": "com·pli·men·ta·ry", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles", "enquiries": "en·qui·ries"};
         
-        // 修改了讀音字典，強迫單字點擊時逐字母讀出
+        // 字典：修正網址和縮寫讀音
         const meaningDict = { 
             "jul": { spoken: "July", meaning: "July" }, 
             "oct": { spoken: "October", meaning: "October" }, 
@@ -414,16 +414,29 @@
 
         const synth = window.speechSynthesis; let voiceUK = null, voiceUS = null;
         
+        // ★終極尋寶版★ 強行挖出手機內的高音質/真人聲線
         function initVoices() {
             const voices = synth.getVoices();
             const findBest = (lang) => {
-                return voices.find(v => v.lang.startsWith(lang) && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Enhanced') || v.name.includes('Siri'))) 
-                    || voices.find(v => v.lang.startsWith(lang)) 
-                    || voices[0];
+                // 第一志願：微軟 Edge 的神級 AI 聲線 (Online / Natural)
+                let best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Online') && v.name.includes('Natural'));
+                // 第二志願：Apple (iOS/Mac) 的高級 Siri 或 Premium 聲線
+                if (!best) best = voices.find(v => v.lang.startsWith(lang) && (v.name.includes('Premium') || v.name.includes('Siri')));
+                // 第三志願：Android / Google 的雲端高音質聲線 (Network)
+                if (!best) best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Network'));
+                // 第四志願：系統內建的增強版聲線 (Enhanced)
+                if (!best) best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Enhanced'));
+                // 第五志願：普通的 Google 聲線
+                if (!best) best = voices.find(v => v.lang.startsWith(lang) && v.name.includes('Google'));
+                // 保底：任何一個符合語言的聲線
+                if (!best) best = voices.find(v => v.lang.startsWith(lang));
+                
+                return best || voices[0];
             };
             voiceUK = findBest('en-GB');
             voiceUS = findBest('en-US');
         }
+        
         if (speechSynthesis.onvoiceschanged !== undefined) { speechSynthesis.onvoiceschanged = initVoices; }
         function syncAccents(val) { document.getElementById('accent-select').value = val; document.getElementById('accent-select-2').value = val; }
         function updateVoice() {}
@@ -487,7 +500,7 @@
         }
         function makeClickableArea(elementId) { const el = document.getElementById(elementId); if(el) { const processed = processNode(el); el.parentNode.replaceChild(processed, el); } }
 
-        // --- 純前端 100% 輸出 MP3 (解決 WhatsApp 相容性問題) ---
+        // --- 純前端 100% 輸出 MP3 ---
         let audioContext = null; let sourceNode = null; let processorNode = null; let activeStream = null;
         let mp3Encoder = null; let mp3Data = []; 
         let timerInterval = null; let seconds = 0; let recordedBlob = null;
