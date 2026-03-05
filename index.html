@@ -170,7 +170,7 @@
             <div class="settings-panel"><div class="setting-group"><label>🗣️ Accent:</label><select id="accent-select-2" onchange="syncAccents(this.value)"><option value="UK">British (UK)</option><option value="US">American (US)</option></select></div></div>
             
             <div class="recorder-container">
-                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record Here!!</div>
+                <div style="font-weight: 700; color: #ef4444; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Record your Pitch here!</div>
                 <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Look at the sample below and time yourself (Target: 1.5 - 2 mins)</div>
                 <div class="timer-display" id="timer">00:00</div>
                 <div class="loading-text" id="loading-text">⚙️ Encoding to MP3... Please wait</div>
@@ -190,7 +190,7 @@
                 </div>
             </div>
             
-            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Sample</h2>
+            <h2 style="font-size: 1.4rem; margin-top: 15px; font-weight: 700; font-family: var(--font-title);">Possible Sample</h2>
             <div class="hint"><span style="margin-right: 8px;">▶️</span> Tap play for the whole sentence, or tap words for syllables!</div>
             <div class="box" id="sample-container" style="display: flex; flex-direction: column; gap: 12px; padding: 12px;"></div>
         </div>
@@ -420,7 +420,7 @@
         
         const meaningDict = { 
             "jul": { spoken: "July", meaning: "July" }, "oct": { spoken: "October", meaning: "October" }, "nov": { spoken: "November", meaning: "November" }, "jan": { spoken: "January", meaning: "January" }, "may": { spoken: "May", meaning: "May" }, "feb": { spoken: "February", meaning: "February" }, 
-            "am": { spoken: "A M", meaning: "Morning" }, "pm": { spoken: "P M", meaning: "Afternoon" }, "org": { spoken: "org", meaning: ".org = organisation" }, "hk": { spoken: "H K", meaning: ".hk = Hong Kong" }, "com": { spoken: "com", meaning: ".com = commercial" }, "www": { spoken: "W W W", meaning: "World Wide Web" } 
+            "am": { spoken: "A M", meaning: "Morning" }, "pm": { spoken: "P M", meaning: "Afternoon" }, "org": { spoken: "dot O R G", meaning: ".org = organisation" }, "hk": { spoken: "H K", meaning: ".hk = Hong Kong" }, "com": { spoken: "com", meaning: ".com = commercial" }, "www": { spoken: "W W W", meaning: "World Wide Web" } 
         };
         const ordinalMap = { "1": "first", "8": "eighth", "15": "fifteenth", "20": "twentieth", "21": "twenty-first", "31": "thirty-first" };
         const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
