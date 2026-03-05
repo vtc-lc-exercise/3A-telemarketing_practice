@@ -405,7 +405,7 @@
             "pm": { spoken: "P M", meaning: "Afternoon" }, 
             "org": { spoken: "dot O R G", meaning: ".org = organisation" }, 
             "hk": { spoken: "dot H K", meaning: ".hk = Hong Kong" }, 
-            "com": { spoken: "dot C O M", meaning: ".com = commercial" }, 
+            "com": { spoken: "dot com", meaning: ".com = commercial" }, 
             "www": { spoken: "W W W", meaning: "World Wide Web" } 
         };
         
@@ -448,7 +448,7 @@
             // 讀音修正魔法：在發聲前把網址和時間打散，避免讀錯
             let processedText = text.replace(/www\./gi, 'W W W dot ')
                                     .replace(/\.org/gi, ' dot O R G ')
-                                    .replace(/\.com/gi, ' dot C O M ')
+                                    .replace(/\.com/gi, ' dot com ')
                                     .replace(/\.hk/gi, ' dot H K ')
                                     .replace(/a\.m\./gi, ' A M ')
                                     .replace(/p\.m\./gi, ' P M ');
