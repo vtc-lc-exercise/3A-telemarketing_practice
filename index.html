@@ -556,7 +556,59 @@
         }
         window.addEventListener('resize', adjustArrows);
 
-        const syllableDict = {"learning": "learn·ing", "centre": "cen·tre", "english": "eng·lish", "children": "chil·dren", "multi": "mul·ti", "purpose": "pur·pose", "activities": "ac·tiv·i·ties", "language": "lan·guage", "storytelling": "sto·ry·tell·ing", "enrolment": "en·rol·ment", "method": "meth·od", "online": "on·line", "participant": "par·tic·i·pant", "participants": "par·tic·i·pants", "deadline": "dead·line", "special": "spe·cial", "offers": "of·fers", "sponsored": "spon·sored", "education": "ed·u·ca·tion", "environment": "en·vi·ron·ment", "everyone": "ev·ery·one", "benefit": "ben·e·fit", "elaboration": "e·lab·o·ra·tion", "enquiry": "en·qui·ry", "information": "in·for·ma·tion", "morning": "morn·ing", "calling": "call·ing", "hotline": "hot·line", "excited": "ex·cit·ed", "perfect": "per·fect", "seven": "sev·en", "twelve": "twelve", "line-up": "line·up", "ready": "read·y", "practicing": "prac·tic·ing", "friendly": "friend·ly", "speaking": "speak·ing", "confidence": "con·fi·dence", "everyday": "ev·ery·day", "communication": "com·mu·ni·ca·tion", "secure": "se·cure", "visiting": "vis·it·ing", "before": "be·fore", "dollars": "dol·lars", "bonus": "bo·nus", "phonics": "phon·ics", "workbook": "work·book", "junior": "jun·ior", "master": "mas·ter", "certificate": "cer·tif·i·cate", "goodbye": "good·bye", "apple": "ap·ple", "july": "ju·ly", "united": "u·nit·ed", "charity": "char·i·ty", "mental": "men·tal", "health": "health", "adults": "a·dults", "november": "no·vem·ber", "central": "cen·tral", "different": "dif·fer·ent", "sharing": "shar·ing", "sessions": "ses·sions", "management": "man·age·ment", "workshops": "work·shops", "relaxation": "re·lax·a·tion", "exercises": "ex·er·cis·es", "useful": "use·ful", "experts": "ex·perts", "practical": "prac·ti·cal", "techniques": "tech·niques", "effectively": "ef·fec·tive·ly", "balance": "bal·ance", "demands": "de·mands", "personal": "per·son·al", "enrol": "en·rol", "website": "web·site", "october": "oc·to·ber", "person": "per·son", "sponsorship": "spon·sor·ship", "receive": "re·ceive", "guided": "guid·ed", "meditation": "med·i·ta·tion", "audio": "au·di·o", "sensory": "sen·so·ry", "toolkit": "tool·kit", "details": "de·tails", "graceful": "grace·ful", "service": "ser·vice", "warmly": "warm·ly", "invite": "in·vite", "students": "stu·dents", "january": "jan·u·ar·y", "college": "col·lege", "caring": "car·ing", "visits": "vis·its", "donation": "do·na·tion", "tutoring": "tu·tor·ing", "meaningful": "mean·ing·ful", "volunteer": "vol·un·teer", "minded": "mind·ed", "contributing": "con·trib·ut·ing", "supportive": "sup·por·tive", "setting": "set·ting", "applications": "ap·pli·ca·tions", "participation": "par·tic·i·pa·tion", "official": "of·fi·cial", "appreciation": "ap·pre·ci·a·tion", "limited": "lim·it·ed", "edition": "e·di·tion", "development": "de·vel·op·ment", "lovely": "love·ly", "community": "com·mu·ni·ty", "contacting": "con·tact·ing", "announce": "an·nounce", "leadership": "lead·er·ship", "training": "train·ing", "scheduled": "sched·uled", "running": "run·ning", "lantau": "lan·tau", "island": "is·land", "feature": "fea·ture", "various": "var·i·ous", "outdoor": "out·door", "shelter": "shel·ter", "nature": "na·ture", "highly": "high·ly", "recommend": "rec·om·mend", "furthermore": "fur·ther·more", "strengthen": "strength·en", "resilience": "re·sil·ience", "dramatically": "dra·mat·i·cal·ly", "improve": "im·prove", "ability": "a·bil·i·ty", "pressure": "pres·sure", "registration": "reg·is·tra·tion", "mention": "men·tion", "talent": "tal·ent", "support": "sup·port", "complimentary": "com·pli·men·ta·ry", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles", "enquiries": "en·qui·ries"};
+        // 完整更新及修正的字典 (包括 Flashcards 及 文章用字)
+        const syllableDict = {
+            // Flashcards List 1
+            "association": "as·so·ci·a·tion", "centre": "cen·tre", "charity": "char·i·ty", "company": "com·pa·ny", 
+            "competition": "com·pe·ti·tion", "headquarters": "head·quar·ters", "participant": "par·tic·i·pant", 
+            "participants": "par·tic·i·pants", "public": "pub·lic", "staff": "staff", "studio": "stu·di·o",
+            // Flashcards List 2
+            "booth": "booth", "campaign": "cam·paign", "culture": "cul·ture", "demonstration": "dem·on·stra·tion", 
+            "environment": "en·vi·ron·ment", "health": "health", "sports": "sports", "tasting": "tast·ing", 
+            "trial": "tri·al", "workshop": "work·shop", "workshops": "work·shops",
+            // Flashcards List 3
+            "attractive": "at·trac·tive", "awareness": "a·ware·ness", "broaden": "broad·en", "creative": "cre·a·tive", 
+            "develop": "de·vel·op", "effective": "ef·fec·tive", "efficient": "ef·fi·cient", "enhance": "en·hance", 
+            "experience": "ex·pe·ri·ence", "explore": "ex·plore",
+            // Flashcards List 4
+            "apply": "ap·ply", "application": "ap·pli·ca·tion", "applications": "ap·pli·ca·tions", "enrol": "en·rol", 
+            "enrolment": "en·rol·ment", "per": "per", "register": "reg·is·ter", "registration": "reg·is·tra·tion", 
+            "reserve": "re·serve", "reservation": "res·er·va·tion",
+            // Flashcards List 5
+            "community": "com·mu·ni·ty", "complimentary": "com·pli·men·ta·ry", "coupon": "cou·pon", "equipment": "e·quip·ment", 
+            "fund": "fund", "souvenir": "sou·ve·nir", "sponsored": "spon·sored", "supported": "sup·port·ed", 
+            "voucher": "vouch·er", "welfare": "wel·fare",
+            
+            // 其他文章字眼
+            "learning": "learn·ing", "english": "eng·lish", "children": "chil·dren", "multi": "mul·ti", "purpose": "pur·pose", 
+            "activities": "ac·tiv·i·ties", "language": "lan·guage", "storytelling": "sto·ry·tell·ing", "method": "meth·od", 
+            "online": "on·line", "deadline": "dead·line", "special": "spe·cial", "offers": "of·fers", "education": "ed·u·ca·tion", 
+            "everyone": "ev·ery·one", "benefit": "ben·e·fit", "elaboration": "e·lab·o·ra·tion", "enquiry": "en·qui·ry", 
+            "enquiries": "en·qui·ries", "information": "in·for·ma·tion", "morning": "morn·ing", "calling": "call·ing", 
+            "hotline": "hot·line", "excited": "ex·cit·ed", "perfect": "per·fect", "seven": "sev·en", "twelve": "twelve", 
+            "line-up": "line·up", "ready": "read·y", "practicing": "prac·tic·ing", "friendly": "friend·ly", "speaking": "speak·ing", 
+            "confidence": "con·fi·dence", "everyday": "ev·ery·day", "communication": "com·mu·ni·ca·tion", "secure": "se·cure", 
+            "visiting": "vis·it·ing", "before": "be·fore", "dollars": "dol·lars", "bonus": "bo·nus", "phonics": "phon·ics", 
+            "workbook": "work·book", "junior": "jun·ior", "master": "mas·ter", "certificate": "cer·tif·i·cate", "goodbye": "good·bye", 
+            "apple": "ap·ple", "july": "ju·ly", "united": "u·nit·ed", "mental": "men·tal", "adults": "a·dults", "november": "no·vem·ber", 
+            "central": "cen·tral", "different": "dif·fer·ent", "sharing": "shar·ing", "sessions": "ses·sions", "management": "man·age·ment", 
+            "relaxation": "re·lax·a·tion", "exercises": "ex·er·cis·es", "useful": "use·ful", "experts": "ex·perts", "practical": "prac·ti·cal", 
+            "techniques": "tech·niques", "effectively": "ef·fec·tive·ly", "balance": "bal·ance", "demands": "de·mands", "personal": "per·son·al", 
+            "website": "web·site", "october": "oc·to·ber", "person": "per·son", "sponsorship": "spon·sor·ship", "receive": "re·ceive", 
+            "guided": "guid·ed", "meditation": "med·i·ta·tion", "audio": "au·di·o", "sensory": "sen·so·ry", "toolkit": "tool·kit", 
+            "details": "de·tails", "graceful": "grace·ful", "service": "ser·vice", "warmly": "warm·ly", "invite": "in·vite", 
+            "students": "stu·dents", "january": "jan·u·ar·y", "college": "col·lege", "caring": "car·ing", "visits": "vis·its", 
+            "donation": "do·na·tion", "tutoring": "tu·tor·ing", "meaningful": "mean·ing·ful", "volunteer": "vol·un·teer", 
+            "minded": "mind·ed", "contributing": "con·trib·ut·ing", "supportive": "sup·por·tive", "setting": "set·ting", 
+            "participation": "par·tic·i·pa·tion", "official": "of·fi·cial", "appreciation": "ap·pre·ci·a·tion", "limited": "lim·it·ed", 
+            "edition": "e·di·tion", "development": "de·vel·op·ment", "lovely": "love·ly", "contacting": "con·tact·ing", 
+            "announce": "an·nounce", "leadership": "lead·er·ship", "training": "train·ing", "scheduled": "sched·uled", 
+            "running": "run·ning", "lantau": "lan·tau", "island": "is·land", "feature": "fea·ture", "various": "var·i·ous", 
+            "outdoor": "out·door", "shelter": "shel·ter", "nature": "na·ture", "highly": "high·ly", "recommend": "rec·om·mend", 
+            "furthermore": "fur·ther·more", "strengthen": "strength·en", "resilience": "re·sil·ience", "dramatically": "dra·mat·i·cal·ly", 
+            "improve": "im·prove", "ability": "a·bil·i·ty", "pressure": "pres·sure", "mention": "men·tion", "talent": "tal·ent", 
+            "support": "sup·port", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles"
+        };
         
         const meaningDict = { 
             "jul": { spoken: "July", meaning: "July" }, 
