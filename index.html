@@ -69,6 +69,13 @@
         .option-text h3 { margin: 0 0 3px 0; color: var(--primary); font-size: 1.1rem; font-family: var(--font-title); font-weight: 700; }
         .option-text p { margin: 0; color: #6b7280; font-size: 0.9rem; font-weight: 600; }
 
+        /* Mock Paper Card Special Style */
+        .mock-card { border: 2px solid #ef4444; background: linear-gradient(to right, #fff, #fef2f2); position: relative; overflow: hidden; }
+        .mock-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.8), transparent); transform: skewX(-25deg); animation: shine 3s infinite; }
+        @keyframes shine { 0% { left: -100%; } 20% { left: 200%; } 100% { left: 200%; } }
+        .mock-card .option-icon { background: #fee2e2; color: #ef4444; }
+        .mock-card .option-text h3 { color: #ef4444; }
+
         .paper-layout { margin-top: 15px; position: relative; }
         .box { background: var(--card-bg); border: 2px solid #e5e7eb; border-radius: 10px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-size: 0.95rem; }
         .box-left { border-color: #94a3b8; }
@@ -80,11 +87,19 @@
         @media (max-width: 767px) { .desktop-hints-container { display: none; } .svg-arrow { display: none; } }
         .box-title { font-weight: 700; font-size: 1.05rem; margin-bottom: 10px; border-bottom: 2px solid #f3f4f6; padding-bottom: 5px; display: flex; align-items: center; gap: 5px; color: var(--text-dark); }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; opacity: 0; transition: opacity 0.3s; align-items: flex-end; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; opacity: 0; transition: opacity 0.3s; align-items: flex-end; justify-content: center; }
         .modal.show { display: flex; opacity: 1; }
-        .modal-content { background: white; width: 100%; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 25px 20px; box-sizing: border-box; transform: translateY(100%); transition: transform 0.3s ease-out; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); border-top: 5px solid var(--accent); }
+        .modal-content { background: white; width: 100%; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 25px 20px; box-sizing: border-box; transform: translateY(100%); transition: transform 0.3s ease-out; box-shadow: 0 -5px 15px rgba(0,0,0,0.1); border-top: 5px solid var(--accent); max-width: 600px; }
         .modal.show .modal-content { transform: translateY(0); }
         .modal-close { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; font-weight: bold; color: #9ca3af; cursor: pointer; background: none; border: none; padding: 5px; }
+
+        /* Password Modal Specific */
+        #modal-password { align-items: center; }
+        #modal-password .modal-content { border-radius: 20px; transform: scale(0.9); width: 90%; max-width: 400px; border-top: 5px solid #ef4444; text-align: center; }
+        #modal-password.show .modal-content { transform: scale(1); }
+        .pwd-input { width: 100%; padding: 12px; margin: 15px 0; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 1.1rem; text-align: center; font-family: var(--font-body); outline: none; transition: border-color 0.2s; box-sizing: border-box; }
+        .pwd-input:focus { border-color: #ef4444; }
+        .pwd-error { color: #ef4444; font-size: 0.9rem; font-weight: 600; margin-bottom: 15px; display: none; }
 
         .settings-panel { background: white; border-radius: 10px; padding: 12px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; border-left: 4px solid var(--primary); }
         .setting-group { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; font-weight: 600; }
@@ -179,6 +194,15 @@
                 <div class="option-card" onclick="loadPractice('p2')"><div class="option-icon">2</div><div class="option-text"><h3>Practice 2 🧠</h3><p>United Charity</p></div></div>
                 <div class="option-card" onclick="loadPractice('p3')"><div class="option-icon">3</div><div class="option-text"><h3>Practice 3 💖</h3><p>Graceful Heart</p></div></div>
                 <div class="option-card" onclick="loadPractice('p4')"><div class="option-icon">4</div><div class="option-text"><h3>Practice 4 🏕️</h3><p>Miles Community Centre</p></div></div>
+                
+                <!-- Mock Paper moved here -->
+                <div class="option-card mock-card" onclick="openPasswordModal()" style="margin-top: 5px;">
+                    <div class="option-icon">🏆</div>
+                    <div class="option-text">
+                        <h3>Mock Paper</h3>
+                        <p>Test your skills! (Password required)</p>
+                    </div>
+                </div>
             </div>
             <div style="margin-top: 25px; text-align: center;"><button class="btn btn-outline" style="width: auto; padding: 10px 20px; display: inline-flex;" onclick="navToLanding()">← Back to Cover</button></div>
         </div>
@@ -242,6 +266,40 @@
             <p style="font-size: 0.9rem; color: #6b7280; font-weight: 600;">Use these templates for your speaking assessment. The <span style="color:#f59e0b;font-weight:700;">orange</span> parts can be changed!</p>
             <div id="expressions-container"></div>
         </div>
+
+        <!-- NEW MOCK PAPER PAGE -->
+        <div id="page-mock" class="page">
+            <div class="btn-container"><button class="btn btn-outline" onclick="navTo('page-menu')">← Menu</button></div>
+            <div class="settings-panel">
+                <div class="setting-group"><label>🗣️ Accent:</label><select id="accent-select-mock" onchange="syncAccents(this.value)"><option value="UK">British (UK)</option><option value="US">American (US)</option></select></div>
+                <div class="setting-group" style="margin-left: 10px;"><label>⏱️ Speed:</label><select id="speed-select-mock" onchange="syncSpeed(this.value)"><option value="0.75">Slow</option><option value="0.9" selected>Normal</option><option value="1.1">Fast</option></select></div>
+            </div>
+            
+            <!-- Recorder inside Mock Page -->
+            <div class="recorder-container" style="border-color: #f59e0b; background: #fffbeb; box-shadow: 0 4px 6px -1px rgba(245,158,11,0.1);">
+                <div style="font-weight: 700; color: #d97706; margin-bottom: -5px; font-size: 1.1rem; font-family: var(--font-title);">🎙️ Mock Paper Recorder</div>
+                <div style="font-size: 0.85rem; color: #6b7280; text-align: center; font-weight: 600;">Read the paper below and record your speech!</div>
+                <div class="timer-display" id="timer-mock" style="border-color: #fcd34d;">00:00</div>
+                <div class="loading-text" id="loading-text-mock">⚙️ Encoding to MP3... Please wait</div>
+                <div class="controls-row">
+                    <button class="rec-btn btn-start-rec" id="btn-start-mock" onclick="startRecordingMock()"><span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Start</button>
+                    <button class="rec-btn btn-stop-rec" id="btn-stop-mock" onclick="stopRecordingMock()"><span style="background: white; width: 12px; height: 12px; display: inline-block;"></span> Stop</button>
+                </div>
+                <audio id="audio-preview-mock" controls style="display: none; width: 100%; margin-top: 5px;"></audio>
+                
+                <div id="post-record-actions-mock" style="display: none; flex-direction: column; width: 100%; align-items: center; gap: 10px; margin-top: 15px;">
+                    <button id="btn-share-mock" class="rec-btn" onclick="shareAudioFileMock()" style="background: #25D366; color: white; width: 100%; max-width: 250px; justify-content: center; box-shadow: 0 4px 6px rgba(37, 211, 102, 0.3);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                        Send via WhatsApp
+                    </button>
+                    <a id="btn-download-mock" class="rec-btn" target="_blank" style="background: var(--primary); color: white; width: 100%; max-width: 250px; justify-content: center; text-decoration: none; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.3);">📥 Download MP3</a>
+                    <div id="share-status-mock" style="font-size: 0.85rem; color: #6b7280; text-align: center; margin-top: 5px; font-weight: 600; padding: 0 10px; display:none;"></div>
+                </div>
+            </div>
+
+            <div class="hint"><span style="margin-right: 8px;">💡</span> Tap any word or number to hear it!</div>
+            <div class="paper-layout"><div class="paper-left" id="paper-left-container-mock"></div><div class="desktop-hints-container" id="desktop-hints-container-mock"></div></div>
+        </div>
     </div>
 
     <!-- Modals -->
@@ -250,6 +308,18 @@
     </div>
     <div id="modal-offers" class="modal" onclick="closeModalOnBG(event, 'modal-offers')">
         <div class="modal-content" id="modal-content-offers"><button class="modal-close" onclick="closeModal('modal-offers')">&times;</button><div class="box-title" style="font-size: 1.2rem; border-color: var(--accent); color: var(--accent);">🎁 Offers to participants</div><ul id="modal-content-offers-list" style="padding-left: 20px; font-size: 1.05rem; margin-top: 15px;"></ul></div>
+    </div>
+    
+    <!-- Password Modal -->
+    <div id="modal-password" class="modal" onclick="closeModalOnBG(event, 'modal-password')">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal-password')">&times;</button>
+            <h3 style="font-family: var(--font-title); color: #ef4444; margin-top: 0;">🔒 Enter Password</h3>
+            <p style="font-size: 0.9rem; color: #6b7280; margin-bottom: 10px;">Please enter the password provided by your teacher to access the Mock Paper.</p>
+            <input type="password" id="mock-password-input" class="pwd-input" placeholder="Password" onkeypress="handlePasswordEnter(event)">
+            <div id="pwd-error" class="pwd-error">Incorrect password. Please try again.</div>
+            <button class="btn" style="width: 100%; background: #ef4444;" onclick="checkPassword()">Unlock Paper 🔓</button>
+        </div>
     </div>
 
     <script>
@@ -356,6 +426,13 @@
                     {pattern: "For registration, please go to (website) before (deadline).", example: "For registration, please go to www.miles.org.hk before the 15th of October."},
                     {pattern: "We are also proud to mention that the (Sponsor) is sponsoring (Offer 1) and (Offer 2).", example: "We are also proud to mention that the Talent Support Fund is sponsoring complimentary first-aid kits and reusable stainless steel water bottles."}
                 ]
+            },
+            mock1: {
+                title: "Sha Tin Town Hall<br>Community Health Day", enrollTitle: "Enrolment Method & Fee",
+                details: ["For young adults (aged between 18 & 25)", "Date / Time / Venue:<br>16 Jun / 9:30am - 5:00pm / Centre Square", "Activities: group exercises, health talks & organic food tasting"],
+                enrollment: ["Online enrolment: www.shatintw.org.hk", "Fee: $10 / person", "Deadline: 30 May 2026"], sponsor: "World Health Fund", enquiry: "2 6 5 7 1 3 2 4",
+                whyPoints: ["Fun fitness activities -> participants 😊", "<b>Benefit 2 and elaboration?</b>"], offerPoints: ["<b>Offer 1?</b>", "<b>Offer 2?</b>"],
+                sample: [], exp: []
             }
         };
 
@@ -419,12 +496,33 @@
         function navToMenu() { document.getElementById('main-body').classList.remove('landing-active'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById('page-menu').classList.add('active'); window.scrollTo(0, 0); }
         function navTo(pageId) { 
             document.getElementById('main-body').classList.remove('landing-active'); document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(pageId).classList.add('active'); window.scrollTo(0, 0); 
-            if(pageId === 'page-practice') { setTimeout(adjustArrows, 100); }
+            if(pageId === 'page-practice' || pageId === 'page-mock') { setTimeout(adjustArrows, 100); }
         }
 
         function navToVocab() {
             renderVocab();
             navTo('page-vocab');
+        }
+
+        function openPasswordModal() {
+            document.getElementById('mock-password-input').value = '';
+            document.getElementById('pwd-error').style.display = 'none';
+            openModal('modal-password');
+            setTimeout(() => document.getElementById('mock-password-input').focus(), 300);
+        }
+
+        function handlePasswordEnter(e) {
+            if (e.key === 'Enter') checkPassword();
+        }
+
+        function checkPassword() {
+            const pwd = document.getElementById('mock-password-input').value;
+            if (pwd === '3aTA' || pwd === '3ata' || pwd === '3ATA') {
+                closeModal('modal-password');
+                loadMockPaper();
+            } else {
+                document.getElementById('pwd-error').style.display = 'block';
+            }
         }
 
         function renderVocab() {
@@ -450,7 +548,6 @@
                     const card = document.createElement('div');
                     card.className = 'flashcard';
                     
-                    // Added auto-play on flip
                     card.onclick = function(e) {
                         if(e.target.tagName.toLowerCase() === 'button' || e.target.parentElement.tagName.toLowerCase() === 'button') return;
                         const isFlippingToBack = !this.classList.contains('flipped');
@@ -490,26 +587,34 @@
             speak(word);
         }
 
-        function loadPractice(id) {
-            currentPracticeId = id; const d = pData[id];
-            
+        function renderPaperContent(id, containerLeftId, containerRightId) {
+            const d = pData[id];
             let detailsHtml = d.details.map(x => `<li>${x}</li>`).join(''); let enrollHtml = d.enrollment.map(x => `<li>${x}</li>`).join('');
-            document.getElementById('paper-left-container').innerHTML = `
-                <div class="box box-left" id="box-main">
+            document.getElementById(containerLeftId).innerHTML = `
+                <div class="box box-left" id="box-main-${id}">
                     <div style="text-align: center; font-size: 1.3rem; font-weight: 600; margin-bottom: 15px; font-family: var(--font-paper-title); color: #1e3a8a;">${d.title}</div>
-                    <div id="target-details" style="position: relative;"><b>Details</b><button class="mobile-hint-btn" onclick="openModal('modal-why')">💡 Why joining?</button><ul style="margin-top: 5px; padding-left: 20px;">${detailsHtml}</ul></div>
+                    <div id="target-details-${id}" style="position: relative;"><b>Details</b><button class="mobile-hint-btn" onclick="openModal('modal-why')">💡 Why joining?</button><ul style="margin-top: 5px; padding-left: 20px;">${detailsHtml}</ul></div>
                     <b style="margin-top: 10px; display: inline-block;">${d.enrollTitle}</b><ul style="margin-top: 5px; padding-left: 20px;">${enrollHtml}</ul>
-                    <div class="target-offer-box" id="target-offer"><b>Check out our special offers to participants sponsored by<br>${d.sponsor}</b><div style="margin-top: 8px;"><button class="mobile-hint-btn" style="margin:0;" onclick="openModal('modal-offers')">🎁 View Offers</button></div></div>
+                    <div class="target-offer-box" id="target-offer-${id}"><b>Check out our special offers to participants sponsored by<br>${d.sponsor}</b><div style="margin-top: 8px;"><button class="mobile-hint-btn" style="margin:0;" onclick="openModal('modal-offers')">🎁 View Offers</button></div></div>
                     <b>Enquiry</b><ul style="margin-top: 5px; margin-bottom: 0; padding-left: 20px;"><li>More information: ${d.enquiry}</li></ul>
                 </div>`;
             
             let whyHtml = d.whyPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join(''); let offerHtml = d.offerPoints.map(x => `<li style="margin-top:5px;">${x}</li>`).join('');
-            document.getElementById('desktop-hints-container').innerHTML = `
-                <div class="box box-right" id="box-why"><svg class="svg-arrow" id="why-arrow" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none" /></svg><div class="box-title">💡 Why joining?</div><ul style="padding-left: 20px; margin-bottom: 0;">${whyHtml}</ul></div>
-                <div class="box box-right" id="box-offers"><svg class="svg-arrow" id="offer-arrow" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none" /></svg><div class="box-title">🎁 Offers to participants:</div><ul style="padding-left: 20px; margin-bottom: 0;">${offerHtml}</ul></div>`;
+            document.getElementById(containerRightId).innerHTML = `
+                <div class="box box-right" id="box-why-${id}"><svg class="svg-arrow" id="why-arrow-${id}" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none" /></svg><div class="box-title">💡 Why joining?</div><ul style="padding-left: 20px; margin-bottom: 0;">${whyHtml}</ul></div>
+                <div class="box box-right" id="box-offers-${id}"><svg class="svg-arrow" id="offer-arrow-${id}" viewBox="0 0 45 20" preserveAspectRatio="none"><path d="M45 10 L15 10 M15 10 L25 0 M15 10 L25 20" stroke="#f59e0b" stroke-width="3" fill="none" /></svg><div class="box-title">🎁 Offers to participants:</div><ul style="padding-left: 20px; margin-bottom: 0;">${offerHtml}</ul></div>`;
             
             document.getElementById('modal-content-why-list').innerHTML = whyHtml; document.getElementById('modal-content-offers-list').innerHTML = offerHtml;
             
+            makeClickableArea(`box-main-${id}`); makeClickableArea(`box-why-${id}`); makeClickableArea(`box-offers-${id}`);
+            makeClickableArea('modal-content-why-list'); makeClickableArea('modal-content-offers-list');
+        }
+
+        function loadPractice(id) {
+            currentPracticeId = id; 
+            renderPaperContent(id, 'paper-left-container', 'desktop-hints-container');
+            
+            const d = pData[id];
             const sampleContainer = document.getElementById('sample-container'); sampleContainer.innerHTML = '';
             d.sample.forEach(sentence => {
                 const row = document.createElement('div'); row.className = 'play-row'; row.style.borderBottom = '1px dashed #e5e7eb'; row.style.paddingBottom = '10px';
@@ -531,9 +636,6 @@
                 card.appendChild(btn); card.appendChild(content); expContainer.appendChild(card);
             });
 
-            makeClickableArea('box-main'); makeClickableArea('box-why'); makeClickableArea('box-offers');
-            makeClickableArea('modal-content-why-list'); makeClickableArea('modal-content-offers-list');
-
             stopRecording();
             document.getElementById('audio-preview').style.display = 'none';
             document.getElementById('post-record-actions').style.display = 'none';
@@ -544,42 +646,51 @@
             navTo('page-practice');
         }
 
+        function loadMockPaper() {
+            currentPracticeId = 'mock1';
+            renderPaperContent('mock1', 'paper-left-container-mock', 'desktop-hints-container-mock');
+            
+            stopRecordingMock();
+            document.getElementById('audio-preview-mock').style.display = 'none';
+            document.getElementById('post-record-actions-mock').style.display = 'none';
+            document.getElementById('share-status-mock').style.display = 'none';
+            document.getElementById('loading-text-mock').style.display = 'none';
+            document.getElementById('timer-mock').textContent = "00:00";
+
+            navTo('page-mock');
+        }
+
         function openModal(id) { const modal = document.getElementById(id); modal.style.display = 'flex'; setTimeout(() => { modal.classList.add('show'); }, 10); document.body.style.overflow = 'hidden'; }
         function closeModal(id) { const modal = document.getElementById(id); modal.classList.remove('show'); setTimeout(() => { modal.style.display = 'none'; document.body.style.overflow = ''; }, 300); }
         function closeModalOnBG(event, id) { if (event.target.id === id) { closeModal(id); } }
         function adjustArrows() {
             if (window.innerWidth < 768) return; 
-            const targetDetails = document.getElementById('target-details'); const boxWhy = document.getElementById('box-why'); const whyArrow = document.getElementById('why-arrow');
+            const id = currentPracticeId;
+            const targetDetails = document.getElementById(`target-details-${id}`); const boxWhy = document.getElementById(`box-why-${id}`); const whyArrow = document.getElementById(`why-arrow-${id}`);
             if(targetDetails && boxWhy && whyArrow) { whyArrow.style.top = `${Math.max(10, (targetDetails.getBoundingClientRect().top - boxWhy.getBoundingClientRect().top) + 20)}px`; }
-            const targetOffer = document.getElementById('target-offer'); const boxOffers = document.getElementById('box-offers'); const offerArrow = document.getElementById('offer-arrow');
+            const targetOffer = document.getElementById(`target-offer-${id}`); const boxOffers = document.getElementById(`box-offers-${id}`); const offerArrow = document.getElementById(`offer-arrow-${id}`);
             if(targetOffer && boxOffers && offerArrow) { offerArrow.style.top = `${(targetOffer.getBoundingClientRect().top - boxOffers.getBoundingClientRect().top) + (targetOffer.getBoundingClientRect().height / 2)}px`; }
         }
         window.addEventListener('resize', adjustArrows);
 
-        // 完整更新及修正的字典 (包括 Flashcards 及 文章用字)
+        // 完整更新及修正的字典 (包括 Flashcards 及 文章用字，新增 Mock Paper 字眼)
         const syllableDict = {
-            // Flashcards List 1
             "association": "as·so·ci·a·tion", "centre": "cen·tre", "charity": "char·i·ty", "company": "com·pa·ny", 
             "competition": "com·pe·ti·tion", "headquarters": "head·quar·ters", "participant": "par·tic·i·pant", 
             "participants": "par·tic·i·pants", "public": "pub·lic", "staff": "staff", "studio": "stu·di·o",
-            // Flashcards List 2
             "booth": "booth", "campaign": "cam·paign", "culture": "cul·ture", "demonstration": "dem·on·stra·tion", 
             "environment": "en·vi·ron·ment", "health": "health", "sports": "sports", "tasting": "tast·ing", 
             "trial": "tri·al", "workshop": "work·shop", "workshops": "work·shops",
-            // Flashcards List 3
             "attractive": "at·trac·tive", "awareness": "a·ware·ness", "broaden": "broad·en", "creative": "cre·a·tive", 
             "develop": "de·vel·op", "effective": "ef·fec·tive", "efficient": "ef·fi·cient", "enhance": "en·hance", 
             "experience": "ex·pe·ri·ence", "explore": "ex·plore",
-            // Flashcards List 4
             "apply": "ap·ply", "application": "ap·pli·ca·tion", "applications": "ap·pli·ca·tions", "enrol": "en·rol", 
             "enrolment": "en·rol·ment", "per": "per", "register": "reg·is·ter", "registration": "reg·is·tra·tion", 
             "reserve": "re·serve", "reservation": "res·er·va·tion",
-            // Flashcards List 5
             "community": "com·mu·ni·ty", "complimentary": "com·pli·men·ta·ry", "coupon": "cou·pon", "equipment": "e·quip·ment", 
             "fund": "fund", "souvenir": "sou·ve·nir", "sponsored": "spon·sored", "supported": "sup·port·ed", 
             "voucher": "vouch·er", "welfare": "wel·fare",
             
-            // 其他文章字眼
             "learning": "learn·ing", "english": "eng·lish", "children": "chil·dren", "multi": "mul·ti", "purpose": "pur·pose", 
             "activities": "ac·tiv·i·ties", "language": "lan·guage", "storytelling": "sto·ry·tell·ing", "method": "meth·od", 
             "online": "on·line", "deadline": "dead·line", "special": "spe·cial", "offers": "of·fers", "education": "ed·u·ca·tion", 
@@ -607,10 +718,15 @@
             "outdoor": "out·door", "shelter": "shel·ter", "nature": "na·ture", "highly": "high·ly", "recommend": "rec·om·mend", 
             "furthermore": "fur·ther·more", "strengthen": "strength·en", "resilience": "re·sil·ience", "dramatically": "dra·mat·i·cal·ly", 
             "improve": "im·prove", "ability": "a·bil·i·ty", "pressure": "pres·sure", "mention": "men·tion", "talent": "tal·ent", 
-            "support": "sup·port", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles"
+            "support": "sup·port", "reusable": "re·us·a·ble", "stainless": "stain·less", "bottles": "bot·tles",
+            
+            // Mock Paper words
+            "shatin": "sha·tin", "town": "town", "hall": "hall", "young": "young", "between": "be·tween", "square": "square",
+            "group": "group", "talks": "talks", "organic": "or·gan·ic", "food": "food", "fitness": "fit·ness"
         };
         
         const meaningDict = { 
+            "jun": { spoken: "June", meaning: "June" },
             "jul": { spoken: "July", meaning: "July" }, 
             "oct": { spoken: "October", meaning: "October" }, 
             "nov": { spoken: "November", meaning: "November" }, 
@@ -622,10 +738,11 @@
             "org": { spoken: "dot O R G", meaning: ".org = organisation" }, 
             "hk": { spoken: "dot H K", meaning: ".hk = Hong Kong" }, 
             "com": { spoken: "dot com", meaning: ".com = commercial" }, 
-            "www": { spoken: "W W W", meaning: "World Wide Web" } 
+            "www": { spoken: "W W W", meaning: "World Wide Web" },
+            "shatintw": { spoken: "sha tin T W", meaning: "Sha Tin Town Hall" }
         };
         
-        const ordinalMap = { "1": "first", "8": "eighth", "15": "fifteenth", "20": "twentieth", "21": "twenty-first", "31": "thirty-first" };
+        const ordinalMap = { "1": "first", "8": "eighth", "15": "fifteenth", "16": "sixteenth", "20": "twentieth", "21": "twenty-first", "30": "thirtieth", "31": "thirty-first" };
         const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
 
         const synth = window.speechSynthesis; let voiceUK = null, voiceUS = null;
@@ -648,11 +765,11 @@
         if (speechSynthesis.onvoiceschanged !== undefined) { speechSynthesis.onvoiceschanged = initVoices; }
         
         function syncAccents(val) { 
-            const selects = ['accent-select', 'accent-select-2', 'accent-select-vocab'];
+            const selects = ['accent-select', 'accent-select-2', 'accent-select-vocab', 'accent-select-mock'];
             selects.forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = val; });
         }
         function syncSpeed(val) {
-            const selects = ['speed-select', 'speed-select-vocab'];
+            const selects = ['speed-select', 'speed-select-vocab', 'speed-select-mock'];
             selects.forEach(id => { if(document.getElementById(id)) document.getElementById(id).value = val; });
         }
         
@@ -669,11 +786,18 @@
 
             const utterThis = new SpeechSynthesisUtterance(processedText);
             
-            const selectedAccent = document.getElementById('accent-select').value;
+            // Check which page is active to get the correct select
+            let accentId = 'accent-select';
+            if (document.getElementById('page-mock').classList.contains('active')) accentId = 'accent-select-mock';
+            
+            const selectedAccent = document.getElementById(accentId).value;
             utterThis.voice = (selectedAccent === 'UK') ? voiceUK : voiceUS;
             utterThis.lang = (selectedAccent === 'UK') ? 'en-GB' : 'en-US'; 
             
-            const speed = document.getElementById('speed-select').value;
+            let speedId = 'speed-select';
+            if (document.getElementById('page-mock').classList.contains('active')) speedId = 'speed-select-mock';
+            
+            const speed = document.getElementById(speedId).value;
             utterThis.rate = parseFloat(speed) * 0.95; 
             synth.speak(utterThis);
         }
@@ -720,9 +844,13 @@
         let timerInterval = null; let seconds = 0; let recordedBlob = null;
         let isRecording = false;
 
-        function updateTimerDisplay() { const mins = Math.floor(seconds / 60).toString().padStart(2, '0'); const secs = (seconds % 60).toString().padStart(2, '0'); document.getElementById('timer').textContent = `${mins}:${secs}`; }
+        function updateTimerDisplay(timerId) { 
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0'); 
+            const secs = (seconds % 60).toString().padStart(2, '0'); 
+            document.getElementById(timerId).textContent = `${mins}:${secs}`; 
+        }
 
-        async function startRecording() {
+        async function startRecordingBase(prefix) {
             try {
                 if (activeStream) { activeStream.getTracks().forEach(track => track.stop()); }
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -753,22 +881,22 @@
                 sourceNode.connect(processorNode);
                 processorNode.connect(audioContext.destination);
 
-                document.getElementById('btn-start').style.display = 'none'; document.getElementById('btn-stop').style.display = 'flex';
-                document.getElementById('audio-preview').style.display = 'none'; document.getElementById('post-record-actions').style.display = 'none'; document.getElementById('share-status').style.display = 'none';
-                document.getElementById('timer').classList.add('recording');
-                seconds = 0; updateTimerDisplay(); clearInterval(timerInterval);
-                timerInterval = setInterval(() => { seconds++; updateTimerDisplay(); }, 1000);
+                document.getElementById(`btn-start${prefix}`).style.display = 'none'; document.getElementById(`btn-stop${prefix}`).style.display = 'flex';
+                document.getElementById(`audio-preview${prefix}`).style.display = 'none'; document.getElementById(`post-record-actions${prefix}`).style.display = 'none'; document.getElementById(`share-status${prefix}`).style.display = 'none';
+                document.getElementById(`timer${prefix}`).classList.add('recording');
+                seconds = 0; updateTimerDisplay(`timer${prefix}`); clearInterval(timerInterval);
+                timerInterval = setInterval(() => { seconds++; updateTimerDisplay(`timer${prefix}`); }, 1000);
             } catch (err) { alert("Cannot access microphone. Please ensure you have granted permission in your browser settings."); }
         }
 
-        function stopRecording() {
+        function stopRecordingBase(prefix) {
             if (isRecording) {
                 isRecording = false;
                 clearInterval(timerInterval);
-                document.getElementById('timer').classList.remove('recording');
-                document.getElementById('btn-start').style.display = 'none';
-                document.getElementById('btn-stop').style.display = 'none';
-                document.getElementById('loading-text').style.display = 'block';
+                document.getElementById(`timer${prefix}`).classList.remove('recording');
+                document.getElementById(`btn-start${prefix}`).style.display = 'none';
+                document.getElementById(`btn-stop${prefix}`).style.display = 'none';
+                document.getElementById(`loading-text${prefix}`).style.display = 'block';
 
                 if (processorNode && sourceNode) {
                     sourceNode.disconnect(); processorNode.disconnect();
@@ -783,30 +911,30 @@
                     recordedBlob = new Blob(mp3Data, { type: 'audio/mpeg' }); 
                     const audioUrl = URL.createObjectURL(recordedBlob);
                     
-                    const audioEl = document.getElementById('audio-preview');
+                    const audioEl = document.getElementById(`audio-preview${prefix}`);
                     audioEl.src = audioUrl; audioEl.style.display = 'block';
                     
                     const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
                     const filename = `${pName}_TA Practice.mp3`;
                     
-                    document.getElementById('post-record-actions').style.display = 'flex';
+                    document.getElementById(`post-record-actions${prefix}`).style.display = 'flex';
                     
-                    const btnDownload = document.getElementById('btn-download');
+                    const btnDownload = document.getElementById(`btn-download${prefix}`);
                     btnDownload.href = audioUrl; btnDownload.download = filename;
 
-                    document.getElementById('loading-text').style.display = 'none';
-                    document.getElementById('btn-start').style.display = 'flex'; 
-                    document.getElementById('btn-start').innerHTML = '<span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Record Again';
+                    document.getElementById(`loading-text${prefix}`).style.display = 'none';
+                    document.getElementById(`btn-start${prefix}`).style.display = 'flex'; 
+                    document.getElementById(`btn-start${prefix}`).innerHTML = '<span style="background: white; width: 12px; height: 12px; border-radius: 50%; display: inline-block;"></span> Record Again';
                 }, 500);
             }
         }
 
-        async function shareAudioFile() {
+        async function shareAudioFileBase(prefix) {
             if (!recordedBlob) return;
             const pName = pData[currentPracticeId].title.split('<br>')[0].replace(/[^a-zA-Z0-9]/g, '');
             const filename = `${pName}_TA Practice.mp3`;
             const file = new File([recordedBlob], filename, { type: 'audio/mpeg' });
-            const statusEl = document.getElementById('share-status');
+            const statusEl = document.getElementById(`share-status${prefix}`);
             
             try {
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -822,6 +950,16 @@
                 else { statusEl.style.display = 'none'; }
             }
         }
+
+        // Wrappers for Practice Page
+        function startRecording() { startRecordingBase(''); }
+        function stopRecording() { stopRecordingBase(''); }
+        function shareAudioFile() { shareAudioFileBase(''); }
+
+        // Wrappers for Mock Page
+        function startRecordingMock() { startRecordingBase('-mock'); }
+        function stopRecordingMock() { stopRecordingBase('-mock'); }
+        function shareAudioFileMock() { shareAudioFileBase('-mock'); }
 
         window.onload = function() { setTimeout(initVoices, 100); document.body.addEventListener('touchstart', function() { if (synth.state === 'suspended') synth.resume(); }, { once: true }); };
     </script>
